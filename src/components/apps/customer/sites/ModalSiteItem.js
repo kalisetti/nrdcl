@@ -10,7 +10,7 @@ import {
   Text,
   Textarea,
 } from 'native-base';
-import {callAxios} from '../../../../redux/actions/commonActions';
+import {callAxios, handleError} from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 import Config from 'react-native-config';
 
@@ -65,7 +65,7 @@ const SiteItem = ({
       );
       setall_branch(all_branches.data.message);
     } catch (error) {
-      console.log('ERROR', error);
+      handleError(error);
     }
   };
 

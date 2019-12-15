@@ -42,9 +42,15 @@ import ExtendQty from '../../apps/customer/sites/ExtendQty';
 import AddVehicle from '../../apps/customer/vehicles/AddVehicle';
 import ListVehicle from '../../apps/customer/vehicles/ListVehicle';
 import VehicleDetail from '../../apps/customer/vehicles/VehicleDetail';
+import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver';
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
+import TransportDashboard from '../../apps/transporter/TransportDashboard';
+import AddTransport from '../../apps/transporter/transport/AddTransport';
+import ListTransport from '../../apps/transporter/transport/ListTransport';
+import TransportDetail from '../../apps/transporter/transport/TransportDetail';
+import TransportDriverUpdate from '../../apps/transporter/transport/TransportDriverUpdate';
 
 const AppNavigator = createStackNavigator(
   {
@@ -130,10 +136,46 @@ const AppNavigator = createStackNavigator(
         title: 'Vehilce Detail',
       },
     },
+    UpdateDriver: {
+      screen: UpdateDriver,
+      navigationOptions: {
+        title: 'Update Driver Info',
+      },
+    },
     TransporterDashboard: {
       screen: TransporterDashboard,
       navigationOptions: {
         title: 'Transporter',
+      },
+    },
+    TransportDashboard: {
+      screen: TransportDashboard,
+      navigationOptions: {
+        title: 'Transport Dashboard',
+      },
+    },
+    AddTransport: {
+      screen: AddTransport,
+      navigationOptions: {
+        title: 'Add Transport',
+      },
+    },
+    ListTransport: {
+      screen: ListTransport,
+      navigationOptions: {
+        title: 'List Transport',
+      },
+    },
+    TransportDriverUpdate: {
+      screen: TransportDriverUpdate,
+      navigationOptions: {
+        title: 'Driver Update',
+      },
+    },
+    TransportDetail: {
+      screen: TransportDetail,
+      navigationOptions: {
+        title: 'Transport Detail',
       },
     },
     Settings: {

@@ -13,6 +13,12 @@ export default StyleSheet.create({
     paddingBottom: 70,
   },
 
+  listContent: {
+    paddingHorizontal: 10,
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
+
   ma15: {
     marginHorizontal: 15,
     marginVertical: 15,

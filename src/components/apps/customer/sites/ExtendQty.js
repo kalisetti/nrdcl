@@ -127,7 +127,7 @@ export const ExtendQty = ({
             info
             style={globalStyles.mb10}
             onPress={getSupportingDocuments}>
-            <Text>Attach File</Text>
+            <Text>Attach Supporting Documents</Text>
           </Button>
           {extension_approval_document.length === 0 ? null : (
             <View style={{height: 300, width: '100%', marginBottom: 20}}>

@@ -43,7 +43,6 @@ export const AddSite = ({
   setLoading,
 }) => {
   //state info for forms
-  const [site_type, setsite_type] = useState(undefined);
   const [purpose, setPurpose] = useState(undefined);
   const [approval_no, setapproval_no] = useState(undefined);
   const [approval_document, setapproval_document] = useState([]);
@@ -52,7 +51,6 @@ export const AddSite = ({
   const [construction_end_date, setconstruction_end_date] = useState(null);
   const [number_of_floors, setnumber_of_floors] = useState(null);
   const [dzongkhag, setdzongkhag] = useState(undefined);
-  const [gewog, setgewog] = useState(undefined);
   const [plot_no, setplot_no] = useState(null);
   const [location, setlocation] = useState(null);
   const [remarks, setremarks] = useState(null);
@@ -95,11 +93,9 @@ export const AddSite = ({
   };
 
   //all values
-  const [all_site_type, setall_site_type] = useState([]);
   const [all_purpose, setall_purpose] = useState([]);
   const [all_construction_type, setall_construction_type] = useState([]);
   const [all_dzongkhag, setall_dzongkhag] = useState([]);
-  const [all_gewogs, setall_gewogs] = useState([]);
   const [all_sub_item, setall_sub_item] = useState([]);
 
   //For proper navigation/auth settings
@@ -115,11 +111,6 @@ export const AddSite = ({
   }, []);
 
   useEffect(() => {
-    //get gewog according to dzongkhag
-    getGewogs(dzongkhag);
-  }, [dzongkhag]);
-
-  useEffect(() => {
     setImages([]);
     setTimeout(() => {
       setImages(approval_document);
@@ -129,9 +120,6 @@ export const AddSite = ({
   const getFormData = async () => {
     try {
       setLoading(true);
-      const all_st = await callAxios('resource/Site Type');
-      setall_site_type(all_st.data.data);
-
       const all_pur = await callAxios('resource/Site Purpose');
       setall_purpose(all_pur.data.data);
 
@@ -160,7 +148,6 @@ export const AddSite = ({
 
     try {
       const gw_all = await callAxios('resource/Gewogs', 'get', params);
-      setall_gewogs(gw_all.data.data);
     } catch (error) {
       handleError(error);
     }
@@ -193,7 +180,6 @@ export const AddSite = ({
     const site_info = {
       approval_status: 'Pending',
       user: userState.login_id,
-      site_type,
       purpose,
       construction_type,
       construction_start_date,
@@ -201,7 +187,6 @@ export const AddSite = ({
       number_of_floors,
       approval_no,
       dzongkhag,
-      gewog,
       plot_no,
       location,
       remarks,
@@ -219,24 +204,6 @@ export const AddSite = ({
     <Container>
       <Content style={globalStyles.content}>
         <Form>
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={site_type}
-              onValueChange={val => setsite_type(val)}>
-              <Picker.Item
-                label={'Select Site Type'}
-                value={undefined}
-                key={-1}
-              />
-              {all_site_type &&
-                all_site_type.map((val, idx) => {
-                  return (
-                    <Picker.Item label={val.name} value={val.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
           <Item regular style={globalStyles.mb10}>
             <Picker
               mode="dropdown"
@@ -331,30 +298,7 @@ export const AddSite = ({
                 })}
             </Picker>
           </Item>
-          {dzongkhag && (
-            <Item regular style={globalStyles.mb10}>
-              <Picker
-                mode="dropdown"
-                selectedValue={gewog}
-                onValueChange={val => setgewog(val)}>
-                <Picker.Item
-                  label={'Select Gewog/Thromde'}
-                  value={undefined}
-                  key={-1}
-                />
-                {all_gewogs &&
-                  all_gewogs.map((val, idx) => {
-                    return (
-                      <Picker.Item
-                        label={val.name}
-                        value={val.name}
-                        key={idx}
-                      />
-                    );
-                  })}
-              </Picker>
-            </Item>
-          )}
+
           <Item regular style={globalStyles.mb10}>
             <Input
               value={plot_no}
@@ -387,7 +331,9 @@ export const AddSite = ({
             info
             onPress={() => setShowModal(true)}
             style={globalStyles.mb10}>
-            <Text>{items.length == 0 ? 'Add Item' : 'Add More Ietm'}</Text>
+            <Text>
+              {items.length == 0 ? 'Add Materials' : 'Add More Materials'}
+            </Text>
           </Button>
           <ModalSiteItem
             showModal={showModal}
@@ -398,30 +344,11 @@ export const AddSite = ({
 
           <SiteItemList data={items} removeItem={removeItem} />
 
-          <Button info style={globalStyles.mb10} onPress={getGPS}>
-            <Text>Set GPS Location</Text>
-          </Button>
-          {showmap && (
-            <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
-              <MapView
-                provider={PROVIDER_GOOGLE}
-                style={globalStyles.map}
-                initialRegion={region}
-                showUserLocation={true}
-                onLongPress={e => setLatLong(e.nativeEvent.coordinate)}>
-                <Marker
-                  draggable
-                  coordinate={coordinate}
-                  onDragEnd={e => setLatLong(e.nativeEvent.coordinate)}
-                />
-              </MapView>
-            </View>
-          )}
           <Button info style={globalStyles.mb10} onPress={getSiteDocuments}>
-            <Text>Attach File</Text>
+            <Text>Attach Supporting Documents</Text>
           </Button>
           {images.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 20}}>
+            <View style={{height: 300, width: '100%', marginBottom: 15}}>
               <Text style={{alignSelf: 'center', color: 'red'}}>
                 Swipe to review all images
               </Text>
@@ -448,7 +375,28 @@ export const AddSite = ({
               />
             </View>
           )}
-          <View style={{marginBottom: 20}}></View>
+          <View style={{marginBottom: 15}}></View>
+
+          <Button info style={globalStyles.mb10} onPress={getGPS}>
+            <Text>Set Site GPS Location</Text>
+          </Button>
+          {showmap && (
+            <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={globalStyles.map}
+                initialRegion={region}
+                showUserLocation={true}
+                onLongPress={e => setLatLong(e.nativeEvent.coordinate)}>
+                <Marker
+                  draggable
+                  coordinate={coordinate}
+                  onDragEnd={e => setLatLong(e.nativeEvent.coordinate)}
+                />
+              </MapView>
+            </View>
+          )}
+          <View style={{marginBottom: 15}}></View>
           <Button success style={globalStyles.mb50} onPress={submitSiteInfo}>
             <Text>Submit for Approval</Text>
           </Button>

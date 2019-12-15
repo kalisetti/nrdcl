@@ -15,22 +15,22 @@ import {
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import globalStyle from '../../../../styles/globalStyle';
+import {startTransportDeregister} from '../../../../redux/actions/transportActions';
 import {
   setLoading,
   callAxios,
   handleError,
 } from '../../../../redux/actions/commonActions';
-import {startVehicleDeregistration} from '../../../../redux/actions/siteActions';
 
-export const VehicleDetail = ({
+export const TransportDetail = ({
   userState,
   commonState,
   navigation,
   handleError,
   setLoading,
-  startVehicleDeregistration,
+  startTransportDeregister,
 }) => {
-  const [vehicle, setVehicle] = useState({});
+  const [vehicle, setVehicle] = useState({items: []});
   const [showAlert, setShowAlert] = useState(false);
 
   const toggleAlert = () => {
@@ -55,6 +55,7 @@ export const VehicleDetail = ({
       setLoading(false);
     } catch (error) {
       handleError(error);
+      setLoading(false);
     }
   };
 
@@ -69,7 +70,7 @@ export const VehicleDetail = ({
             showProgress={false}
             title="Remove Vehicle"
             message="Are you sure you want to remove vehicle"
-            closeOnTouchOutside={false}
+            closeOnTouchOutside={true}
             closeOnHardwareBackPress={false}
             showCancelButton={true}
             showConfirmButton={true}
@@ -81,7 +82,7 @@ export const VehicleDetail = ({
             }}
             onConfirmPressed={() => {
               toggleAlert();
-              startVehicleDeregistration({vehicle: vehicle.name});
+              startTransportDeregister({vehicle: vehicle.name});
             }}
           />
         </View>
@@ -191,6 +192,26 @@ export const VehicleDetail = ({
               <Text>{vehicle.driver_cid}</Text>
             </Col>
           </Row>
+
+          <Row style={globalStyle.labelContainer}>
+            <Col size={5}>
+              <Text style={globalStyle.label}>
+                Registered with following Branches
+              </Text>
+            </Col>
+          </Row>
+          {vehicle.items.map((veh, idx) => {
+            return (
+              <Row style={globalStyle.labelContainer} key={idx}>
+                <Col size={2}>
+                  <Text style={globalStyle.label}>Branch</Text>
+                </Col>
+                <Col size={3}>
+                  <Text>{veh.crm_branch}</Text>
+                </Col>
+              </Row>
+            );
+          })}
         </Content>
       </Grid>
     </Container>
@@ -205,7 +226,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   handleError,
   setLoading,
-  startVehicleDeregistration,
+  startTransportDeregister,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(VehicleDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(TransportDetail);

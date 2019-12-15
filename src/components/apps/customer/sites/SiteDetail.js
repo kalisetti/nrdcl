@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {Modal, Alert} from 'react-native';
+import {Modal} from 'react-native';
 import moment from 'moment';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {
@@ -16,13 +16,25 @@ import {
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import globalStyle from '../../../../styles/globalStyle';
-import {setLoading, callAxios} from '../../../../redux/actions/commonActions';
+import {
+  setLoading,
+  callAxios,
+  handleError,
+} from '../../../../redux/actions/commonActions';
+import {startSetSiteStatus} from '../../../../redux/actions/siteActions';
 
-export const SiteDetail = ({userState, commonState, navigation}) => {
+export const SiteDetail = ({
+  userState,
+  commonState,
+  navigation,
+  startSetSiteStatus,
+  handleError,
+}) => {
   const [site, setSite] = useState({items: []});
   const [currentItem, setcurrentItem] = useState({});
   const [modalIsVisible, setVisible] = useState(false);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showEnableAlert, setShowEnableAlert] = useState(false);
+  const [showDisableAlert, setShowDisableAlert] = useState(false);
 
   useEffect(() => {
     if (!userState.logged_in) {
@@ -41,8 +53,7 @@ export const SiteDetail = ({userState, commonState, navigation}) => {
       setSite(response.data.data);
       setLoading(false);
     } catch (error) {
-      console.log('Active Sites', error);
-      setLoading(false);
+      handleError(error);
     }
   };
 
@@ -64,22 +75,26 @@ export const SiteDetail = ({userState, commonState, navigation}) => {
     closeModal();
   };
 
-  const toggleAlert = () => {
-    setShowAlert(!showAlert);
+  const toggleDisableAlert = () => {
+    setShowDisableAlert(!showDisableAlert);
+  };
+
+  const toggleEnableAlert = () => {
+    setShowEnableAlert(!showEnableAlert);
   };
 
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
     <Container>
-      {showAlert && (
+      {showDisableAlert && (
         <View style={{width: '100%', height: '100%'}}>
           <AwesomeAlert
-            show={showAlert}
+            show={showDisableAlert}
             showProgress={false}
             title="Disable Site"
             message="Are you sure you want to disable site"
-            closeOnTouchOutside={true}
+            closeOnTouchOutside={false}
             closeOnHardwareBackPress={false}
             showCancelButton={true}
             showConfirmButton={true}
@@ -87,10 +102,42 @@ export const SiteDetail = ({userState, commonState, navigation}) => {
             confirmText="Yes, disable it"
             confirmButtonColor="#DD6B55"
             onCancelPressed={() => {
-              toggleAlert();
+              toggleDisableAlert();
             }}
             onConfirmPressed={() => {
-              toggleAlert();
+              toggleDisableAlert();
+              startSetSiteStatus({
+                site: site.name,
+                status: 0,
+              });
+            }}
+          />
+        </View>
+      )}
+
+      {showEnableAlert && (
+        <View style={{width: '100%', height: '100%'}}>
+          <AwesomeAlert
+            show={showEnableAlert}
+            showProgress={false}
+            title="Enable Site"
+            message="Are you sure you want to enable site"
+            closeOnTouchOutside={false}
+            closeOnHardwareBackPress={false}
+            showCancelButton={true}
+            showConfirmButton={true}
+            cancelText="No, cancel"
+            confirmText="Yes, enable it"
+            confirmButtonColor="#12793e"
+            onCancelPressed={() => {
+              toggleEnableAlert();
+            }}
+            onConfirmPressed={() => {
+              toggleEnableAlert();
+              startSetSiteStatus({
+                site: site.name,
+                status: 1,
+              });
             }}
           />
         </View>
@@ -122,19 +169,34 @@ export const SiteDetail = ({userState, commonState, navigation}) => {
               <Text style={{color: 'blue'}}>Extend Date</Text>
             </Button>
           </Col>
-          {site.enabled && (
+          {site.enabled ? (
             <Col>
               <Button
                 vertical
                 transparent
                 style={{alignSelf: 'center'}}
-                onPress={() => toggleAlert()}>
+                onPress={() => toggleDisableAlert()}>
                 <Icon
                   name="closesquareo"
                   type="AntDesign"
                   style={{color: 'red'}}
                 />
                 <Text style={{color: 'red'}}>Disable Site</Text>
+              </Button>
+            </Col>
+          ) : (
+            <Col>
+              <Button
+                vertical
+                transparent
+                style={{alignSelf: 'center'}}
+                onPress={() => toggleEnableAlert()}>
+                <Icon
+                  name="checksquareo"
+                  type="AntDesign"
+                  style={{color: 'blue'}}
+                />
+                <Text style={{color: 'blue'}}>Enable Site</Text>
               </Button>
             </Col>
           )}
@@ -240,15 +302,6 @@ export const SiteDetail = ({userState, commonState, navigation}) => {
             </Col>
             <Col size={3}>
               <Text>{site.dzongkhag}</Text>
-            </Col>
-          </Row>
-
-          <Row style={globalStyle.labelContainer}>
-            <Col size={2}>
-              <Text style={globalStyle.label}>Gewog</Text>
-            </Col>
-            <Col size={3}>
-              <Text>{site.gewog}</Text>
             </Col>
           </Row>
 
@@ -396,20 +449,25 @@ export const SiteDetail = ({userState, commonState, navigation}) => {
                   </Col>
                 </Row>
 
-                <Row style={globalStyle.modalButtonContainer}>
-                  <Button
-                    success
-                    style={globalStyle.itemButton}
-                    onPress={extendSiteQty}>
-                    <Text>Request Qty</Text>
-                  </Button>
-
-                  <Button
-                    warning
-                    style={globalStyle.itemButton}
-                    onPress={() => closeModal()}>
-                    <Text>Close</Text>
-                  </Button>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={5}>
+                    <Button
+                      success
+                      style={[globalStyle.mb10, globalStyle.button]}
+                      onPress={extendSiteQty}>
+                      <Text>Request Additional Qty</Text>
+                    </Button>
+                  </Col>
+                </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={5}>
+                    <Button
+                      warning
+                      style={[globalStyle.mb10, globalStyle.button]}
+                      onPress={() => closeModal()}>
+                      <Text style={{}}>Close</Text>
+                    </Button>
+                  </Col>
                 </Row>
               </Grid>
             </Container>
@@ -425,6 +483,6 @@ const mapStateToProps = state => ({
   commonState: state.commonState,
 });
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {startSetSiteStatus, handleError};
 
 export default connect(mapStateToProps, mapDispatchToProps)(SiteDetail);

@@ -5,7 +5,7 @@ import {Grid, Col, Row} from 'react-native-easy-grid';
 import globalStyle from '../../../styles/globalStyle';
 import Logo from '../../base/header/Logo';
 
-export const TransporterDashboard = ({userState, navigation}) => {
+export const TransportDashboard = ({userState, navigation}) => {
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -29,23 +29,27 @@ export const TransporterDashboard = ({userState, navigation}) => {
               vertical
               transparent
               style={{alignSelf: 'center'}}
-              onPress={() => navigation.navigate('TransportDashboard')}>
+              onPress={() => navigation.navigate('ListTransport')}>
               <Icon
-                name="dump-truck"
+                name="truck-fast"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
               />
-              <Text style={globalStyle.homeIconText}>Manage Transport</Text>
+              <Text style={globalStyle.homeIconText}>List Transport</Text>
             </Button>
           </Col>
           <Col style={globalStyle.homeButton}>
-            <Button vertical transparent style={{alignSelf: 'center'}}>
+            <Button
+              vertical
+              transparent
+              style={{alignSelf: 'center'}}
+              onPress={() => navigation.navigate('AddTransport')}>
               <Icon
-                name="truck-delivery"
+                name="truck-check"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
               />
-              <Text style={globalStyle.homeIconText}>Manage Delivery</Text>
+              <Text style={globalStyle.homeIconText}>Add Transport</Text>
             </Button>
           </Col>
         </Row>
@@ -60,7 +64,4 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {};
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TransporterDashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(TransportDashboard);

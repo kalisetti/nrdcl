@@ -12,6 +12,8 @@ import {
   siteExtensionSchema,
   qtyItemExtensionSchema,
   qtyExtensionSchema,
+  driverInfoSchema,
+  vehilceSchema,
 } from '../../validation/schema/siteSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
 
@@ -168,7 +170,7 @@ export const startVehicleRegistration = (
   return async dispatch => {
     dispatch(setLoading(true));
     try {
-      //await siteSchema.validate(vehicle_info);
+      await vehilceSchema.validate(vehicle_info);
 
       let res = await callAxios(
         'resource/Transport Request/',
@@ -191,6 +193,73 @@ export const startVehicleRegistration = (
       NavigationService.navigate('ListVehicle');
       dispatch(setLoading(false));
       dispatch(showToast('Vehicle Registration request sent', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+/**
+ *
+ * @param {driver's information} driver_info
+ */
+export const startUpdateDriverDetail = driver_info => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      await driverInfoSchema.validate(driver_info);
+
+      await callAxios('resource/Vehicle Update/', 'POST', {}, driver_info);
+
+      NavigationService.navigate('ListVehicle');
+      dispatch(setLoading(false));
+      dispatch(showToast('Update Info request sent', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+/**
+ *
+ * @param {site data to set site active or inactive} site_data
+ */
+export const startSetSiteStatus = site_data => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      await callAxios(
+        'method/erpnext.crm_api.set_site_status',
+        'post',
+        site_data,
+      );
+
+      dispatch(setLoading(false));
+      NavigationService.navigate('ListSite');
+      dispatch(showToast('Successfully changed site status', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+/**
+ *
+ * @param {vehicle no to be deregistered} vehicle
+ */
+export const startVehicleDeregistration = vehicle => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      await callAxios(
+        'method/erpnext.crm_api.deregister_vehicle',
+        'post',
+        vehicle,
+      );
+
+      dispatch(setLoading(false));
+      NavigationService.navigate('ListVehicle');
+      dispatch(showToast('Successfully deregistered vehicle', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }

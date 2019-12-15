@@ -83,7 +83,6 @@ export const startLogin = (login_id, pin) => {
       const token = `token ${user_details.data.api_key}:${user_details.data.api_secret}`;
       axios.defaults.headers.common['Authorization'] = token;
       const username = `nrdcl${user_details.data.login_id}`;
-      console.log(token);
 
       //Store token and login_id for persistence
       await AsyncStorage.multiRemove(['nrdcl_token', 'nrdcl_username']);
@@ -111,6 +110,20 @@ export const startLogin = (login_id, pin) => {
 export const logout = () => {
   return {
     type: LOGOUT,
+  };
+};
+
+export const startLogout = () => {
+  return async dispatch => {
+    //call logout method
+    try {
+      await callAxios('method/logout');
+      axios.defaults.headers.common['Authorization'] = null;
+      await AsyncStorage.removeItem('nrdcl_token');
+      dispatch(logout());
+    } catch (error) {
+      dispatch(handleError(error));
+    }
   };
 };
 

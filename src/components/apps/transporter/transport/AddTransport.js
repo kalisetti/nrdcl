@@ -1,7 +1,6 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {View, Image} from 'react-native';
-import {NavigationEvents} from 'react-navigation';
 
 import {
   Container,
@@ -23,35 +22,33 @@ import {
   getImages,
   setLoading,
 } from '../../../../redux/actions/commonActions';
-import {startVehicleRegistration} from '../../../../redux/actions/siteActions';
+import {startTransportRegistration} from '../../../../redux/actions/transportActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 
-export const AddVehicle = ({
+export const AddTransport = ({
   userState,
   commonState,
   navigation,
-  startVehicleRegistration,
+  startTransportRegistration,
   handleError,
   getImages,
   setLoading,
 }) => {
   //state info for forms
-  let [, setState] = useState();
   const [vehicle_no, setVehicle_no] = useState('');
   const [vehicle_owner, setvehicle_owner] = useState(undefined);
+  const [crm_branch, setcrm_branch] = useState(undefined);
   const [vehicle_capacity, setVehicle_capacity] = useState(undefined);
-  const [drivers_name, setdrivers_name] = useState('');
-  const [contact_no, setcontact_no] = useState('');
-  const [driver_cid, setdriver_cid] = useState('');
+  const [drivers_name, setdrivers_name] = useState(undefined);
+  const [contact_no, setcontact_no] = useState(undefined);
+  const [driver_cid, setdriver_cid] = useState(undefined);
   const [registration_document, setregistration_document] = useState([]);
   const [images, setImages] = useState([]);
 
-  const [marriage_certificate, setmarriage_certificate] = useState([]);
-  const [mc, setMc] = useState([]);
-
   //all values
   const [all_capacities, setall_capacities] = useState([]);
+  const [all_branches, setall_branches] = useState([]);
 
   //For proper navigation/auth settings
   useEffect(() => {
@@ -62,7 +59,7 @@ export const AddVehicle = ({
     } else {
       //get all capacities
       setLoading(true);
-      getCapacities();
+      getFormData();
     }
   }, []);
 
@@ -73,21 +70,22 @@ export const AddVehicle = ({
     }, 600);
   }, [registration_document]);
 
-  useEffect(() => {
-    setMc([]);
-    setTimeout(() => {
-      setMc(marriage_certificate);
-    }, 600);
-  }, [marriage_certificate]);
-
-  const getCapacities = async () => {
+  const getFormData = async () => {
     try {
       const all_st = await callAxios('resource/Vehicle Capacity');
       setall_capacities(all_st.data.data);
+
+      const params = {filters: JSON.stringify([['has_common_pool', '=', 1]])};
+      const all_br = await callAxios(
+        'resource/CRM Branch Setting',
+        'GET',
+        params,
+      );
+      setall_branches(all_br.data.data);
+
       setLoading(false);
     } catch (error) {
       handleError(error);
-      setLoading(false);
     }
   };
 
@@ -97,39 +95,31 @@ export const AddVehicle = ({
     setregistration_document(images);
   };
 
-  const getMarriageCertificate = async () => {
-    const images = await getImages('Marriage Certificate');
-    setmarriage_certificate(images);
-  };
-
   const submitVehicleInfo = async () => {
-    const site_info = {
+    const vehicle_info = {
       approval_status: 'Pending',
       user: userState.login_id,
-      self_arranged: 1,
+      common_pool: 1,
       vehicle_no: vehicle_no.toUpperCase(),
       vehicle_capacity,
       vehicle_owner,
       drivers_name,
       contact_no,
       driver_cid,
+      items: [
+        {
+          crm_branch,
+        },
+      ],
     };
 
-    startVehicleRegistration(site_info, images, mc);
+    startTransportRegistration(vehicle_info, images);
   };
 
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
     <Container>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setState({});
-        }}
-        onWillBlur={_ => {
-          setState(undefined);
-        }}
-      />
       <Content style={globalStyles.content}>
         <Form>
           <Item regular style={globalStyles.mb10}>
@@ -158,6 +148,20 @@ export const AddVehicle = ({
             </Picker>
           </Item>
           <Item regular style={globalStyles.mb10}>
+            <Picker
+              mode="dropdown"
+              selectedValue={crm_branch}
+              onValueChange={val => setcrm_branch(val)}>
+              <Picker.Item label={'Select Branch'} value={undefined} key={-1} />
+              {all_branches &&
+                all_branches.map((pur, idx) => {
+                  return (
+                    <Picker.Item label={pur.name} value={pur.name} key={idx} />
+                  );
+                })}
+            </Picker>
+          </Item>
+          <Item regular style={globalStyles.mb10}>
             <Input
               value={drivers_name}
               onChangeText={val => setdrivers_name(val)}
@@ -177,21 +181,6 @@ export const AddVehicle = ({
               onChangeText={val => setdriver_cid(val)}
               placeholder="Driver's CID"
             />
-          </Item>
-
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={vehicle_owner}
-              onValueChange={val => setvehicle_owner(val)}>
-              <Picker.Item
-                label={'Select Vehicle Owner'}
-                value={undefined}
-                key={0}
-              />
-              <Picker.Item label={'Self'} value={'Self'} key={1} />
-              <Picker.Item label={'Spouse'} value={'Spouse'} key={2} />
-            </Picker>
           </Item>
 
           <Button info style={globalStyles.mb10} onPress={getBluebook}>
@@ -227,50 +216,6 @@ export const AddVehicle = ({
           )}
           <View style={{marginBottom: 20}}></View>
 
-          {vehicle_owner === 'Spouse' ? (
-            <Fragment>
-              <Button
-                info
-                style={globalStyles.mb10}
-                onPress={getMarriageCertificate}>
-                <Text>Attach Marriage Certificate</Text>
-              </Button>
-              {mc.length === 0 ? null : (
-                <View style={{height: 300, width: '100%', marginBottom: 20}}>
-                  <Text style={{alignSelf: 'center', color: 'red'}}>
-                    Swipe to review all images
-                  </Text>
-                  <DeckSwiper
-                    dataSource={marriage_certificate}
-                    renderItem={image => (
-                      <Card style={{elevation: 3}}>
-                        <CardItem cardBody>
-                          <Image
-                            source={{
-                              uri: image.path,
-                            }}
-                            style={{height: 250, width: '100%'}}
-                          />
-                        </CardItem>
-                        <CardItem>
-                          <Icon name="heart" style={{color: '#ED4A6A'}} />
-                          <Text>
-                            {image.path.substring(
-                              image.path.lastIndexOf('/') + 1,
-                            )}
-                          </Text>
-                        </CardItem>
-                      </Card>
-                    )}
-                  />
-                </View>
-              )}
-              <View style={{marginBottom: 20}}></View>
-            </Fragment>
-          ) : (
-            <Fragment></Fragment>
-          )}
-
           <Button success style={globalStyles.mb50} onPress={submitVehicleInfo}>
             <Text>Submit for Approval</Text>
           </Button>
@@ -286,10 +231,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-  startVehicleRegistration,
+  startTransportRegistration,
   handleError,
   getImages,
   setLoading,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddVehicle);
+export default connect(mapStateToProps, mapDispatchToProps)(AddTransport);

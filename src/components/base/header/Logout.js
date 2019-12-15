@@ -3,12 +3,12 @@ import {Button, Icon} from 'native-base';
 import NavigationService from '../navigation/NavigationService';
 import {connect} from 'react-redux';
 
-import {logout} from '../../../redux/actions/userActions';
+import {startLogout} from '../../../redux/actions/userActions';
 import globalStyle from '../../../styles/globalStyle';
 
-const Logout = ({userState, logout}) => {
+const Logout = ({userState, startLogout}) => {
   const performLogout = () => {
-    logout();
+    startLogout();
     NavigationService.navigate('Login');
   };
 
@@ -27,4 +27,4 @@ const mstp = state => ({
   userState: state.userState,
 });
 
-export default connect(mstp, {logout})(Logout);
+export default connect(mstp, {startLogout})(Logout);

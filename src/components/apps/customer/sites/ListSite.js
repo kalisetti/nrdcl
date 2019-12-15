@@ -1,4 +1,4 @@
-import React, {useEffect, useState, Fragment} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
 import {
   Container,
@@ -12,12 +12,24 @@ import {
 } from 'native-base';
 
 import SpinnerScreen from '../../../base/SpinnerScreen';
-import {callAxios, setLoading} from '../../../../redux/actions/commonActions';
+import {
+  callAxios,
+  setLoading,
+  handleError,
+} from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 import {FlatList} from 'react-native-gesture-handler';
+import {NavigationEvents} from 'react-navigation';
 
-export const ListSite = ({userState, commonState, navigation, setLoading}) => {
+export const ListSite = ({
+  userState,
+  commonState,
+  navigation,
+  setLoading,
+  handleError,
+}) => {
   const [sites, setsites] = useState([]);
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (!userState.logged_in) {
@@ -27,9 +39,8 @@ export const ListSite = ({userState, commonState, navigation, setLoading}) => {
     } else {
       setLoading(true);
       getActiveSites();
-      setLoading(true);
     }
-  }, []);
+  }, [reload]);
 
   const renderItem = ({item}) => {
     return (
@@ -70,22 +81,29 @@ export const ListSite = ({userState, commonState, navigation, setLoading}) => {
 
     try {
       const response = await callAxios(
-        'resource/Site?order_by=creation%20desc,enabled%20asc',
+        'resource/Site?order_by=enabled%20desc,creation%20desc',
         'GET',
         params,
       );
       setsites(response.data.data);
       setLoading(false);
     } catch (error) {
-      console.log('Active Sites', error);
-      setLoading(false);
+      handleError(error);
     }
   };
 
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.content}>
+    <Container style={globalStyles.listContent}>
+      <NavigationEvents
+        onWillFocus={_ => {
+          setReload(1);
+        }}
+        onWillBlur={_ => {
+          setReload(0);
+        }}
+      />
       {sites.length > 0 ? (
         <FlatList
           data={sites}
@@ -106,6 +124,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   setLoading,
+  handleError,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListSite);

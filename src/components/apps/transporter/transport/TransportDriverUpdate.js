@@ -14,15 +14,14 @@ import {
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import {startUpdateDriverDetail} from '../../../../redux/actions/siteActions';
-import {handleError, setLoading} from '../../../../redux/actions/commonActions';
+import {setLoading} from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 
-export const UpdateDriver = ({
+export const TransportDriverUpdate = ({
   userState,
   commonState,
   navigation,
   startUpdateDriverDetail,
-  handleError,
   setLoading,
 }) => {
   const [vehicle, setvehicle] = useState(undefined);
@@ -56,6 +55,7 @@ export const UpdateDriver = ({
     const driver_info = {
       approval_status: 'Pending',
       user: userState.login_id,
+      update_type: 'Driver Detail Update',
       vehicle: vehicle.toUpperCase(),
       driver_name,
       driver_mobile_no,
@@ -137,8 +137,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
   startUpdateDriverDetail,
-  handleError,
   setLoading,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(UpdateDriver);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(TransportDriverUpdate);

@@ -21,7 +21,7 @@ import globalStyles from '../../../../styles/globalStyle';
 import {FlatList} from 'react-native-gesture-handler';
 import {NavigationEvents} from 'react-navigation';
 
-export const ListVehicle = ({
+export const ListTransport = ({
   userState,
   commonState,
   navigation,
@@ -49,7 +49,9 @@ export const ListVehicle = ({
           header
           bordered
           button
-          onPress={() => navigation.navigate('VehicleDetail', {id: item.name})}
+          onPress={() => {
+            navigation.navigate('TransportDetail', {id: item.name});
+          }}
           style={globalStyles.tableHeader}>
           <Body>
             {item.vehilce_status === 'Blacklisted' ? (
@@ -81,7 +83,7 @@ export const ListVehicle = ({
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
-        ['self_arranged', '=', 1],
+        ['common_pool', '=', 1],
         ['vehicle_status', '!=', 'Deregistered'],
       ]),
     };
@@ -119,7 +121,7 @@ export const ListVehicle = ({
           keyExtractor={item => item.name}
         />
       ) : (
-        <Text style={globalStyles.emptyString}>No approved vehilces yet</Text>
+        <Text style={globalStyles.emptyString}>No approved transports yet</Text>
       )}
     </Container>
   );
@@ -135,4 +137,4 @@ const mapDispatchToProps = {
   handleError,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListVehicle);
+export default connect(mapStateToProps, mapDispatchToProps)(ListTransport);

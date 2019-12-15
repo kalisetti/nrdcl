@@ -5,10 +5,6 @@ export const siteSchema = yup.object().shape({
     .string()
     .trim()
     .required('User is mandatory'),
-  site_type: yup
-    .string()
-    .trim()
-    .required('Site Type is mandatory'),
   purpose: yup
     .string()
     .trim()
@@ -32,10 +28,6 @@ export const siteSchema = yup.object().shape({
     .string()
     .trim()
     .required('Dzongkhag is mandatory'),
-  gewog: yup
-    .string()
-    .trim()
-    .required('Gewog is mandatory'),
   plot_no: yup
     .string('Plot No is mandatory')
     .trim()
@@ -48,7 +40,7 @@ export const siteSchema = yup.object().shape({
     .string()
     .trim()
     .nullable(),
-  items: yup.array().required(),
+  items: yup.array().required('Items are mandatory'),
 });
 
 //Object for Site Item
@@ -80,7 +72,9 @@ export const siteItemSchema = yup.object().shape({
   remarks: yup.string().nullable(),
 });
 
-//Object to change site status
+/**
+ * Object to change site status
+ */
 export const siteStatusSchema = yup.object().shape({
   approval_status: yup
     .string()
@@ -95,6 +89,9 @@ export const siteStatusSchema = yup.object().shape({
     .oneOf(['Activate', 'Deactivate']),
 });
 
+/**
+ * schema validation for site extension date
+ */
 export const siteExtensionSchema = yup.object().shape({
   approval_status: yup
     .string()
@@ -135,6 +132,9 @@ export const qtyExtensionSchema = yup.object().shape({
   items: yup.array().required('Items is mandatory'),
 });
 
+/**
+ * schema validation for qty extension for site
+ */
 export const qtyItemExtensionSchema = yup.object().shape({
   site_item_name: yup.string().required('Name is mandatory'),
   site_sub_group: yup.string().required('Item is mandatory'),
@@ -142,4 +142,69 @@ export const qtyItemExtensionSchema = yup.object().shape({
     .number('Additional Qty is mandatory')
     .moreThan(0, 'Additional Qty should be more than 0'),
   remarks: yup.string().nullable(),
+});
+
+/**
+ * schema validation for vehicle
+ */
+export const vehilceSchema = yup.object().shape({
+  approval_status: yup
+    .string()
+    .required()
+    .oneOf(['Pending']),
+  user: yup
+    .string()
+    .trim()
+    .required('User is mandatory'),
+  vehicle_no: yup
+    .string()
+    .trim()
+    .required('Vehilce No is mandatory'),
+  drivers_name: yup
+    .string()
+    .trim()
+    .required('Driver Name is mandatory'),
+  contact_no: yup
+    .string()
+    .trim()
+    .required('Contact No is mandatory'),
+  driver_cid: yup
+    .string()
+    .trim()
+    .required('Driver CID is mandatory'),
+  self_arranged: yup
+    .number()
+    .integer()
+    .positive(),
+});
+
+export const driverInfoSchema = yup.object().shape({
+  approval_status: yup
+    .string()
+    .required()
+    .oneOf(['Pending']),
+  user: yup
+    .string()
+    .trim()
+    .required('User is mandatory'),
+  vehicle: yup
+    .string()
+    .trim()
+    .required('User is mandatory'),
+  driver_name: yup
+    .string()
+    .trim()
+    .required('Driver Name is mandatory'),
+  driver_mobile_no: yup
+    .string()
+    .trim()
+    .required('Driver Contact No is mandatory'),
+  driver_cid: yup
+    .string()
+    .trim()
+    .required('Driver CID is mandatory'),
+  remarks: yup
+    .string()
+    .trim()
+    .nullable(),
 });

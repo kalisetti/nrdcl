@@ -35,9 +35,7 @@ const SiteItemList = ({data, removeItem}) => {
     <Grid
       style={{
         width: '100%',
-        marginLeft: 0,
-        marginRight: 0,
-        marginBottom: 10,
+        marginHorizontal: 0,
       }}>
       {data.length == 0 ? (
         <Text></Text>
