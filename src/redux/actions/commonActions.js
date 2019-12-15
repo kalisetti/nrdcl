@@ -1,5 +1,6 @@
 import {SET_ERROR, SET_LOADING, SET_TITLE, SET_RANDOM} from './actionTypes';
 import {Toast} from 'native-base';
+import {PermissionsAndroid, Platform} from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
 //import ImagePicker from 'react-native-image-crop-picker';
@@ -90,7 +91,7 @@ export const uploadAxios = data => {
   });
 };
 
-/* common function to handle select Image */
+/* common function to handle select Image 
 export const selectImage = (width = 400, height = 200, cropping = true) => {
   try {
     return ImagePicker.openCamera({
@@ -102,7 +103,7 @@ export const selectImage = (width = 400, height = 200, cropping = true) => {
   } catch (error) {
     handleError(error);
   }
-};
+}; */
 
 //image picker
 export const getImages = (
@@ -114,6 +115,30 @@ export const getImages = (
 ) => {
   return async dispatch => {
     try {
+      if (Platform.OS === 'android') {
+        const perm = await PermissionsAndroid.checkPermission(
+          PermissionsAndroid.PERMISSIONS.CAMERA,
+        );
+
+        if (perm === false) {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.CAMERA,
+            {
+              title: `${Config.APP_NAME} Camera Permission`,
+              message: `${Config.APP_NAME} needs access to your camera`,
+            },
+          );
+
+          if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
+            dispatch(
+              handleError({
+                message: 'Cannot proceed without camera permission',
+              }),
+            );
+          }
+        }
+      }
+
       const image = await ImagePicker.openPicker({
         multiple: multiple,
         includeBase64: true,
@@ -166,6 +191,7 @@ export const attachFile = async (
 export const handleError = error => {
   if (error.response) {
     console.log(error.response);
+    //console.log(error.response.status);
     if (error.response.data.NRDCL_ERROR) {
       return showToast(error.response.data.NRDCL_ERROR);
     }
