@@ -332,7 +332,9 @@ export const AddSite = ({
             onPress={() => setShowModal(true)}
             style={globalStyles.mb10}>
             <Text>
-              {items.length == 0 ? 'Add Materials' : 'Add More Materials'}
+              {items.length == 0
+                ? 'Add Expected Materials'
+                : 'Add More Expected Materials'}
             </Text>
           </Button>
           <ModalSiteItem

@@ -139,6 +139,22 @@ export const AddVehicle = ({
               placeholder="Vehicle No."
             />
           </Item>
+
+          <Item regular style={globalStyles.mb10}>
+            <Picker
+              mode="dropdown"
+              selectedValue={vehicle_owner}
+              onValueChange={val => setvehicle_owner(val)}>
+              <Picker.Item
+                label={'Select Vehicle Owner'}
+                value={undefined}
+                key={0}
+              />
+              <Picker.Item label={'Self'} value={'Self'} key={1} />
+              <Picker.Item label={'Spouse'} value={'Spouse'} key={2} />
+            </Picker>
+          </Item>
+
           <Item regular style={globalStyles.mb10}>
             <Picker
               mode="dropdown"
@@ -157,6 +173,7 @@ export const AddVehicle = ({
                 })}
             </Picker>
           </Item>
+
           <Item regular style={globalStyles.mb10}>
             <Input
               value={drivers_name}
@@ -164,34 +181,13 @@ export const AddVehicle = ({
               placeholder="Driver Name"
             />
           </Item>
+
           <Item regular style={globalStyles.mb10}>
             <Input
               value={contact_no}
               onChangeText={val => setcontact_no(val)}
               placeholder="Driver's Contact No"
             />
-          </Item>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={driver_cid}
-              onChangeText={val => setdriver_cid(val)}
-              placeholder="Driver's CID"
-            />
-          </Item>
-
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={vehicle_owner}
-              onValueChange={val => setvehicle_owner(val)}>
-              <Picker.Item
-                label={'Select Vehicle Owner'}
-                value={undefined}
-                key={0}
-              />
-              <Picker.Item label={'Self'} value={'Self'} key={1} />
-              <Picker.Item label={'Spouse'} value={'Spouse'} key={2} />
-            </Picker>
           </Item>
 
           <Button info style={globalStyles.mb10} onPress={getBluebook}>
@@ -229,6 +225,14 @@ export const AddVehicle = ({
 
           {vehicle_owner === 'Spouse' ? (
             <Fragment>
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={driver_cid}
+                  onChangeText={val => setdriver_cid(val)}
+                  placeholder="Owner's CID"
+                />
+              </Item>
+
               <Button
                 info
                 style={globalStyles.mb10}

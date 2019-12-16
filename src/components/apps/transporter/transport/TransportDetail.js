@@ -104,7 +104,6 @@ export const TransportDetail = ({
                   id: vehicle.name,
                   driver_name: vehicle.drivers_name,
                   driver_mobile_no: vehicle.contact_no,
-                  driver_cid: vehicle.driver_cid,
                 })
               }>
               <Icon

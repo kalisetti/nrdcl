@@ -32,7 +32,6 @@ export const transportSchema = yup.object().shape({
     .number()
     .integer()
     .positive(),
-  items: yup.array().required('Branch is mandatory'),
 });
 
 export const driverInfoSchema = yup.object().shape({
@@ -40,10 +39,6 @@ export const driverInfoSchema = yup.object().shape({
     .string()
     .required()
     .oneOf(['Pending']),
-  update_type: yup
-    .string()
-    .required()
-    .oneOf(['Driver Detail Update']),
   user: yup
     .string()
     .trim()
@@ -60,10 +55,6 @@ export const driverInfoSchema = yup.object().shape({
     .string()
     .trim()
     .required('Driver Contact No is mandatory'),
-  driver_cid: yup
-    .string()
-    .trim()
-    .required('Driver CID is mandatory'),
   remarks: yup
     .string()
     .trim()

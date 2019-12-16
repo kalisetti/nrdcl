@@ -22,13 +22,11 @@ export const UpdateDriver = ({
   commonState,
   navigation,
   startUpdateDriverDetail,
-  handleError,
   setLoading,
 }) => {
   const [vehicle, setvehicle] = useState(undefined);
   const [driver_name, setdriver_name] = useState(undefined);
   const [driver_mobile_no, setdriver_mobile_no] = useState(undefined);
-  const [driver_cid, setdriver_cid] = useState(undefined);
   const [remarks, setremarks] = useState('');
 
   /**
@@ -44,7 +42,6 @@ export const UpdateDriver = ({
       setvehicle(navigation.state.params.id);
       setdriver_name(navigation.state.params.driver_name);
       setdriver_mobile_no(navigation.state.params.driver_mobile_no);
-      setdriver_cid(navigation.state.params.driver_cid);
       setLoading(false);
     }
   }, []);
@@ -59,7 +56,6 @@ export const UpdateDriver = ({
       vehicle: vehicle.toUpperCase(),
       driver_name,
       driver_mobile_no,
-      driver_cid,
       remarks,
     };
 
@@ -82,14 +78,6 @@ export const UpdateDriver = ({
             <Input
               value={driver_name}
               onChangeText={val => setdriver_name(val)}
-            />
-          </Item>
-
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Driver's CID</Label>
-            <Input
-              value={driver_cid}
-              onChangeText={val => setdriver_cid(val)}
             />
           </Item>
 

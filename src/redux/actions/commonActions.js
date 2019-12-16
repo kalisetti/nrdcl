@@ -116,7 +116,7 @@ export const getImages = (
   return async dispatch => {
     try {
       if (Platform.OS === 'android') {
-        const perm = await PermissionsAndroid.checkPermission(
+        const perm = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.CAMERA,
         );
 

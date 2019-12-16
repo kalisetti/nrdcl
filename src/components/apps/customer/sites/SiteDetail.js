@@ -333,7 +333,7 @@ export const SiteDetail = ({
           </Row>
 
           <Row style={[globalStyle.labelContainer]}>
-            <Text style={globalStyle.label}>MATERIAL DETAILS</Text>
+            <Text style={globalStyle.label}>EXPECTED MATERIAL DETAILS</Text>
           </Row>
           <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
             <Grid>

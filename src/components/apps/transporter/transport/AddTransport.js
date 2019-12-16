@@ -58,8 +58,6 @@ export const AddTransport = ({
       navigation.navigate('UserDetail');
     } else {
       //get all capacities
-      setLoading(true);
-      getFormData();
     }
   }, []);
 
@@ -69,25 +67,6 @@ export const AddTransport = ({
       setImages(registration_document);
     }, 600);
   }, [registration_document]);
-
-  const getFormData = async () => {
-    try {
-      const all_st = await callAxios('resource/Vehicle Capacity');
-      setall_capacities(all_st.data.data);
-
-      const params = {filters: JSON.stringify([['has_common_pool', '=', 1]])};
-      const all_br = await callAxios(
-        'resource/CRM Branch Setting',
-        'GET',
-        params,
-      );
-      setall_branches(all_br.data.data);
-
-      setLoading(false);
-    } catch (error) {
-      handleError(error);
-    }
-  };
 
   //image picker
   const getBluebook = async () => {
@@ -106,11 +85,6 @@ export const AddTransport = ({
       drivers_name,
       contact_no,
       driver_cid,
-      items: [
-        {
-          crm_branch,
-        },
-      ],
     };
 
     startTransportRegistration(vehicle_info, images);
@@ -147,20 +121,7 @@ export const AddTransport = ({
                 })}
             </Picker>
           </Item>
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={crm_branch}
-              onValueChange={val => setcrm_branch(val)}>
-              <Picker.Item label={'Select Branch'} value={undefined} key={-1} />
-              {all_branches &&
-                all_branches.map((pur, idx) => {
-                  return (
-                    <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
+
           <Item regular style={globalStyles.mb10}>
             <Input
               value={drivers_name}
