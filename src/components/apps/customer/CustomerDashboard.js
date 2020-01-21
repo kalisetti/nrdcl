@@ -56,6 +56,7 @@ export const CustomerDashboard = ({userState, navigation}) => {
                 name="payment"
                 type="MaterialIcons"
                 style={globalStyle.homeIcon}
+                onPress={() => navigation.navigate('OrderDashboard')}
               />
               <Text style={globalStyle.homeIconText}>Manage Orders</Text>
             </Button>

@@ -13,9 +13,9 @@ import {
 } from 'native-base';
 
 import globalStyles from '../../styles/globalStyle';
-import {startPin} from '../../redux/actions/userActions';
+import {startResetPin} from '../../redux/actions/userActions';
 
-export const PinRecover = ({userState, navigation, startPin}) => {
+export const PinRecover = ({userState, navigation, startResetPin}) => {
   useEffect(() => {
     if (userState.logged_in) {
       navigation.navigate('App');
@@ -26,7 +26,7 @@ export const PinRecover = ({userState, navigation, startPin}) => {
   const [mobileno, setMobileno] = useState('');
 
   const requestPin = () => {
-    startPin('DummyName', loginid, mobileno, 'reset');
+    startResetPin(loginid, mobileno);
   };
 
   return (
@@ -84,4 +84,4 @@ const mapStateToProps = state => ({
   userState: state.userState,
 });
 
-export default connect(mapStateToProps, {startPin})(PinRecover);
+export default connect(mapStateToProps, {startResetPin})(PinRecover);

@@ -28,7 +28,7 @@ export const ModeSelector = ({userState, navigation}) => {
             vertical
             transparent
             style={{alignSelf: 'center'}}
-            onPress={() => navigation.navigate('CustomerDashboard')}>
+            onPress={() => navigation.navigate('CustomerTerms')}>
             <Icon name="ios-people" style={globalStyle.modeIcon} />
             <Text style={globalStyle.homeIconText}>Customer</Text>
           </Button>
@@ -38,7 +38,7 @@ export const ModeSelector = ({userState, navigation}) => {
             vertical
             transparent
             style={{alignSelf: 'center'}}
-            onPress={() => navigation.navigate('TransporterDashboard')}>
+            onPress={() => navigation.navigate('TransporterTerms')}>
             <Icon
               name="dump-truck"
               type="MaterialCommunityIcons"

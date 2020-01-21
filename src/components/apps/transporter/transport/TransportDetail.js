@@ -55,7 +55,6 @@ export const TransportDetail = ({
       setLoading(false);
     } catch (error) {
       handleError(error);
-      setLoading(false);
     }
   };
 
@@ -88,48 +87,52 @@ export const TransportDetail = ({
         </View>
       )}
       <Grid style={{marginTop: 5}}>
-        <Row
-          style={{
-            height: 55,
-            borderBottomWidth: 1,
-            borderBottomColor: 'green',
-          }}>
-          <Col>
-            <Button
-              vertical
-              transparent
-              style={{alignSelf: 'center'}}
-              onPress={() =>
-                navigation.navigate('UpdateDriver', {
-                  id: vehicle.name,
-                  driver_name: vehicle.drivers_name,
-                  driver_mobile_no: vehicle.contact_no,
-                })
-              }>
-              <Icon
-                name="drivers-license"
-                type="FontAwesome"
-                style={{color: 'blue'}}
-              />
-              <Text style={{color: 'blue'}}>Update Driver Info</Text>
-            </Button>
-          </Col>
+        {vehicle.vehicle_status === 'Active' ? (
+          <Row
+            style={{
+              height: 55,
+              borderBottomWidth: 1,
+              borderBottomColor: 'green',
+            }}>
+            <Col>
+              <Button
+                vertical
+                transparent
+                style={{alignSelf: 'center'}}
+                onPress={() =>
+                  navigation.navigate('UpdateDriver', {
+                    id: vehicle.name,
+                    driver_name: vehicle.drivers_name,
+                    driver_mobile_no: vehicle.contact_no,
+                  })
+                }>
+                <Icon
+                  name="drivers-license"
+                  type="FontAwesome"
+                  style={{color: 'blue'}}
+                />
+                <Text style={{color: 'blue'}}>Update Driver Info</Text>
+              </Button>
+            </Col>
 
-          <Col>
-            <Button
-              vertical
-              transparent
-              style={{alignSelf: 'center'}}
-              onPress={() => toggleAlert()}>
-              <Icon
-                name="truck-loading"
-                type="FontAwesome5"
-                style={{color: 'red'}}
-              />
-              <Text style={{color: 'red'}}>Deregister</Text>
-            </Button>
-          </Col>
-        </Row>
+            <Col>
+              <Button
+                vertical
+                transparent
+                style={{alignSelf: 'center'}}
+                onPress={() => toggleAlert()}>
+                <Icon
+                  name="truck-loading"
+                  type="FontAwesome5"
+                  style={{color: 'red'}}
+                />
+                <Text style={{color: 'red'}}>Deregister</Text>
+              </Button>
+            </Col>
+          </Row>
+        ) : (
+          <Text></Text>
+        )}
 
         <Content style={globalStyle.content}>
           <Row style={globalStyle.labelContainer}>
@@ -137,16 +140,15 @@ export const TransportDetail = ({
               <Text style={globalStyle.label}>Vehicle Status</Text>
             </Col>
             <Col size={3}>
-              {vehicle.vehicle_status === 'Blacklisted' ? (
+              {vehicle.vehicle_status === 'Suspended' ? (
                 <Text style={{color: 'red', fontWeight: 'bold'}}>
-                  Blacklisted
+                  Suspended
                 </Text>
               ) : (
                 <Text style={{color: 'blue', fontWeight: 'bold'}}>Active</Text>
               )}
             </Col>
           </Row>
-
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
               <Text style={globalStyle.label}>Vehicle Number</Text>
@@ -155,7 +157,6 @@ export const TransportDetail = ({
               <Text>{vehicle.name}</Text>
             </Col>
           </Row>
-
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
               <Text style={globalStyle.label}>Vehicle Capacity</Text>
@@ -164,7 +165,6 @@ export const TransportDetail = ({
               <Text>{vehicle.vehicle_capacity} m3</Text>
             </Col>
           </Row>
-
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
               <Text style={globalStyle.label}>Driver's Name</Text>
@@ -173,7 +173,6 @@ export const TransportDetail = ({
               <Text>{vehicle.drivers_name}</Text>
             </Col>
           </Row>
-
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
               <Text style={globalStyle.label}>Driver's Contact No</Text>
@@ -182,35 +181,14 @@ export const TransportDetail = ({
               <Text>{vehicle.contact_no}</Text>
             </Col>
           </Row>
-
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
               <Text style={globalStyle.label}>Driver's CID</Text>
             </Col>
             <Col size={3}>
-              <Text>{vehicle.driver_cid}</Text>
+              <Text>{vehicle.owner_cid}</Text>
             </Col>
           </Row>
-
-          <Row style={globalStyle.labelContainer}>
-            <Col size={5}>
-              <Text style={globalStyle.label}>
-                Registered with following Branches
-              </Text>
-            </Col>
-          </Row>
-          {vehicle.items.map((veh, idx) => {
-            return (
-              <Row style={globalStyle.labelContainer} key={idx}>
-                <Col size={2}>
-                  <Text style={globalStyle.label}>Branch</Text>
-                </Col>
-                <Col size={3}>
-                  <Text>{veh.crm_branch}</Text>
-                </Col>
-              </Row>
-            );
-          })}
         </Content>
       </Grid>
     </Container>

@@ -30,6 +30,8 @@ import UserDetail from '../../apps/user/UserDetail';
 import Settings from '../../apps/user/Settings';
 
 //Customer Screens
+import CustomerTerms from '../../apps/customer/CustomerTerms';
+import TransporterTerms from '../../apps/transporter/TransporterTerms';
 import CustomerDashboard from '../../apps/customer/CustomerDashboard';
 import SiteDashboard from '../../apps/customer/SiteDashboard';
 import VehicleDashboard from '../../apps/customer/VehicleDashboard';
@@ -43,6 +45,9 @@ import AddVehicle from '../../apps/customer/vehicles/AddVehicle';
 import ListVehicle from '../../apps/customer/vehicles/ListVehicle';
 import VehicleDetail from '../../apps/customer/vehicles/VehicleDetail';
 import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver';
+import OrderDashboard from '../../apps/customer/OrderDashboard';
+import ListOrder from '../../apps/customer/orders/ListOrder';
+import AddOrder from '../../apps/customer/orders/AddOrder';
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
@@ -63,6 +68,14 @@ const AppNavigator = createStackNavigator(
     ModeSelector: {
       screen: ModeSelector,
       navigationOptions: {title: 'Select Mode'},
+    },
+    CustomerTerms: {
+      screen: CustomerTerms,
+      navigationOptions: {title: 'Customer Terms & Conditions'},
+    },
+    TransporterTerms: {
+      screen: TransporterTerms,
+      navigationOptions: {title: 'Transporter Terms & Conditions'},
     },
     CustomerDashboard: {
       screen: CustomerDashboard,
@@ -140,6 +153,24 @@ const AppNavigator = createStackNavigator(
       screen: UpdateDriver,
       navigationOptions: {
         title: 'Update Driver Info',
+      },
+    },
+    OrderDashboard: {
+      screen: OrderDashboard,
+      navigationOptions: {
+        title: 'Orders',
+      },
+    },
+    ListOrder: {
+      screen: ListOrder,
+      navigationOptions: {
+        title: 'All Orders',
+      },
+    },
+    AddOrder: {
+      screen: AddOrder,
+      navigationOptions: {
+        title: 'Place Order',
       },
     },
     TransporterDashboard: {

@@ -21,13 +21,15 @@ export const transportSchema = yup.object().shape({
     .trim()
     .required('Driver Name is mandatory'),
   contact_no: yup
-    .string()
-    .trim()
-    .required('Contact No is mandatory'),
-  driver_cid: yup
-    .string()
-    .trim()
-    .required('Driver CID is mandatory'),
+    .number()
+    .positive('Invalid Owner CID')
+    .required('Contact No is mandatory')
+    .typeError('Invalid Owner CID'),
+  owner_cid: yup
+    .number()
+    .positive('Invalid Owner CID')
+    .required('Driver CID is mandatory')
+    .typeError('Invalid Owner CID'),
   common_pool: yup
     .number()
     .integer()
@@ -52,9 +54,9 @@ export const driverInfoSchema = yup.object().shape({
     .trim()
     .required('Driver Name is mandatory'),
   driver_mobile_no: yup
-    .string()
-    .trim()
-    .required('Driver Contact No is mandatory'),
+    .number()
+    .required('Driver Contact No is mandatory')
+    .typeError('Invalid Driver Mobile'),
   remarks: yup
     .string()
     .trim()

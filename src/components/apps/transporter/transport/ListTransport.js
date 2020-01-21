@@ -54,7 +54,7 @@ export const ListTransport = ({
           }}
           style={globalStyles.tableHeader}>
           <Body>
-            {item.vehilce_status === 'Blacklisted' ? (
+            {item.vehilce_status === 'Suspended' ? (
               <Text style={{color: 'red'}}>{item.name}</Text>
             ) : (
               <Text style={{color: 'blue'}}>{item.name}</Text>
@@ -66,8 +66,13 @@ export const ListTransport = ({
           </Right>
         </CardItem>
         <CardItem>
-          <H3>Driver: {item.drivers_name} </H3>
-          <Text>({item.contact_no})</Text>
+          <Text>Vehicle Capacity: {item.vehicle_capacity} m3</Text>
+        </CardItem>
+        <CardItem>
+          <Text>Driver Name: {item.drivers_name}</Text>
+        </CardItem>
+        <CardItem>
+          <Text>Contact No : {item.contact_no}</Text>
         </CardItem>
       </Card>
     );
@@ -77,6 +82,7 @@ export const ListTransport = ({
     const params = {
       fields: JSON.stringify([
         'name',
+        'vehicle_capacity',
         'vehicle_status',
         'drivers_name',
         'contact_no',
@@ -98,7 +104,6 @@ export const ListTransport = ({
       setLoading(false);
     } catch (error) {
       handleError(error);
-      setLoading(false);
     }
   };
 

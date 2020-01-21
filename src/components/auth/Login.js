@@ -27,7 +27,7 @@ const Login = ({
   startLogin,
 }) => {
   const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('2766');
+  const [password, setPassword] = useState('6503');
 
   useEffect(() => {
     if (userState.logged_in) {

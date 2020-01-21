@@ -21,14 +21,14 @@ import globalStyles from '../../../../styles/globalStyle';
 import {FlatList} from 'react-native-gesture-handler';
 import {NavigationEvents} from 'react-navigation';
 
-export const ListVehicle = ({
+export const ListOrder = ({
   userState,
   commonState,
   navigation,
   setLoading,
   handleError,
 }) => {
-  const [vehicle, setVehicle] = useState([]);
+  const [order, setOrders] = useState([]);
   const [reload, setReload] = useState(0);
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export const ListVehicle = ({
       navigation.navigate('UserDetail');
     } else {
       setLoading(true);
-      getActiveVehciles();
+      getAllOrders();
     }
   }, [reload]);
 
@@ -52,7 +52,7 @@ export const ListVehicle = ({
           onPress={() => navigation.navigate('VehicleDetail', {id: item.name})}
           style={globalStyles.tableHeader}>
           <Body>
-            {item.vehilce_status === 'Suspended' ? (
+            {item.docstatus === 0 ? (
               <Text style={{color: 'red'}}>{item.name}</Text>
             ) : (
               <Text style={{color: 'blue'}}>{item.name}</Text>
@@ -64,35 +64,40 @@ export const ListVehicle = ({
           </Right>
         </CardItem>
         <CardItem>
-          <H3>Driver: {item.drivers_name} </H3>
-          <Text>({item.contact_no})</Text>
+          <H3>Site: {item.site} </H3>
+          <H3>Item: {item.item_name} </H3>
+          {item.total_balance_amount > 0 ? (
+            <H3>Payable: {item.total_balance_amount} </H3>
+          ) : (
+            <Text style={{color: 'blue'}}></Text>
+          )}
         </CardItem>
       </Card>
     );
   };
 
-  const getActiveVehciles = async () => {
+  const getAllOrders = async () => {
     const params = {
       fields: JSON.stringify([
         'name',
-        'vehicle_status',
-        'drivers_name',
-        'contact_no',
+        'docstatus',
+        'site',
+        'item_name',
+        'total_balance_amount',
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
-        ['self_arranged', '=', 1],
-        ['vehicle_status', '!=', 'Deregistered'],
+        ['docstatus', '!=', 2],
       ]),
     };
 
     try {
       const response = await callAxios(
-        'resource/Vehicle?order_by=creation%20desc,vehicle_status%20asc',
+        'resource/Customer Order?order_by=creation%20desc',
         'GET',
         params,
       );
-      setVehicle(response.data.data);
+      setOrders(response.data.data);
       setLoading(false);
     } catch (error) {
       handleError(error);
@@ -111,14 +116,14 @@ export const ListVehicle = ({
           setReload(0);
         }}
       />
-      {vehicle.length > 0 ? (
+      {order.length > 0 ? (
         <FlatList
-          data={vehicle}
+          data={order}
           renderItem={renderItem}
           keyExtractor={item => item.name}
         />
       ) : (
-        <Text style={globalStyles.emptyString}>No approved vehilces yet</Text>
+        <Text style={globalStyles.emptyString}>Place your first order</Text>
       )}
     </Container>
   );
@@ -134,4 +139,4 @@ const mapDispatchToProps = {
   handleError,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ListVehicle);
+export default connect(mapStateToProps, mapDispatchToProps)(ListOrder);

@@ -149,26 +149,30 @@ export const SiteDetail = ({
             borderBottomWidth: 1,
             borderBottomColor: 'green',
           }}>
-          <Col>
-            <Button
-              vertical
-              transparent
-              style={{alignSelf: 'center'}}
-              onPress={() =>
-                navigation.navigate('ExtendSite', {
-                  id: site.name,
-                  start_date: site.construction_start_date,
-                  end_date: site.construction_end_date,
-                })
-              }>
-              <Icon
-                name="format-text-wrapping-overflow"
-                type="MaterialCommunityIcons"
-                style={{color: 'blue'}}
-              />
-              <Text style={{color: 'blue'}}>Extend Date</Text>
-            </Button>
-          </Col>
+          {site.enabled ? (
+            <Col>
+              <Button
+                vertical
+                transparent
+                style={{alignSelf: 'center'}}
+                onPress={() =>
+                  navigation.navigate('ExtendSite', {
+                    id: site.name,
+                    start_date: site.construction_start_date,
+                    end_date: site.construction_end_date,
+                  })
+                }>
+                <Icon
+                  name="format-text-wrapping-overflow"
+                  type="MaterialCommunityIcons"
+                  style={{color: 'blue'}}
+                />
+                <Text style={{color: 'blue'}}>Extend Date</Text>
+              </Button>
+            </Col>
+          ) : (
+            <Text></Text>
+          )}
           {site.enabled ? (
             <Col>
               <Button
@@ -271,7 +275,7 @@ export const SiteDetail = ({
             </Col>
             <Col size={3}>
               <Text>
-                {moment(site.construction_end_date)
+                {moment(site.extension_till_date)
                   .format('Do MMM YYYY')
                   .toString()}
               </Text>
@@ -448,17 +452,20 @@ export const SiteDetail = ({
                     <Text>{currentItem.remarks}</Text>
                   </Col>
                 </Row>
-
-                <Row style={globalStyle.labelContainer}>
-                  <Col size={5}>
-                    <Button
-                      success
-                      style={[globalStyle.mb10, globalStyle.button]}
-                      onPress={extendSiteQty}>
-                      <Text>Request Additional Qty</Text>
-                    </Button>
-                  </Col>
-                </Row>
+                {site.enabled ? (
+                  <Row style={globalStyle.labelContainer}>
+                    <Col size={5}>
+                      <Button
+                        success
+                        style={[globalStyle.mb10, globalStyle.button]}
+                        onPress={extendSiteQty}>
+                        <Text>Request Additional Qty</Text>
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : (
+                  <Text></Text>
+                )}
                 <Row style={globalStyle.labelContainer}>
                   <Col size={5}>
                     <Button

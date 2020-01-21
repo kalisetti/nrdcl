@@ -37,18 +37,15 @@ export const AddTransport = ({
 }) => {
   //state info for forms
   const [vehicle_no, setVehicle_no] = useState('');
-  const [vehicle_owner, setvehicle_owner] = useState(undefined);
-  const [crm_branch, setcrm_branch] = useState(undefined);
   const [vehicle_capacity, setVehicle_capacity] = useState(undefined);
   const [drivers_name, setdrivers_name] = useState(undefined);
   const [contact_no, setcontact_no] = useState(undefined);
-  const [driver_cid, setdriver_cid] = useState(undefined);
+  const [owner_cid, setowner_cid] = useState(undefined);
   const [registration_document, setregistration_document] = useState([]);
   const [images, setImages] = useState([]);
 
   //all values
   const [all_capacities, setall_capacities] = useState([]);
-  const [all_branches, setall_branches] = useState([]);
 
   //For proper navigation/auth settings
   useEffect(() => {
@@ -58,6 +55,8 @@ export const AddTransport = ({
       navigation.navigate('UserDetail');
     } else {
       //get all capacities
+      setLoading(true);
+      getCapacities();
     }
   }, []);
 
@@ -70,8 +69,18 @@ export const AddTransport = ({
 
   //image picker
   const getBluebook = async () => {
-    const images = await getImages('Bluebook');
-    setregistration_document(images);
+    const bluebooks = await getImages('Bluebook');
+    setregistration_document(bluebooks);
+  };
+
+  const getCapacities = async () => {
+    try {
+      const all_st = await callAxios('resource/Vehicle Capacity');
+      setall_capacities(all_st.data.data);
+      setLoading(false);
+    } catch (error) {
+      handleError(error);
+    }
   };
 
   const submitVehicleInfo = async () => {
@@ -81,13 +90,12 @@ export const AddTransport = ({
       common_pool: 1,
       vehicle_no: vehicle_no.toUpperCase(),
       vehicle_capacity,
-      vehicle_owner,
       drivers_name,
       contact_no,
-      driver_cid,
+      owner_cid,
     };
 
-    startTransportRegistration(vehicle_info, images);
+    startTransportRegistration(vehicle_info, registration_document);
   };
 
   return commonState.isLoading ? (
@@ -103,6 +111,15 @@ export const AddTransport = ({
               placeholder="Vehicle No."
             />
           </Item>
+
+          <Item regular style={globalStyles.mb10}>
+            <Input
+              value={owner_cid}
+              onChangeText={val => setowner_cid(val)}
+              placeholder="Owner's CID"
+            />
+          </Item>
+
           <Item regular style={globalStyles.mb10}>
             <Picker
               mode="dropdown"
@@ -136,17 +153,11 @@ export const AddTransport = ({
               placeholder="Driver's Contact No"
             />
           </Item>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={driver_cid}
-              onChangeText={val => setdriver_cid(val)}
-              placeholder="Driver's CID"
-            />
-          </Item>
 
           <Button info style={globalStyles.mb10} onPress={getBluebook}>
             <Text>Attach Bluebook</Text>
           </Button>
+
           {images.length === 0 ? null : (
             <View style={{height: 300, width: '100%', marginBottom: 20}}>
               <Text style={{alignSelf: 'center', color: 'red'}}>

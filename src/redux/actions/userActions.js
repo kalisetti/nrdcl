@@ -17,6 +17,7 @@ import {
   userRegistrationSchema,
   userProfileSchema,
   loginSchema,
+  pinSchema,
 } from '../../validation/schema/userSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
 
@@ -91,7 +92,6 @@ export const startLogin = (login_id, pin) => {
         ['nrdcl_username', username],
       ]);
 
-      console.log(user_details.data);
       dispatch(login(user_details.data));
       dispatch(setLoading(false));
 
@@ -157,11 +157,36 @@ export const startPin = (
 
     try {
       //validate first
-      await pinResetSchema.validate(params);
+      await pinSchema.validate(params);
 
       dispatch(setLoading(true));
       await callAxios(
         'method/frappe.core.doctype.user.user.send_pin',
+        'post',
+        params,
+      );
+      dispatch(showToast(`PIN sent to ${mobileno}`));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+//send_pin(full_name, login_id, mobile_no)
+export const startResetPin = (loginid, mobileno) => {
+  return async dispatch => {
+    const params = {
+      login_id: loginid,
+      mobile_no: mobileno,
+    };
+
+    try {
+      //validate first
+      await pinResetSchema.validate(params);
+
+      dispatch(setLoading(true));
+      await callAxios(
+        'method/frappe.core.doctype.user.user.crm_reset_password',
         'post',
         params,
       );

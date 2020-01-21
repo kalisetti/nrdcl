@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 //Object for PIN reset and generation
-export const pinResetSchema = yup.object().shape({
+export const pinSchema = yup.object().shape({
   full_name: yup
     .string()
     .trim()
@@ -9,9 +9,9 @@ export const pinResetSchema = yup.object().shape({
     .required('Name is mandatory'),
 
   login_id: yup
-    .string()
-    .trim()
-    .required('CID/Liscence number is mandatory'),
+    .number()
+    .required('CID/Liscence number is mandatory')
+    .typeError('Invalid CID'),
 
   mobile_no: yup
     .string()
@@ -21,6 +21,21 @@ export const pinResetSchema = yup.object().shape({
     .matches(/^\d{8}$/, 'Phone should have eight digits'),
 
   request_type: yup.string().default('signup'),
+});
+
+//Object for PIN reset and generation
+export const pinResetSchema = yup.object().shape({
+  login_id: yup
+    .number()
+    .required('CID/Liscence number is mandatory')
+    .typeError('Invalid CID'),
+
+  mobile_no: yup
+    .string()
+    .trim()
+    .required('Phone number is mandatory')
+    .length(8, 'Phone should have eight digits')
+    .matches(/^\d{8}$/, 'Phone should have eight digits'),
 });
 
 //User registration

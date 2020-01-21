@@ -87,48 +87,52 @@ export const VehicleDetail = ({
         </View>
       )}
       <Grid style={{marginTop: 5}}>
-        <Row
-          style={{
-            height: 55,
-            borderBottomWidth: 1,
-            borderBottomColor: 'green',
-          }}>
-          <Col>
-            <Button
-              vertical
-              transparent
-              style={{alignSelf: 'center'}}
-              onPress={() =>
-                navigation.navigate('UpdateDriver', {
-                  id: vehicle.name,
-                  driver_name: vehicle.drivers_name,
-                  driver_mobile_no: vehicle.contact_no,
-                })
-              }>
-              <Icon
-                name="drivers-license"
-                type="FontAwesome"
-                style={{color: 'blue'}}
-              />
-              <Text style={{color: 'blue'}}>Update Driver Info</Text>
-            </Button>
-          </Col>
+        {vehicle.vehicle_status === 'Active' ? (
+          <Row
+            style={{
+              height: 55,
+              borderBottomWidth: 1,
+              borderBottomColor: 'green',
+            }}>
+            <Col>
+              <Button
+                vertical
+                transparent
+                style={{alignSelf: 'center'}}
+                onPress={() =>
+                  navigation.navigate('UpdateDriver', {
+                    id: vehicle.name,
+                    driver_name: vehicle.drivers_name,
+                    driver_mobile_no: vehicle.contact_no,
+                  })
+                }>
+                <Icon
+                  name="drivers-license"
+                  type="FontAwesome"
+                  style={{color: 'blue'}}
+                />
+                <Text style={{color: 'blue'}}>Update Driver Info</Text>
+              </Button>
+            </Col>
 
-          <Col>
-            <Button
-              vertical
-              transparent
-              style={{alignSelf: 'center'}}
-              onPress={() => toggleAlert()}>
-              <Icon
-                name="truck-loading"
-                type="FontAwesome5"
-                style={{color: 'red'}}
-              />
-              <Text style={{color: 'red'}}>Deregister</Text>
-            </Button>
-          </Col>
-        </Row>
+            <Col>
+              <Button
+                vertical
+                transparent
+                style={{alignSelf: 'center'}}
+                onPress={() => toggleAlert()}>
+                <Icon
+                  name="truck-loading"
+                  type="FontAwesome5"
+                  style={{color: 'red'}}
+                />
+                <Text style={{color: 'red'}}>Deregister</Text>
+              </Button>
+            </Col>
+          </Row>
+        ) : (
+          <Text></Text>
+        )}
 
         <Content style={globalStyle.content}>
           <Row style={globalStyle.labelContainer}>
@@ -136,9 +140,9 @@ export const VehicleDetail = ({
               <Text style={globalStyle.label}>Vehicle Status</Text>
             </Col>
             <Col size={3}>
-              {vehicle.vehicle_status === 'Blacklisted' ? (
+              {vehicle.vehicle_status === 'Suspended' ? (
                 <Text style={{color: 'red', fontWeight: 'bold'}}>
-                  Blacklisted
+                  Suspended
                 </Text>
               ) : (
                 <Text style={{color: 'blue', fontWeight: 'bold'}}>Active</Text>
