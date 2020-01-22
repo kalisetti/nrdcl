@@ -350,7 +350,11 @@ export const AddOrder = ({
                     info
                     onPress={() => setShowModal(true)}
                     style={globalStyles.mb10}>
-                    <Text> Add Qty</Text>
+                    {items.length > 0 ? (
+                      <Text>Add More Qty</Text>
+                    ) : (
+                      <Text>Add Qty</Text>
+                    )}
                   </Button>
 
                   <OrderQty
