@@ -201,3 +201,23 @@ export const handleError = error => {
     return showToast(error.message);
   }
 };
+
+export const startSubmitBillingAddress = (billingAddressChangeRequestData) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      // await userProfileSchema.validate(userRequest);
+      let res = await callAxios(
+        'resource/User Request/',
+        'POST',
+        {},
+        billingAddressChangeRequestData,
+      );
+     
+      dispatch(setLoading(false));
+      dispatch(showToast('Your request submited successfully', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
