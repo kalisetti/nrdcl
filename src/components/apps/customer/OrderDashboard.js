@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
-import {Container, Text, Icon, Button} from 'native-base';
-import {Grid, Col, Row} from 'react-native-easy-grid';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Container, Text, Icon, Button } from 'native-base';
+import { Grid, Col, Row } from 'react-native-easy-grid';
 import globalStyle from '../../../styles/globalStyle';
 import Logo from '../../base/header/Logo';
 
-export const OrderDashboard = ({userState, navigation}) => {
+export const OrderDashboard = ({ userState, navigation }) => {
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -19,7 +19,7 @@ export const OrderDashboard = ({userState, navigation}) => {
     <Container>
       <Grid>
         <Row size={2}>
-          <Col style={{justifyContent: 'space-evenly'}}>
+          <Col style={{ justifyContent: 'space-evenly' }}>
             <Logo />
           </Col>
         </Row>
@@ -28,7 +28,7 @@ export const OrderDashboard = ({userState, navigation}) => {
             <Button
               vertical
               transparent
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
               onPress={() => navigation.navigate('ListOrder')}>
               <Icon
                 name="list-ol"
@@ -42,8 +42,9 @@ export const OrderDashboard = ({userState, navigation}) => {
             <Button
               vertical
               transparent
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
               onPress={() => navigation.navigate('AddOrder')}>
+              {/* onPress={() => navigation.navigate('Payment')}> */}
               <Icon
                 name="add-to-list"
                 type="Entypo"

@@ -168,10 +168,10 @@ export const vehilceSchema = yup.object().shape({
     .string()
     .trim()
     .required('Contact No is mandatory'),
-  driver_cid: yup
-    .string()
-    .trim()
-    .required('Driver CID is mandatory'),
+  // driver_cid: yup
+  //   .string()
+  //   .trim()
+  //   .required('Driver CID is mandatory'),
   self_arranged: yup
     .number()
     .integer()

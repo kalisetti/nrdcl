@@ -16,13 +16,13 @@ const OrderQty = ({data, removeItem, transport_mode}) => {
             <Text style={globalStyles.siteItem}>{item.vehicle}</Text>
           </Col>
         ) : (
-          <Fragment></Fragment>
+          <Fragment></Fragment> 
         )}
         <Col size={1} style={globalStyles.siteCol}>
-          <Text style={globalStyles.siteItem}>{item.capacity}</Text>
+          <Text style={globalStyles.siteItem}>{item.vehicle_capacity}</Text>
         </Col>
         <Col size={2} style={globalStyles.siteCol}>
-          <Text style={globalStyles.siteItem}>{item.truckload}</Text>
+          <Text style={globalStyles.siteItem}>{item.noof_truck_load}</Text>
         </Col>
         <Col size={1}>
           <Button transparent small onPress={() => removeItem(index)}>
@@ -60,7 +60,7 @@ const OrderQty = ({data, removeItem, transport_mode}) => {
             <Text style={globalStyles.siteItem}>{'Capacity'}</Text>
           </Col>
           <Col size={2} style={globalStyles.siteCol}>
-            <Text style={globalStyles.siteItem}>{'Truckload'}</Text>
+            <Text style={globalStyles.siteItem}>{'Truck Load'}</Text>
           </Col>
           <Col size={1}></Col>
         </Row>

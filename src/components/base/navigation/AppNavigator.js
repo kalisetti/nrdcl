@@ -48,6 +48,7 @@ import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver';
 import OrderDashboard from '../../apps/customer/OrderDashboard';
 import ListOrder from '../../apps/customer/orders/ListOrder';
 import AddOrder from '../../apps/customer/orders/AddOrder';
+import Payment from '../../apps/customer/orders/Payment';
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
@@ -171,6 +172,12 @@ const AppNavigator = createStackNavigator(
       screen: AddOrder,
       navigationOptions: {
         title: 'Place Order',
+      },
+    },
+    Payment: {
+      screen: Payment,
+      navigationOptions: {
+        title: 'Payment',
       },
     },
     TransporterDashboard: {

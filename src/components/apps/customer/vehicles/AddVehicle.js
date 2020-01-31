@@ -109,10 +109,11 @@ export const AddVehicle = ({
       self_arranged: 1,
       vehicle_no: vehicle_no.toUpperCase(),
       vehicle_capacity,
-      vehicle_owner,
+      owner:vehicle_owner,
+      owner_cid:vehicle_owner=='Self'?userState.login_id:driver_cid,
       drivers_name,
-      contact_no,
-      driver_cid,
+      contact_no
+      // driver_cid,
     };
 
     startVehicleRegistration(site_info, images, mc);

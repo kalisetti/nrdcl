@@ -1,5 +1,6 @@
 import {StyleSheet, Dimensions} from 'react-native';
 import Config from 'react-native-config';
+import { Right } from 'native-base';
 
 export default StyleSheet.create({
   container: {
@@ -25,6 +26,7 @@ export default StyleSheet.create({
   },
 
   mb10: {
+    borderRadius: 10,
     marginBottom: 10,
   },
 
@@ -145,4 +147,33 @@ export default StyleSheet.create({
 
   itemButton: {width: '45%', justifyContent: 'center'},
   button: {justifyContent: 'center'},
+  moneyFormat:{
+    marginRight:-50
+  },
+
+  fieldSet:{
+    margin: 10,
+    paddingBottom: 10,
+    paddingTop: 15,
+    borderRadius: 5,
+    borderWidth: 1,
+    alignItems: 'center',
+    borderColor: 'grey'
+},
+legend:{
+    position: 'absolute',
+    top: -10,
+    left: 10,
+    color:'grey',
+    fontWeight: 'bold',
+    backgroundColor: '#FFFFFF'
+},
+dialogueInput: {
+  borderRadius: 4,
+  borderWidth: 0.5,
+  borderColor: 'grey',
+  padding:5
+},
+
+
 });

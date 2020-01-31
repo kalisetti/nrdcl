@@ -124,7 +124,7 @@ export const AddSite = ({
       setall_purpose(all_pur.data.data);
 
       const all_ct = await callAxios('resource/Construction Type');
-      setall_construction_type(all_ct.data.data);
+      setall_construction_type(all_ct.data.data); 
 
       const dz_all = await callAxios('resource/Dzongkhags', 'get');
       setall_dzongkhag(dz_all.data.data);

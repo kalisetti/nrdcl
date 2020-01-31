@@ -17,6 +17,7 @@ import {
 } from '../../validation/schema/siteSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
 
+
 /**
  *
  * @param {details of site to be registered} site_info
@@ -53,6 +54,72 @@ export const startSiteRegistration = (site_info, images) => {
       NavigationService.navigate('SiteDashboard');
       dispatch(setLoading(false));
       dispatch(showToast('Site Registration request sent', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+
+export const submitSalesOrder = (data) => {
+  // alert(data.bank_a)
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      // await siteSchema.validate(site_info);
+      const res = await callAxios(
+        'resource/Customer Order/',
+        'POST',
+        {},
+        data,
+      );
+      // alert(res.data.data.name)
+      if (res.status == 200) {
+        NavigationService.navigate('Payment', { orderNumber: res.data.data.name })
+      }
+      // NavigationService.navigate('SiteDashboard');
+      // dispatch(setLoading(false));
+      // dispatch(showToast('Order successfully placed', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+export const submitPayNow = (data) => {
+  // alert(data.)
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      // await siteSchema.validate(site_info);
+      const res = await callAxios(
+        'method/erpnext.crm_api.init_payment',
+        'post',
+        data,
+      );
+      // alert(res.data.data.name)
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+export const submitMakePayment = (data) => {
+  // alert(data.)
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      // await siteSchema.validate(site_info);
+      const res = await callAxios(
+        'method/erpnext.crm_api.make_payment',
+        'post',
+        data,
+      );
+      if (res.status == 200) {
+        dispatch(setLoading(false));
+        dispatch(showToast('Your order payment has been make successfully.', 'success'));
+        NavigationService.navigate('OrderDashboard');
+      }
     } catch (error) {
       dispatch(handleError(error));
     }
