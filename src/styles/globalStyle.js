@@ -26,8 +26,9 @@ export default StyleSheet.create({
   },
 
   mb10: {
-    borderRadius: 10,
+    borderRadius: 25,
     marginBottom: 10,
+    paddingLeft:5
   },
 
   bottom: {
@@ -86,15 +87,22 @@ export default StyleSheet.create({
     fontSize: 90,
   },
 
+  smallIcon: {
+    color: Config.APP_HEADER_COLOR,
+    fontSize: 20,
+    paddingRight:10
+  },
+
   homeIconText: {
     fontWeight: 'bold',
     color: Config.APP_HEADER_COLOR,
   },
 
-  siteCol: {borderRightWidth: 0.2, borderColor: 'black'},
+  siteCol: {borderRightWidth: 0.2, borderColor: 'white'},
 
   siteItem: {
     fontSize: 13,
+    paddingLeft:5
   },
 
   emptyString: {alignSelf: 'center', color: 'red', fontSize: 25},
@@ -108,11 +116,13 @@ export default StyleSheet.create({
   label: {
     fontWeight: 'bold',
     fontStyle: 'italic',
+    
   },
 
   tableContainer: {
     marginBottom: 10,
     borderWidth: 0.5,
+    // paddingLeft:4
   },
 
   tableHeaderContainer: {
@@ -126,6 +136,7 @@ export default StyleSheet.create({
 
   colContainer: {
     borderRightWidth: 0.5,
+    paddingLeft:3
   },
 
   modal: {
@@ -173,6 +184,16 @@ dialogueInput: {
   borderWidth: 0.5,
   borderColor: 'grey',
   padding:5
+},
+
+errorMsg: {
+  fontStyle: 'italic',
+  color:'red',
+  paddingLeft:10
+},
+
+italicFont: {
+  fontStyle: 'italic',
 },
 
 

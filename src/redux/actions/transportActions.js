@@ -5,7 +5,7 @@ import {
   handleError,
   attachFile,
 } from './commonActions';
-import {transportSchema} from '../../validation/schema/transportSchema';
+import { transportSchema } from '../../validation/schema/transportSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
 
 /**
@@ -18,24 +18,27 @@ export const startTransportRegistration = (vehicle_info, bluebook = []) => {
     dispatch(setLoading(true));
     try {
       await transportSchema.validate(vehicle_info);
+      if (bluebook.length <= 0) {
+        dispatch(showToast('Bluebook attachment is mandatory'))
+      } else {
+        let res = await callAxios(
+          'resource/Transport Request/',
+          'POST',
+          {},
+          vehicle_info,
+        );
 
-      let res = await callAxios(
-        'resource/Transport Request/',
-        'POST',
-        {},
-        vehicle_info,
-      );
+        const docname = res.data.data.name;
+        const doctype = res.data.data.doctype;
 
-      const docname = res.data.data.name;
-      const doctype = res.data.data.doctype;
+        bluebook.map(async image => {
+          await attachFile(doctype, docname, image);
+        });
 
-      bluebook.map(async image => {
-        await attachFile(doctype, docname, image);
-      });
-
-      NavigationService.navigate('ListTransport');
-      dispatch(setLoading(false));
-      dispatch(showToast('Transport Registration request sent', 'success'));
+        NavigationService.navigate('TransportDashboard');
+        dispatch(setLoading(false));
+        dispatch(showToast('Transport Registration request sent, please wait for approval', 'success'));
+      }
     } catch (error) {
       dispatch(handleError(error));
     }

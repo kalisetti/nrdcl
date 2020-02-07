@@ -38,7 +38,8 @@ export const PinRecover = ({userState, navigation, startResetPin}) => {
             <Input
               value={loginid}
               onChangeText={usr => setLoginid(usr)}
-              placeholder="CID/License No"
+              placeholder="CID Number"
+              keyboardType={'numeric'}
             />
           </Item>
 
@@ -48,6 +49,7 @@ export const PinRecover = ({userState, navigation, startResetPin}) => {
               value={mobileno}
               onChangeText={usr => setMobileno(usr)}
               placeholder="Mobile No"
+              keyboardType={'numeric'}
             />
           </Item>
 

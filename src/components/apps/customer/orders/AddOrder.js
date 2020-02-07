@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Modal } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Config from 'react-native-config';
+import { default as commaNumber } from 'comma-number';
 
 import {
   Container,
@@ -16,7 +17,8 @@ import {
   View,
   Row,
   Col,
-  Grid
+  Grid,
+  Icon
 } from 'native-base';
 import {
   callAxios,
@@ -59,9 +61,6 @@ export const AddOrder = ({
   const [allprivatevehicles, setallprivatevehicles] = useState([]);
 
   const [all_vehicle_capacities, setall_vehicle_capacities] = useState([]);
-  const [remitter_bank, setremitter_bank] = useState([undefined]);
-  const [remitter_acc_no, setremitter_acc_no] = useState([undefined]);
-  const [all_financial_inst, setall_financial_inst] = useState([]);
   const [totalOrderQty, settotalOrderQty] = useState(undefined);
   const [totalItemRate, settotalItemRate] = useState(undefined);
   const [totalTransportationRate, settotalTransportationRate] = useState(undefined);
@@ -70,6 +69,9 @@ export const AddOrder = ({
   const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState([]);
 
+  const [cp, setCp] = useState(undefined);
+  const [self, setSelf] = useState(undefined);
+  const [Others, setOthers] = useState(undefined);
   //For proper navigation/auth settings
   useEffect(() => {
     if (!userState.logged_in) {
@@ -110,17 +112,12 @@ export const AddOrder = ({
 
   useEffect(() => {
     setLoading(true);
-    getFinancialInstList();
-  }, [items]);
-
-  useEffect(() => {
-    setLoading(true);
     caculateInvoice();
   }, [items]);
 
+
   const setVehDetails = veh => {
     setcapacity(veh.vehicle_capacity);
-    alert(veh.vehicle)
     setvehicle(veh.vehicle);
   };
 
@@ -204,8 +201,12 @@ export const AddOrder = ({
             'branch': branch,
           },
         );
-
         setItemDetail(all_its.data.message[0]);
+        // if (branch != undefined) {
+        //   setCp(all_its.data.message[0].has_common_pool);
+        //   setSelf(all_its.data.message[0].allow_self_owned_transport);
+        //   setOthers(all_its.data.message[0].allow_other_transport);
+        // }
         setLoading(false);
       } catch (error) {
         handleError(error);
@@ -236,7 +237,7 @@ export const AddOrder = ({
   };
 
   const getVehicleCapacity = async () => {
-    if (transport_mode === 'Common Pool') {
+    if (transport_mode === 'Common Pool' || transport_mode === 'Others') {
       try {
         const all_st = await callAxios('resource/Vehicle Capacity');
         setall_vehicle_capacities(all_st.data.data);
@@ -249,8 +250,6 @@ export const AddOrder = ({
       setLoading(false);
     }
   };
-
-
 
   const resetModal = () => {
     setvehicle(undefined);
@@ -274,7 +273,7 @@ export const AddOrder = ({
   };
 
   const addItemToList = () => {
-    if ((transport_mode == 'Common Pool') && (vehicle_capacities == undefined)) {
+    if ((transport_mode == 'Common Pool' || transport_mode === 'Others') && (vehicle_capacities == undefined)) {
       setVehicleCapacityErrorMsg('Vehicle capacity is required.');
     }
     else if ((transport_mode == 'Self Owned Transport') && (vehicle == undefined)) {
@@ -292,18 +291,9 @@ export const AddOrder = ({
       };
       addItem(item);
       resetModal();
-
       setShowModal(false);
-      const order_details = {
-        transport_mode,
-        items
-      };
-      // loop(order_details);
-
     }
   };
-
-
 
   const submitOrder = async () => {
     const order_details = {
@@ -312,13 +302,11 @@ export const AddOrder = ({
       item,
       branch,
       transport_mode,
-      // bank_code: remitter_bank,
-      // bank_account: remitter_acc_no,
       vehicles: items,//for self owned
       pool_vehicles: items// for common pool
     };
     // loop(order_details);
-    submitSalesOrder(order_details);
+    submitSalesOrder(order_details,totalPayableAmount);
   };
 
   const resetDataGrid = val => {
@@ -326,57 +314,43 @@ export const AddOrder = ({
       setItems(items.filter((_, ind) => 0 > ind));
     }
   };
-  const caculateInvoice = async () => {
-    //  const totalOrderQty = 0;
+  /**
+   * 
+   * @param {to select transportation mode by defualt if there is only one value} val 
+   */
+  const selectTransportMode = () => {
+    // if (others === 1 && cp !== 1 && self != 1) {
+    //   setTransportMode('Others');
+    // }
+    // if (others !== 1 && cp === 1 && self !== 1) {
+    //   setTransportMode('Common Pool');
+    // }
+    // if (others !== 1 && cp !== 1 && self === 1) {
+    //   setTransportMode('Self Owned Transport');
+    // }
+    setTransportMode(undefined);
+  };
 
+
+  const caculateInvoice = async () => {
     if (items.length > 0) {
       var totalOrderQty = items.reduce(function (prev, cur) {
         return prev + (cur.noof_truck_load * cur.vehicle_capacity);
       }, 0);
+
       settotalOrderQty(totalOrderQty);
 
       var totalItemRate = totalOrderQty * itemDetail.item_rate;
-      settotalItemRate(totalItemRate.toFixed(2));
-
-      var totalTransportationRate = transport_mode == 'Common Pool' ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00
-      settotalTransportationRate(totalTransportationRate.toFixed(2));
-
-      var totalPayableAmount = totalTransportationRate + totalItemRate
-      settotalPayableAmount(totalPayableAmount.toFixed(2));
-
-    }
-  };
-
-
-  const getFinancialInstList = async () => {
-    if (items.length > 0) {
-      try {
-        const params = {
-          fields: JSON.stringify([
-            'name',
-            'bank_name',
-            'bank_code',
-          ]),
-          filters: JSON.stringify([
-            // ['user', '=', userState.login_id],
-            ['bank_code', '!=', null],
-          ]),
-
-        };
-        const bankList = await callAxios('resource/Financial Institution', 'get', params);
-        // alert(bankList.data.data.bank_name)
-        setall_financial_inst(bankList.data.data);
-        setLoading(false);
-      } catch (error) {
-        handleError(error);
-      }
-    } else {
-      //self owned capcities
+      // settotalItemRate(totalItemRate.toFixed(2));
+      settotalItemRate(100);
+      var totalTransportationRate = transport_mode == 'Common Pool' ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00;
+      settotalTransportationRate(50);
+      var totalPayableAmount = totalTransportationRate + totalItemRate;
+      settotalPayableAmount(100);
       setLoading(false);
     }
+    setLoading(false);
   };
-
-
 
   return commonState.isLoading ? (
     <SpinnerScreen />
@@ -430,36 +404,40 @@ export const AddOrder = ({
               </Picker>
             </Item>
             {item && (
-              <Row style={[globalStyles.tableContainer, globalStyles.mb50]}>
+              <Row style={[globalStyles.tableContainer]}>
                 <Grid>
                   <Row style={globalStyles.tableHeaderContainer}>
                     <Col size={2} style={globalStyles.colContainer}>
                       <Text>Region</Text>
                     </Col>
                     <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text>Rate (Nu.)</Text>
+                      <Text>Rate</Text>
                     </Col>
                     <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text>L T (Days)</Text>
+                      <Text>Lead Time</Text>
                     </Col>
-                    <Col size={1.5}>
-                      <Text>T Rate (Nu.)</Text>
+                    <Col size={1.5} style={globalStyles.colContainer}>
+                      <Text>Transport Rate</Text>
                     </Col>
                   </Row>
                   {all_branches.map((item, idx) => (
                     <Row key={idx} style={globalStyles.rowContainer}>
-                      <Col size={2} style={globalStyles.colContainer}>
+                      <Col size={2} style={globalStyles.colContainer}
+                        onPress={() => setBranch(item.branch)} >
                         <Text>{item.branch}</Text>
                       </Col>
-                      <Col size={1.5} style={globalStyles.colContainer}>
-                        <Text>{item.item_rate}</Text>
+                      <Col size={1.5} style={globalStyles.colContainer}
+                        onPress={() => setBranch(item.branch)}>
+                        <Text>Nu.{item.item_rate}</Text>
                       </Col>
-                      <Col size={1.5} style={globalStyles.colContainer}>
-                        <Text> {item.lead_time} </Text>
+                      <Col size={1.5} style={globalStyles.colContainer}
+                        onPress={() => setBranch(item.branch)}>
+                        <Text> {item.lead_time} Days</Text>
                       </Col>
-                      <Col size={1.5}>
+                      <Col size={1.5} style={globalStyles.colContainer}
+                        onPress={() => setBranch(item.branch)}>
                         {(item.has_common_pool === 1) && (
-                          <Text> {item.tr_rate} </Text>
+                          <Text>Nu.{item.tr_rate} </Text>
                         )}
                       </Col>
                     </Row>
@@ -472,7 +450,7 @@ export const AddOrder = ({
               <Picker
                 mode="dropdown"
                 selectedValue={branch}
-                onValueChange={val => setBranch(val)}>
+                onValueChange={val => { setBranch(val), selectTransportMode() }}>
                 <Picker.Item label={'Select Branch'} value={undefined} key={-1} />
                 {all_branches &&
                   all_branches.map((pur, idx) => {
@@ -486,43 +464,203 @@ export const AddOrder = ({
                   })}
               </Picker>
             </Item>
-            {itemDetail !== undefined ? (
+
+            {(itemDetail !== undefined && branch !== undefined) ? (
               <Fragment>
-                <Item regular style={globalStyles.mb10}>
-                  <Text style={{ color: 'red' }}>
-                    Will take approximately {itemDetail.lead_time} working days
-                  {/* at th rate
-                  of Nu. {itemDetail.item_rate}/{itemDetail.stock_uom}{' '} */}
-                  </Text>
-                </Item>
+                <Text style={{ color: 'gray' }}>
+                  <Icon name="info-circle"
+                    type="FontAwesome"
+                    style={globalStyles.smallIcon}
+                  ></Icon>
+                  Will take approximately {itemDetail.lead_time} working days
+                  at the rate of Nu. {itemDetail.item_rate}/{itemDetail.stock_uom}{' '}
+                </Text>
 
                 <Item regular style={globalStyles.mb10}>
-                  <Picker
-                    mode="dropdown"
-                    selectedValue={transport_mode}
-                    onValueChange={val => {
-                      setTransportMode(val)
-                        , resetDataGrid(val)
-                    }
-                    }>
-                    <Picker.Item
-                      label={'Select Transport Mode'}
-                      value={undefined}
-                      key={-1}
-                    />
-                    <Picker.Item
-                      label={'Self Owned Transport'}
-                      value={'Self Owned Transport'}
-                      key={0}
-                    />
-                    {itemDetail.has_common_pool === 1 && (
-                      <Picker.Item
-                        label={'Common Pool'}
-                        value={'Common Pool'}
-                        key={1}
-                      />
+                  {/* to select self owned */}
+                  {(itemDetail.allow_self_owned_transport === 1)
+                    && (itemDetail.has_common_pool !== 1)
+                    && (itemDetail.allow_other_transport !== 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Self Owned Transport'}
+                          value={'Self Owned Transport'}
+                          key={0}
+                        />
+                      </Picker>
                     )}
-                  </Picker>
+                  {/* to select common pool */}
+                  {(itemDetail.allow_self_owned_transport !== 1)
+                    && (itemDetail.has_common_pool === 1)
+                    && (itemDetail.allow_other_transport !== 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Common Pool'}
+                          value={'Common Pool'}
+                          key={0}
+                        />
+                      </Picker>
+                    )}
+
+                  {/* to select Others */}
+                  {(itemDetail.allow_self_owned_transport !== 1)
+                    && (itemDetail.has_common_pool !== 1)
+                    && (itemDetail.allow_other_transport == 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Others'}
+                          value={'Others'}
+                          key={0}
+                        />
+                      </Picker>
+                    )}
+
+                  {/* to select common pool and self owned */}
+                  {(itemDetail.allow_self_owned_transport === 1)
+                    && (itemDetail.has_common_pool === 1)
+                    && (itemDetail.allow_other_transport !== 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Self Owned Transport'}
+                          value={'Self Owned Transport'}
+                          key={0}
+                        />
+                        <Item
+                          label={'Common Pool'}
+                          value={'Common Pool'}
+                          key={1}
+                        />
+                      </Picker>
+                    )}
+                  {/* to select common pool and Other */}
+                  {(itemDetail.allow_self_owned_transport !== 1)
+                    && (itemDetail.has_common_pool === 1)
+                    && (itemDetail.allow_other_transport === 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Common Pool'}
+                          value={'Common Pool'}
+                          key={0}
+                        />
+                        <Item
+                          label={'Others'}
+                          value={'Others'}
+                          key={1}
+                        />
+                      </Picker>
+                    )}
+
+                  {/* to select self owned and Others */}
+                  {(itemDetail.allow_self_owned_transport === 1)
+                    && (itemDetail.has_common_pool !== 1)
+                    && (itemDetail.allow_other_transport === 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Self Owned Transport'}
+                          value={'Self Owned Transport'}
+                          key={0}
+                        />
+                        <Item
+                          label={'Others'}
+                          value={'Others'}
+                          key={1}
+                        />
+                      </Picker>
+                    )}
+
+                  {/* to select all three */}
+                  {(itemDetail.allow_self_owned_transport === 1)
+                    && (itemDetail.has_common_pool === 1)
+                    && (itemDetail.allow_other_transport === 1) &&
+                    (
+                      <Picker
+                        mode="dropdown"
+                        selectedValue={transport_mode}
+                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
+                        }>
+                        <Item
+                          label={'Select Transport Mode'}
+                          value={undefined}
+                          key={-1}
+                        />
+                        <Item
+                          label={'Self Owned Transport'}
+                          value={'Self Owned Transport'}
+                          key={0}
+                        />
+                        <Item
+                          label={'Common Pool'}
+                          value={'Common Pool'}
+                          key={1}
+                        />
+                        <Item
+                          label={'Others'}
+                          value={'Others'}
+                          key={2}
+                        />
+                      </Picker>
+                    )}
+
                 </Item>
 
                 {transport_mode && (
@@ -551,39 +689,53 @@ export const AddOrder = ({
               )}
 
 
-            {items.length > 0 ? (
+            {(items.length > 0 && branch !== undefined && transport_mode !== undefined) ? (
               // <Text></Text>
               <Fragment>
                 <Row style={globalStyles.labelContainer}>
-                  <Col size={3}>
-                    <Text style={globalStyles.label}>Total Order Qty:</Text>
+                  {/* <Col size={3}>
+                    <Text></Text>
                   </Col>
                   <Col size={2}>
-                    <Text>{totalOrderQty}</Text>
+                    <Text style={{ textAlign: 'right' }}></Text>
+                  </Col> */}
+                </Row>
+                <Row style={globalStyles.labelContainer}>
+                  <Col size={3}>
+                    <Text>Total Order Qty:</Text>
+                  </Col>
+                  <Col size={2}>
+                    <Text style={{ textAlign: 'right' }}>{totalOrderQty} m3</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyles.labelContainer}>
                   <Col size={3}>
-                    <Text style={globalStyles.label}>Total Item Amount:</Text>
+                    <Text >Total Item Amt(Nu):</Text>
                   </Col>
                   <Col size={2}>
-                    <Text>{totalItemRate}</Text>
+                    <Text style={{ textAlign: 'right' }}>{commaNumber(totalItemRate)}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyles.labelContainer}>
-                  <Col size={3}>
-                    <Text style={globalStyles.label}>Total Transportation Amount:</Text>
-                  </Col>
-                  <Col size={2}>
-                    <Text>{totalTransportationRate}</Text>
-                  </Col>
+                  {transport_mode === 'Common Pool' && (
+                    <Col size={4}>
+                      <Text>Total Transportation Amt(Nu):</Text>
+                    </Col>
+                  )}
+                  {transport_mode === 'Common Pool' && (
+                    <Col size={2}>
+                      <Text style={{ textAlign: 'right' }}>{commaNumber(totalTransportationRate)}</Text>
+                    </Col>
+                  )}
                 </Row>
+                <Item></Item>
+
                 <Row style={globalStyles.labelContainer}>
                   <Col size={3}>
-                    <Text style={globalStyles.label}>Total Payable Amount:</Text>
+                    <Text style={{ textAlign: 'left', fontWeight: 'bold', }}>Total Payable Amt(Nu):</Text>
                   </Col>
                   <Col size={2}>
-                    <Text>{totalPayableAmount}</Text>
+                    <Text style={{ textAlign: 'right', fontWeight: 'bold', }}>{commaNumber(totalPayableAmount)}</Text>
                   </Col>
                 </Row>
               </Fragment>
@@ -592,7 +744,12 @@ export const AddOrder = ({
               )}
 
             <Text></Text>
-            <Button success style={globalStyles.mb50} onPress={submitOrder}>
+            <Button
+              block
+              success
+              iconLeft
+              style={globalStyles.mb10}
+              onPress={submitOrder}>
               <Text>Place Order</Text>
             </Button>
           </Form>
@@ -615,7 +772,7 @@ export const AddOrder = ({
               Add Qty
           </Text>
 
-            {(transport_mode === 'Common Pool') && (
+            {(transport_mode === 'Common Pool' || transport_mode === 'Others') && (
               <Item regular style={globalStyles.mb10}>
                 <Picker
                   mode="dropdown"
@@ -651,7 +808,6 @@ export const AddOrder = ({
                   />
                   {allprivatevehicles &&
                     allprivatevehicles.map((val, idx) => {
-                      // alert(val.vehicle)
                       return (
                         <Picker.Item label={val.vehicle} value={val} key={idx} />
                       );

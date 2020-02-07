@@ -186,6 +186,14 @@ export const Setting = ({
                 <Input disabled value={cid} />
               </Item>
               <Item regular inlineLabel style={globalStyles.mb10}>
+                <Label>Date of Issue:</Label>
+                <Input disabled value={date_of_issue} />
+              </Item>
+              <Item regular inlineLabel style={globalStyles.mb10}>
+                <Label>Date of Expiry :</Label>
+                <Input disabled value={date_of_expiry} />
+              </Item>
+              <Item regular inlineLabel style={globalStyles.mb10}>
                 <Label>Mobile No:</Label>
                 <Input disabled value={mobile_no} />
               </Item>
@@ -194,19 +202,11 @@ export const Setting = ({
                 <Input disabled value={email_id} />
               </Item>
 
-              <Item regular inlineLabel style={globalStyles.mb10}>
-                <Label>Date of Issue:</Label>
-                <Input disabled value={date_of_issue} />
-              </Item>
-              <Item regular inlineLabel style={globalStyles.mb10}>
-                <Label>Date of Expeiry:</Label>
-                <Input disabled value={date_of_expiry} />
-              </Item>
             </View>
 
 
             <View style={globalStyles.fieldSet}>
-              <Text style={globalStyles.legend}>Billing Address</Text>
+              <Text style={globalStyles.legend}>Present Address</Text>
               <Item regular inlineLabel style={globalStyles.mb10}>
                 <Label>Address line 1:</Label>
                 <Input
@@ -324,9 +324,9 @@ export const Setting = ({
                 </Picker>
               </Item>
 
-              <Button success onPress={submitPerAddress} style={globalStyles.mb50} >
+              {/* <Button success onPress={submitPerAddress} style={globalStyles.mb50} >
                 <Text>Submit Permanent Address</Text>
-              </Button>
+              </Button> */}
             </View>
 
             <View style={globalStyles.fieldSet}>
@@ -339,11 +339,11 @@ export const Setting = ({
                 <Label>Account Number</Label>
                 <Input value={account_number} />
               </Item>
-              <Button success
+              {/* <Button success
                 onPress={submitBankAddress}
                 style={globalStyles.mb50} >
                 <Text>Submit Bank Address</Text>
-              </Button>
+              </Button> */}
             </View>
 
 

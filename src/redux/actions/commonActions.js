@@ -215,7 +215,7 @@ export const startSubmitBillingAddress = (billingAddressChangeRequestData) => {
       );
      
       dispatch(setLoading(false));
-      dispatch(showToast('Your request submited successfully', 'success'));
+      dispatch(showToast('Your request submited successfully, please wait for approval.', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }

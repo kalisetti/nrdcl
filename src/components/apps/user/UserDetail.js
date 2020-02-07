@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
-import {connect} from 'react-redux';
+import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import moment from 'moment';
+import { View, Image } from 'react-native';
 import {
   Container,
   Button,
@@ -12,17 +13,28 @@ import {
   Item,
   Label,
   Spinner,
+  Icon,
+  Card,
+  CardItem,
+  DeckSwiper,
 } from 'native-base';
+import {
+  setLoading,
+  callAxios,
+  handleError,
+  getImages,
+} from '../../../redux/actions/commonActions';
 import DatePicker from 'react-native-datepicker';
 import globalStyles from '../../../styles/globalStyle';
-import {showToast, selectImage} from '../../../redux/actions/commonActions';
-import {startProfileSubmission} from '../../../redux/actions/userActions';
+import { showToast, selectImage } from '../../../redux/actions/commonActions';
+import { startProfileSubmission } from '../../../redux/actions/userActions';
 
 const UserDetail = ({
   userState,
   commonState,
   startProfileSubmission,
   navigation,
+  getImages
 }) => {
   useEffect(() => {
     if (userState.profile_verified) {
@@ -30,10 +42,17 @@ const UserDetail = ({
     }
   }, []);
 
+  const [imagesFront, setImagesFront] = useState([]);
+  const [cidFrontImage, setCidFrontImage] = useState([]);
+
+  const [imagesBack, setImagesBack] = useState([]);
+  const [cidBackImage, setCidBackImage] = useState([]);
+
+  const [imgFrontReqMsg, setImgFrontReqMsg] = useState('');
+  const [imgBackReqMsg, setImgBackReqMsg] = useState('');
+
   const [cid, setCid] = useState(userState.login_id);
   const [fullname, setFullname] = useState(userState.first_name);
-  const [frontImage, setFrontImage] = useState(null);
-  const [backImage, setBackImage] = useState(null);
   const [issued, setIssued] = useState(moment());
   const [expiry, setExpiry] = useState(
     moment()
@@ -41,149 +60,178 @@ const UserDetail = ({
       .subtract(1, 'd'),
   );
 
-  const setExpiryDate = date => {
-    setExpiry(
-      moment(date, 'DD-MM-YYYY')
-        .add(10, 'y')
-        .subtract(1, 'd'),
-    );
+  useEffect(() => {
+    setImagesFront([]);
+    setTimeout(() => {
+      setImagesFront(cidFrontImage);
+    }, 600);
+  }, [cidFrontImage]);
+
+  useEffect(() => {
+    setImagesBack([]);
+    setTimeout(() => {
+      setImagesBack(cidBackImage);
+    }, 600);
+  }, [cidBackImage]);
+
+  /**
+   * image picker cid front page
+   */
+  const getCidFrontPage = async () => {
+    const frontPageImage = await getImages('Front');
+    setCidFrontImage(frontPageImage);
+    setImgFrontReqMsg('');
   };
 
-  const setDirectExpiryDate = date => {
-    setExpiry(moment(date, 'DD-MM-YYYY'));
-  };
-
-  const uploadFront = async () => {
-    const image = await selectImage();
-    setFrontImage(image);
-  };
-
-  const uploadBack = async () => {
-    const image = await selectImage();
-    setBackImage(image);
+  /**
+   * image picker cid back page
+   */
+  const getCidBackPage = async () => {
+    const backPageImage = await getImages('Back');
+    setCidBackImage(backPageImage);
+    setImgBackReqMsg('');
   };
 
   const submitInformation = async () => {
-    const userRequest = {
-      approval_status: 'Pending',
-      user: cid,
-      request_type: 'Registration',
-      request_category: 'CID Details',
-      new_cid: cid,
-      new_date_of_issue: issued,
-      new_date_of_expiry: expiry,
-    };
-    startProfileSubmission(userRequest, frontImage, backImage);
+    if (imagesFront.length < 1) {
+      setImgFrontReqMsg('CID front side is required');
+    }
+    else if (imagesBack.length < 1) {
+      setImgBackReqMsg('CID back side is required');
+    }
+    else {
+      const userRequest = {
+        approval_status: 'Pending',
+        user: cid,
+        request_type: 'Registration',
+        request_category: 'CID Details',
+        new_cid: cid,
+        new_date_of_issue: issued,
+        new_date_of_expiry: expiry,
+      };
+      startProfileSubmission(userRequest, cidFrontImage, cidBackImage);
+    }
   };
 
   return commonState.isLoading ? (
     <Spinner />
   ) : userState.profile_submitted ? (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Text style={{color: '#ee1111', fontSize: 20, fontWeight: 'bold'}}>
-          Your submitted information is being verified. Please come back later.
+    userState.profile_verified ? (
+      <Container>
+        <Content style={globalStyles.content}>
+          <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
+            CID: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
+              {userState.login_id}
+            </Text></Text>
+
+          <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
+            Full Name: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
+              {userState.first_name}
+            </Text></Text>
+          <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
+            Mobile Number: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
+              {userState.mobile_no}
+            </Text></Text>
+
+        </Content>
+      </Container>
+    ) : (
+        <Container>
+          <Content style={globalStyles.content}>
+            <Text style={{ color: 'green', fontSize: 18, fontWeight: 'bold' }}>
+              Thank you for using NRDCL online services. Your application is currently being processed.
+              You will receive SMS notification shortly.
         </Text>
-      </Content>
-    </Container>
+          </Content>
+        </Container>
+      )
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <Item regular style={globalStyles.mb10} stackedLabel>
-            <Label>Full Name</Label>
-            <Input
-              disabled
-              value={fullname}
-              onChangeText={txt => setFullname(txt)}
-            />
-          </Item>
+        <Container>
+          <Content style={globalStyles.content}>
+            <Form>
+              <Text>Full Name :<Text style={globalStyles.label}> {fullname}</Text></Text>
+              <Text></Text>
+              <Text >CID Number : <Text style={globalStyles.label}>{cid}</Text></Text>
+              <Text></Text>
 
-          <Item regular style={globalStyles.mb10} stackedLabel>
-            <Label>Citizen ID No</Label>
-            <Input disabled value={cid} onChangeText={txt => setCid(txt)} />
-          </Item>
+              <Button block info style={globalStyles.mb10} onPress={getCidFrontPage}>
+                <Text>Upload CID (Front Side) *</Text>
+              </Button>
 
-          <Item regular style={globalStyles.mb10} stackedLabel>
-            <Label>CID Issued Date</Label>
-            <DatePicker
-              style={{width: '100%'}}
-              date={issued}
-              mode="date"
-              customStyles={{dateInput: {borderWidth: 0}}}
-              placeholder="Issued Date"
-              format="DD-MM-YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              onDateChange={date => {
-                setIssued(date);
-                setExpiryDate(date);
-              }}
-            />
-          </Item>
+              {imagesFront.length === 0 ? null : (
+                <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                  <Text style={{ alignSelf: 'center', color: 'red' }}>
+                    Swipe to review all images
+              </Text>
+                  <DeckSwiper
+                    dataSource={cidFrontImage}
+                    renderItem={image => (
+                      <Card style={{ elevation: 3 }}>
+                        <CardItem cardBody>
+                          <Image
+                            source={{
+                              uri: image.path,
+                            }}
+                            style={{ height: 250, width: '100%' }}
+                          />
+                        </CardItem>
+                        <CardItem>
+                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                          <Text>
+                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                          </Text>
+                        </CardItem>
+                      </Card>
+                    )}
+                  />
+                </View>
+              )}
+              <View style={{ marginBottom: 20 }}></View>
+              <Button block info style={globalStyles.mb10} onPress={getCidBackPage}>
+                <Text>Upload CID (Back Side) *</Text>
+              </Button>
 
-          <Item regular style={globalStyles.mb10} stackedLabel>
-            <Label>CID Expiry Date</Label>
-            <DatePicker
-              style={{width: '100%'}}
-              date={expiry}
-              mode="date"
-              customStyles={{dateInput: {borderWidth: 0}}}
-              placeholder="Expiry Date"
-              format="DD-MM-YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              onDateChange={date => {
-                setDirectExpiryDate(date);
-              }}
-            />
-          </Item>
-
-          {!frontImage && (
-            <Button info onPress={uploadFront} style={globalStyles.mb10}>
-              <Text>Upload CID (Front Side)</Text>
-            </Button>
-          )}
-
-          {frontImage && (
-            <Container style={globalStyles.cidContainer}>
-              <Text>CID Image (Front Side)</Text>
-              <Thumbnail
-                square
-                large
-                source={{uri: frontImage.path}}
-                style={globalStyles.cidContainer}
-              />
-            </Container>
-          )}
-          <Item style={{marginBottom: 25}}></Item>
-
-          {!backImage && (
-            <Button info onPress={uploadBack} style={globalStyles.mb10}>
-              <Text>Upload CID (Back Side)</Text>
-            </Button>
-          )}
-          {backImage && (
-            <Container style={globalStyles.cidContainer}>
-              <Text>CID Image (Back Side)</Text>
-
-              <Thumbnail
-                square
-                large
-                source={{uri: backImage.path}}
-                style={globalStyles.cidContainer}
-              />
-            </Container>
-          )}
-
-          <Item style={{marginBottom: 25}}></Item>
-          <Button success onPress={submitInformation} style={globalStyles.mb50}>
-            <Text>Submit For Approval</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  );
+              {imagesBack.length === 0 ? null : (
+                <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                  <Text style={{ alignSelf: 'center', color: 'red' }}>
+                    Swipe to review all images
+              </Text>
+                  <DeckSwiper
+                    dataSource={cidBackImage}
+                    renderItem={image => (
+                      <Card style={{ elevation: 3 }}>
+                        <CardItem cardBody>
+                          <Image
+                            source={{
+                              uri: image.path,
+                            }}
+                            style={{ height: 250, width: '100%' }}
+                          />
+                        </CardItem>
+                        <CardItem>
+                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                          <Text>
+                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                          </Text>
+                        </CardItem>
+                      </Card>
+                    )}
+                  />
+                </View>
+              )}
+              <View style={{ marginBottom: 20 }}></View>
+              <Text style={globalStyles.errorMsg}>
+                {imgFrontReqMsg}
+                {imgBackReqMsg}
+              </Text>
+              <Item style={{ marginBottom: 25 }}></Item>
+              <Button block success onPress={submitInformation} style={globalStyles.mb10}>
+                <Text>Submit For Approval</Text>
+              </Button>
+            </Form>
+          </Content>
+        </Container>
+      );
 };
 
 const mstp = state => ({
@@ -194,20 +242,7 @@ const mstp = state => ({
 const mdtp = {
   showToast,
   startProfileSubmission,
+  getImages
 };
 
 export default connect(mstp, mdtp)(UserDetail);
-
-/*
-{
-  'cmd': u'uploadfile', 
-  'file_url': u'', 
-  'doctype': u'test1', 
-  'filename': u'docker.txt', 
-  'file_size': u'89', 
-  'docname': u'deff34d88c', 
-  'filedata': u'MTg3NmUxZTctOWJkZC00YWViLTgyM2ItZDc2MjlmYWI4MGEzCgpHb29nbGUgQVBJOiBBSXphU3lDb0laYnh4dGxGUGo3endWUnJDbEotcWlEM2RrZUJ4WFU=', 
-  'from_form': u'1', 
-  'is_private': u'1'
-}
-*/

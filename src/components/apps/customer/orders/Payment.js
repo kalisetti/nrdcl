@@ -1,9 +1,7 @@
-import React, { useEffect, useState, Fragment } from 'react';
+import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { Modal, TouchableOpacity, View, Text } from 'react-native';
+import { View } from 'react-native';
 import Dialog from "react-native-dialog";
-// import React, { Component } from "react";
-
 
 import {
     Container,
@@ -12,11 +10,8 @@ import {
     Picker,
     Item,
     Button,
-    // Text,
+    Text,
     Input,
-    // View,
-    Row,
-    Col
 } from 'native-base';
 import {
     callAxios,
@@ -24,27 +19,29 @@ import {
     getImages,
     setLoading,
 } from '../../../../redux/actions/commonActions';
-import { submitPayNow,submitMakePayment} from '../../../../redux/actions/siteActions';
+import {
+    submitMakePayment, submitCreditPayment
+} from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
-import OrderQty from './OrderQty';
 export const Payment = ({
     userState,
     commonState,
     navigation,
-    submitPayNow,
     handleError,
     setLoading,
-    submitMakePayment
+    submitMakePayment,
+    submitCreditPayment
 }) => {
     //state info for forms
     const [order_no, setorder_no] = useState([undefined]);
     const [remitter_bank, setremitter_bank] = useState([undefined]);
     const [remitter_acc_no, setremitter_acc_no] = useState([undefined]);
     const [all_financial_inst, setall_financial_inst] = useState([]);
-
     const [showDialog, setshowDialog] = useState(false);
     const [otp, setOTP] = useState(false);
+    const [creditAllowed, setCreditAllowed] = useState([undefined]);
+    const [modeOfPayment, setModeOfPayment] = useState([undefined]);
 
     //For proper navigation/auth settings
     useEffect(() => {
@@ -55,8 +52,23 @@ export const Payment = ({
         } else {
             setLoading(true);
             getFinancialInstList();
+            checkPaymentOption(navigation.getParam('site_type'));
         }
     }, []);
+
+
+    const checkPaymentOption = async id => {
+        try {
+            const response = await callAxios(`resource/Site Type/${id}`);
+            setCreditAllowed(response.data.data.credit_allowed);
+            setModeOfPayment(response.data.data.mode_of_payment);
+            setLoading(false);
+        } catch (error) {
+            handleError(error);
+        }
+    };
+
+    //This methode is to get all the financial bank list for dropdown
     const getFinancialInstList = async () => {
         try {
             const params = {
@@ -66,7 +78,6 @@ export const Payment = ({
                     'bank_code',
                 ]),
                 filters: JSON.stringify([
-                    // ['user', '=', userState.login_id],
                     ['bank_code', '!=', null],
                 ]),
             };
@@ -78,30 +89,51 @@ export const Payment = ({
         }
     };
 
-    const payNow = async () => {
-        setshowDialog(true);
-        setLoading(true);
-        const paymentData = {
-            'customer_order':navigation.getParam('orderNumber'),
-            'bank_code': remitter_bank,
-            'bank_account': remitter_acc_no,
-            'amount': 1
-        };
-        submitPayNow(paymentData);
-        setLoading(false);
-
+    //Confirming the remitter bank and account number with getting OTP SMS
+    const paymentRequest = async () => {
+        try {
+            setLoading(true);
+            const paymentData = {
+                'customer_order': navigation.getParam('orderNumber'),
+                'bank_code': remitter_bank,
+                'bank_account': remitter_acc_no,
+                'amount': 1
+            };
+            const res = await callAxios('method/erpnext.crm_api.init_payment',
+                'post',
+                paymentData,
+            );
+            if (res.status == 200) {
+                setLoading(false);
+                setshowDialog(true);
+            }
+        } catch (error) {
+            handleError(error);
+        }
     };
 
+    //Crdite payment 
+    const paymentLater = async () => {
+        const creditPaymentInfo = {
+            user: userState.login_id,
+            'customer_order': navigation.getParam('orderNumber'),
+            'mode_of_payment': modeOfPayment,
+            'paid_amount': navigation.getParam('totalPayableAmount'),
+            'docstatus': 1,
+
+        };
+        submitCreditPayment(creditPaymentInfo);
+    };
+
+    //Payment confrimation
     const makePayment = async () => {
         setLoading(true);
         setshowDialog(false);
         const data = {
-            'customer_order': "ORDR200100075",
+            'customer_order': navigation.getParam('orderNumber'),
             'otp': otp,
         };
         submitMakePayment(data);
-        setLoading(false);
-
     };
 
     return commonState.isLoading ? (
@@ -110,12 +142,14 @@ export const Payment = ({
         <Content style={globalStyles.content}>
             <Form>
                 <Item>
+
                     <Text style={globalStyles.label}>Your Order Number is :</Text>
-                    <Input style={globalStyles.label} disabled value={JSON.stringify(navigation.getParam('orderNumber'))}
+                    <Input style={globalStyles.label} disabled
+                        value={JSON.stringify(navigation.getParam('orderNumber'))}
                         onChangeText={val => setorder_no(val)}
                     />
                 </Item>
-
+                <Text></Text>
                 <Item regular style={globalStyles.mb10}>
                     <Picker
                         mode="dropdown"
@@ -136,15 +170,31 @@ export const Payment = ({
                 </Item>
                 <Item regular style={globalStyles.mb10}>
                     <Input
+                        keyboardType='number-pad'
                         onChangeText={val => setremitter_acc_no(val)}
                         placeholder="Remitter Account No"
                     />
                 </Item>
-                <Text></Text>
-                <Button success style={globalStyles.mb50} onPress={payNow}>
+                <Button
+                    block
+                    success
+                    iconLeft
+                    style={globalStyles.mb10}
+                    onPress={paymentRequest}>
                     <Text>Pay Now</Text>
                 </Button>
-
+                {creditAllowed == 1 ? (
+                    <Button
+                        block
+                        success
+                        iconLeft
+                        style={globalStyles.mb10}
+                        onPress={paymentLater}>
+                        <Text>Pay Later</Text>
+                    </Button>
+                ) : (
+                        <Text></Text>
+                    )}
                 <View>
                     <Dialog.Container visible={showDialog}>
                         <Dialog.Title>Please enter your OTP</Dialog.Title>
@@ -156,9 +206,10 @@ export const Payment = ({
                         <Dialog.Button label="Make Payment" onPress={makePayment} />
                     </Dialog.Container>
                 </View>
+                <Text></Text>
             </Form>
         </Content>
-    </Container>
+    </Container >
         );
 };
 const mapStateToProps = state => ({
@@ -167,11 +218,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = {
-    submitPayNow,
     handleError,
     getImages,
     setLoading,
-    submitMakePayment
+    submitMakePayment,
+    submitCreditPayment
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payment);

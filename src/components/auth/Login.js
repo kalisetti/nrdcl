@@ -26,8 +26,8 @@ const Login = ({
   setLoading,
   startLogin,
 }) => {
-  const [username, setUsername] = useState('11516001285');
-  const [password, setPassword] = useState('8366');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
   useEffect(() => {
     if (userState.logged_in) {
@@ -66,8 +66,9 @@ const Login = ({
             <Input
               value={username}
               onChangeText={usr => setUsername(usr)}
-              placeholder="CID/License No"
-            />
+              placeholder="CID Number"
+              keyboardType={'numeric'}
+            /> 
           </Item>
 
           <Item regular style={globalStyles.mb10}>
@@ -77,6 +78,7 @@ const Login = ({
               value={password}
               onChangeText={pwd => setPassword(pwd)}
               placeholder="PIN"
+              keyboardType={'numeric'}
             />
           </Item>
           <Button
@@ -87,6 +89,19 @@ const Login = ({
             onPress={performLogin}>
             <Text>Login</Text>
             <Icon name="log-in" />
+          </Button>
+        </Form>
+        <Form style={globalStyles.mb10}>
+          <Button
+            block
+            info
+            iconLeft
+            style={globalStyles.mb10}
+            onPress={() =>
+              navigation.navigate('Terms', {title: 'Terms & Conditions'})
+            }>
+            <Text>Register</Text>
+            <Icon name="person-add" />
           </Button>
         </Form>
 
@@ -101,19 +116,7 @@ const Login = ({
           </Text>
         </Form>
 
-        <Form style={globalStyles.mb10}>
-          <Button
-            block
-            info
-            iconLeft
-            style={globalStyles.mb10}
-            onPress={() =>
-              navigation.navigate('Terms', {title: 'Terms & Conditions'})
-            }>
-            <Text>Register</Text>
-            <Icon name="person-add" />
-          </Button>
-        </Form>
+        
       </Content>
     </Container>
   );

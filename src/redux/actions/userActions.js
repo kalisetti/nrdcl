@@ -1,8 +1,8 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import CookieManager from 'react-native-cookies';
 import setCookie from 'set-cookie-parser';
 import Config from 'react-native-config';
-import {LOGIN, LOGOUT, SET_MODE, SET_PROFILE_SUBMITTED} from './actionTypes';
+import { LOGIN, LOGOUT, SET_MODE, SET_PROFILE_SUBMITTED } from './actionTypes';
 import {
   showToast,
   setLoading,
@@ -31,7 +31,7 @@ export const login = userData => {
 export const startLogin = (login_id, pin) => {
   return async dispatch => {
     try {
-      await loginSchema.validate({login_id, pin});
+      await loginSchema.validate({ login_id, pin });
 
       const formData = new FormData();
       formData.append('usr', login_id);
@@ -44,7 +44,7 @@ export const startLogin = (login_id, pin) => {
       });
 
       if (!response.ok) {
-        throw {message: 'Invalid Login'};
+        throw { message: 'Invalid Login' };
       }
 
       var combinedCookieHeader = response.headers.get('Set-Cookie');
@@ -145,6 +145,7 @@ export const startPin = (
   fullname,
   loginid,
   mobileno,
+  alternate_mobile_no,
   request_type = 'signup',
 ) => {
   return async dispatch => {
@@ -152,11 +153,13 @@ export const startPin = (
       full_name: fullname,
       login_id: loginid,
       mobile_no: mobileno,
+      alternate_mobile_no:alternate_mobile_no,
       request_type,
     };
 
     try {
       //validate first
+
       await pinSchema.validate(params);
 
       dispatch(setLoading(true));
@@ -165,7 +168,7 @@ export const startPin = (
         'post',
         params,
       );
-      dispatch(showToast(`PIN sent to ${mobileno}`));
+      dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -190,7 +193,7 @@ export const startResetPin = (loginid, mobileno) => {
         'post',
         params,
       );
-      dispatch(showToast(`PIN sent to ${mobileno}`));
+      dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -198,29 +201,27 @@ export const startResetPin = (loginid, mobileno) => {
 };
 
 //crm_sign_up(full_name, login_id, mobile_no, email, pin)
-export const startRegister = (fullname, loginid, mobileno, email, pin) => {
+export const startRegister = (fullname, loginid, mobileno,alternate_mobile_no, email, pin) => {
   return async dispatch => {
     //validate user details
     const params = {
       full_name: fullname,
       login_id: loginid,
       mobile_no: mobileno,
+      alternate_mobile_no:alternate_mobile_no,
       email,
       pin,
     };
-
     try {
       await userRegistrationSchema.validate(params);
-
       dispatch(setLoading(true));
       await callAxios(
         'method/frappe.core.doctype.user.user.crm_sign_up',
         'post',
         params,
       );
-
-      dispatch(showToast(`User Registered`));
-
+      // dispatch(showToast(`User Registered`, 'success'));
+      NavigationService.navigate('Login');;
       //Start Login
       dispatch(startLogin(loginid, pin));
     } catch (error) {
@@ -229,7 +230,8 @@ export const startRegister = (fullname, loginid, mobileno, email, pin) => {
   };
 };
 
-export const startProfileSubmission = (userRequest, frontImage, backImage) => {
+export const startProfileSubmission = (userRequest, frontImage = [],
+  backImage = []) => {
   return async dispatch => {
     dispatch(setLoading(true));
 
@@ -244,32 +246,40 @@ export const startProfileSubmission = (userRequest, frontImage, backImage) => {
       const docname = res.data.data.name;
       const doctype = res.data.data.doctype;
 
-      const front = await attachFile(
-        doctype,
-        docname,
-        frontImage,
-        `${userRequest.new_cid}_front.jpg`,
-      );
+      frontImage.map(async image => {
+        await attachFile(doctype, docname, image);
+      });
 
-      const back = await attachFile(
-        doctype,
-        docname,
-        backImage,
-        `${userRequest.new_cid}_back.jpg`,
-      );
+      backImage.map(async image => {
+        await attachFile(doctype, docname, image);
+      }); 
+      
+      // const front = await attachFile(
+      //   doctype,
+      //   docname,
+      //   frontImage,
+      //   `${userRequest.new_cid}_front.jpg`,
+      // );
 
-      res = await callAxios(
-        `resource/${doctype}/${docname}`,
-        'put',
-        {},
-        {
-          new_cid_file_front: front,
-          new_cid_file_back: back,
-        },
-      );
+      // const back = await attachFile(
+      //   doctype,
+      //   docname,
+      //   backImage,
+      //   `${userRequest.new_cid}_back.jpg`,
+      // );
+
+      // res = await callAxios(
+      //   `resource/${doctype}/${docname}`,
+      //   'put',
+      //   {},
+      //   {
+      //     new_cid_file_front: front,
+      //     new_cid_file_back: back,
+      //   },
+      // );
 
       dispatch(
-        showToast('Your Details has been submitted for approval', 'success'),
+        showToast('Your details has been submitted for approval', 'success'),
       );
       dispatch(setProfileUpdated());
       dispatch(setLoading(false));

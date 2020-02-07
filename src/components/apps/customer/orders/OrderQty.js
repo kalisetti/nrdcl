@@ -1,9 +1,9 @@
-import React, {Fragment} from 'react';
-import {Text, Button, Icon, Grid, Row, Col} from 'native-base';
+import React, { Fragment } from 'react';
+import { Text, Button, Icon, Grid, Row, Col } from 'native-base';
 import globalStyles from '../../../../styles/globalStyle';
 
-const OrderQty = ({data, removeItem, transport_mode}) => {
-  const RenderItem = ({item, index}) => {
+const OrderQty = ({ data, removeItem, transport_mode }) => {
+  const RenderItem = ({ item, index }) => {
     return (
       <Row
         size={1}
@@ -12,21 +12,21 @@ const OrderQty = ({data, removeItem, transport_mode}) => {
           borderColor: 'black',
         }}>
         {transport_mode === 'Self Owned Transport' ? (
-          <Col size={2} style={globalStyles.siteCol}>
+          <Col size={2} style={globalStyles.colContainer}>
             <Text style={globalStyles.siteItem}>{item.vehicle}</Text>
           </Col>
         ) : (
-          <Fragment></Fragment> 
-        )}
-        <Col size={1} style={globalStyles.siteCol}>
+            <Fragment></Fragment>
+          )}
+        <Col size={1} style={globalStyles.colContainer}>
           <Text style={globalStyles.siteItem}>{item.vehicle_capacity}</Text>
         </Col>
-        <Col size={2} style={globalStyles.siteCol}>
+        <Col size={1} style={globalStyles.colContainer}>
           <Text style={globalStyles.siteItem}>{item.noof_truck_load}</Text>
         </Col>
         <Col size={1}>
           <Button transparent small onPress={() => removeItem(index)}>
-            <Icon name="delete" type="AntDesign" style={{color: 'red'}} />
+            <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
           </Button>
         </Col>
       </Row>
@@ -34,42 +34,46 @@ const OrderQty = ({data, removeItem, transport_mode}) => {
   };
 
   return (
-    <Grid
-      style={{
-        width: '100%',
-        marginHorizontal: 0,
-      }}>
-      {data.length == 0 ? (
-        <Text></Text>
-      ) : (
-        <Row
-          size={1}
-          style={{
-            borderWidth: 0.2,
-            borderColor: 'black',
-            backgroundColor: 'grey',
-          }}>
-          {transport_mode === 'Self Owned Transport' ? (
-            <Col size={2} style={globalStyles.siteCol}>
-              <Text style={globalStyles.siteItem}>{'Vehicle'}</Text>
-            </Col>
-          ) : (
-            <Fragment></Fragment>
+    <Row style={[globalStyles.tableContainer]}>
+      <Grid
+        style={{
+          width: '100%',
+          marginHorizontal: 0,
+        }}>
+        {data.length == 0 ? (
+          <Text></Text>
+        ) : (
+            <Row
+              size={1}
+              style={{
+                borderWidth: 0.2,
+                borderColor: 'black',
+                // backgroundColor: 'grey',
+              }}>
+              {transport_mode === 'Self Owned Transport' ? (
+                <Col size={2} style={globalStyles.tableHeaderContainer}>
+                  <Text style={globalStyles.siteItem}>{'Vehicle'}</Text>
+                </Col>
+              ) : (
+                  <Fragment></Fragment>
+                )}
+              <Col size={1} style={globalStyles.tableHeaderContainer}>
+                <Text style={globalStyles.siteItem}>{'Capacity'}</Text>
+              </Col>
+              <Col size={1} style={globalStyles.tableHeaderContainer}>
+                <Text style={globalStyles.siteItem}>{'Truck Load'}</Text>
+              </Col>
+              <Col size={1} style={globalStyles.tableHeaderContainer}>
+                <Text style={globalStyles.siteItem}>{'Remove'}</Text>
+              </Col>
+            </Row>
           )}
-          <Col size={1} style={globalStyles.siteCol}>
-            <Text style={globalStyles.siteItem}>{'Capacity'}</Text>
-          </Col>
-          <Col size={2} style={globalStyles.siteCol}>
-            <Text style={globalStyles.siteItem}>{'Truck Load'}</Text>
-          </Col>
-          <Col size={1}></Col>
-        </Row>
-      )}
 
-      {data.map((val, index) => {
-        return <RenderItem item={val} index={index} key={index} />;
-      })}
-    </Grid>
+        {data.map((val, index) => {
+          return <RenderItem item={val} index={index} key={index} />;
+        })}
+      </Grid>
+    </Row>
   );
 };
 
