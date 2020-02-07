@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
-import {View, Image} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { View, Image } from 'react-native';
 
 import {
   Container,
@@ -22,7 +22,7 @@ import {
   getImages,
   setLoading,
 } from '../../../../redux/actions/commonActions';
-import {startTransportRegistration} from '../../../../redux/actions/transportActions';
+import { startTransportRegistration } from '../../../../redux/actions/transportActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 
@@ -82,7 +82,6 @@ export const AddTransport = ({
       handleError(error);
     }
   };
-
   const submitVehicleInfo = async () => {
     const vehicle_info = {
       approval_status: 'Pending',
@@ -92,7 +91,7 @@ export const AddTransport = ({
       vehicle_capacity,
       drivers_name,
       contact_no,
-      owner_cid,
+      owner_cid: userState.login_id,
     };
 
     startTransportRegistration(vehicle_info, registration_document);
@@ -101,100 +100,101 @@ export const AddTransport = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={vehicle_no}
-              onChangeText={val => setVehicle_no(val)}
-              placeholder="Vehicle No."
-            />
-          </Item>
+      <Container>
+        <Content style={globalStyles.content}>
+          <Form>
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={vehicle_no}
+                onChangeText={val => setVehicle_no(val)}
+                placeholder="Vehicle No."
+              />
+            </Item>
 
-          <Item regular style={globalStyles.mb10}>
+            {/* <Item regular style={globalStyles.mb10}>
             <Input
               value={owner_cid}
               onChangeText={val => setowner_cid(val)}
               placeholder="Owner's CID"
             />
-          </Item>
+          </Item> */}
 
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={vehicle_capacity}
-              onValueChange={val => setVehicle_capacity(val)}>
-              <Picker.Item
-                label={'Select Vehicle Capacity'}
-                value={undefined}
-                key={-1}
+            <Item regular style={globalStyles.mb10}>
+              <Picker
+                mode="dropdown"
+                selectedValue={vehicle_capacity}
+                onValueChange={val => setVehicle_capacity(val)}>
+                <Picker.Item
+                  label={'Select Vehicle Capacity'}
+                  value={undefined}
+                  key={-1}
+                />
+                {all_capacities &&
+                  all_capacities.map((pur, idx) => {
+                    return (
+                      <Picker.Item label={pur.name} value={pur.name} key={idx} />
+                    );
+                  })}
+              </Picker>
+            </Item>
+
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={drivers_name}
+                onChangeText={val => setdrivers_name(val)}
+                placeholder="Driver Name"
               />
-              {all_capacities &&
-                all_capacities.map((pur, idx) => {
-                  return (
-                    <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
+            </Item>
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={contact_no}
+                onChangeText={val => setcontact_no(val)}
+                placeholder="Driver's Contact No"
+                keyboardType='numeric'
+              />
+            </Item>
 
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={drivers_name}
-              onChangeText={val => setdrivers_name(val)}
-              placeholder="Driver Name"
-            />
-          </Item>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={contact_no}
-              onChangeText={val => setcontact_no(val)}
-              placeholder="Driver's Contact No"
-            />
-          </Item>
+            <Button block info style={globalStyles.mb10} onPress={getBluebook}>
+              <Text>Attach Bluebook</Text>
+            </Button>
 
-          <Button info style={globalStyles.mb10} onPress={getBluebook}>
-            <Text>Attach Bluebook</Text>
-          </Button>
-
-          {images.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 20}}>
-              <Text style={{alignSelf: 'center', color: 'red'}}>
-                Swipe to review all images
+            {images.length === 0 ? null : (
+              <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                <Text style={{ alignSelf: 'center', color: 'red' }}>
+                  Swipe to review all images
               </Text>
-              <DeckSwiper
-                dataSource={registration_document}
-                renderItem={image => (
-                  <Card style={{elevation: 3}}>
-                    <CardItem cardBody>
-                      <Image
-                        source={{
-                          uri: image.path,
-                        }}
-                        style={{height: 250, width: '100%'}}
-                      />
-                    </CardItem>
-                    <CardItem>
-                      <Icon name="heart" style={{color: '#ED4A6A'}} />
-                      <Text>
-                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                      </Text>
-                    </CardItem>
-                  </Card>
-                )}
-              />
-            </View>
-          )}
-          <View style={{marginBottom: 20}}></View>
+                <DeckSwiper
+                  dataSource={registration_document}
+                  renderItem={image => (
+                    <Card style={{ elevation: 3 }}>
+                      <CardItem cardBody>
+                        <Image
+                          source={{
+                            uri: image.path,
+                          }}
+                          style={{ height: 250, width: '100%' }}
+                        />
+                      </CardItem>
+                      <CardItem>
+                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Text>
+                          {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                        </Text>
+                      </CardItem>
+                    </Card>
+                  )}
+                />
+              </View>
+            )}
+            <View style={{ marginBottom: 20 }}></View>
 
-          <Button success style={globalStyles.mb50} onPress={submitVehicleInfo}>
-            <Text>Submit for Approval</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  );
+            <Button block success style={globalStyles.mb10} onPress={submitVehicleInfo}>
+              <Text>Submit for Approval</Text>
+            </Button>
+          </Form>
+        </Content>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

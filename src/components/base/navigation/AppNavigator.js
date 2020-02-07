@@ -1,6 +1,6 @@
-import React, {Fragment} from 'react';
-import {createAppContainer, createSwitchNavigator} from 'react-navigation';
-import {createStackNavigator} from 'react-navigation-stack';
+import React, { Fragment } from 'react';
+import { createAppContainer, createSwitchNavigator } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
 import Config from 'react-native-config';
 
@@ -21,8 +21,8 @@ import PinRecover from '../../auth/PinRecover';
 //info pages
 import About from '../../info/About';
 import Help from '../../info/Help';
-import Some from '../../info/Some';
-import Waha from '../../info/Waha';
+import ContactUs from '../../info/ContactUs';
+import Faq from '../../info/Faq';
 
 //User Screens
 import ModeSelector from '../../apps/user/ModeSelector';
@@ -48,6 +48,9 @@ import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver';
 import OrderDashboard from '../../apps/customer/OrderDashboard';
 import ListOrder from '../../apps/customer/orders/ListOrder';
 import AddOrder from '../../apps/customer/orders/AddOrder';
+import Payment from '../../apps/customer/orders/Payment';
+import OrderDetail from '../../apps/customer/orders/OrderDetail';
+import DeliveryList from '../../apps/customer/Delivery/DeliveryList'
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
@@ -67,15 +70,15 @@ const AppNavigator = createStackNavigator(
     },
     ModeSelector: {
       screen: ModeSelector,
-      navigationOptions: {title: 'Select Mode'},
+      navigationOptions: { title: 'Select Mode' },
     },
     CustomerTerms: {
       screen: CustomerTerms,
-      navigationOptions: {title: 'Customer Terms & Conditions'},
+      navigationOptions: { title: 'Customer Terms & Conditions' },
     },
     TransporterTerms: {
       screen: TransporterTerms,
-      navigationOptions: {title: 'Transporter Terms & Conditions'},
+      navigationOptions: { title: 'Transporter Terms & Conditions' },
     },
     CustomerDashboard: {
       screen: CustomerDashboard,
@@ -173,6 +176,24 @@ const AppNavigator = createStackNavigator(
         title: 'Place Order',
       },
     },
+    Payment: {
+      screen: Payment,
+      navigationOptions: {
+        title: 'Payment',
+      },
+    },
+    OrderDetail: {
+      screen: OrderDetail,
+      navigationOptions: {
+        title: 'Order Detail',
+      },
+    },
+    DeliveryList: {
+      screen: DeliveryList,
+      navigationOptions: {
+        title: 'Delivery List',
+      },
+    },
     TransporterDashboard: {
       screen: TransporterDashboard,
       navigationOptions: {
@@ -236,10 +257,10 @@ const AppNavigator = createStackNavigator(
 
 const AuthNavigator = createStackNavigator(
   {
-    Login: {screen: Login, navigationOptions: {title: Config.APP_NAME}},
-    Terms: {screen: Terms, navigationOptions: {title: 'Terms & Conditions'}},
-    Signup: {screen: Signup, navigationOptions: {title: 'Register'}},
-    PinRecover: {screen: PinRecover, navigationOptions: {title: 'Reset PIN'}},
+    Login: { screen: Login, navigationOptions: { title: Config.APP_NAME } },
+    Terms: { screen: Terms, navigationOptions: { title: 'Terms & Conditions' } },
+    Signup: { screen: Signup, navigationOptions: { title: 'Register' } },
+    PinRecover: { screen: PinRecover, navigationOptions: { title: 'Reset PIN' } },
   },
   {
     initialRouteName: 'Login',
@@ -258,11 +279,11 @@ const InfoNavigator = createStackNavigator(
   {
     About: {
       screen: About,
-      navigationOptions: {title: 'About', headerLeft: <MyBackButton />},
+      navigationOptions: { title: 'About', headerLeft: <MyBackButton /> },
     },
-    Some: {screen: Some, navigationOptions: {title: 'Some'}},
-    Waha: {screen: Waha, navigationOptions: {title: 'Waha'}},
-    Help: {screen: Help, navigationOptions: {title: 'Help'}},
+    ContactUs: { screen: ContactUs, navigationOptions: { title: 'Contact Us', headerLeft: <MyBackButton /> } },
+    Faq: { screen: Faq, navigationOptions: { title: 'FAQ', headerLeft: <MyBackButton /> } },
+    Help: { screen: Help, navigationOptions: { title: 'Help', headerLeft: <MyBackButton /> } },
   },
   {
     initialRouteName: 'About',

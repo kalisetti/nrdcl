@@ -43,7 +43,7 @@ export const userRegistrationSchema = yup.object().shape({
   full_name: yup
     .string()
     .trim()
-    .min(3, 'Name should have more than three characters')
+    .min(3, 'Full Name should have more than three characters')
     .required('Name is mandatory'),
 
   login_id: yup
@@ -54,9 +54,9 @@ export const userRegistrationSchema = yup.object().shape({
   mobile_no: yup
     .string()
     .trim()
-    .required('Phone number is mandatory')
-    .length(8, 'Phone should have eight digits')
-    .matches(/^\d{8}$/, 'Phone should have eight digits'),
+    .required('Mobile number is mandatory')
+    .length(8, 'Mobile number should have eight digits')
+    .matches(/^\d{8}$/, 'Mobile number should have eight digits'),
 
   email: yup.string().email('Invalid Email Format'),
 

@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -8,7 +8,8 @@ import {
   CardItem,
   Right,
   Icon,
-  H3,
+  View
+
 } from 'native-base';
 
 import SpinnerScreen from '../../../base/SpinnerScreen';
@@ -18,8 +19,9 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
+import { default as commaNumber } from 'comma-number';
 
 export const ListOrder = ({
   userState,
@@ -42,21 +44,21 @@ export const ListOrder = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
           header
           bordered
           button
-          onPress={() => navigation.navigate('VehicleDetail', {id: item.name})}
+          onPress={() => navigation.navigate('OrderDetail', { id: item.name })}
           style={globalStyles.tableHeader}>
           <Body>
             {item.docstatus === 0 ? (
-              <Text style={{color: 'red'}}>{item.name}</Text>
+              <Text style={{ color: 'red' }}>{item.name}</Text>
             ) : (
-              <Text style={{color: 'blue'}}>{item.name}</Text>
-            )}
+                <Text style={{ color: 'blue' }}>{item.name}</Text>
+              )}
           </Body>
 
           <Right>
@@ -64,13 +66,18 @@ export const ListOrder = ({
           </Right>
         </CardItem>
         <CardItem>
-          <H3>Site: {item.site} </H3>
-          <H3>Item: {item.item_name} </H3>
-          {item.total_balance_amount > 0 ? (
-            <H3>Payable: {item.total_balance_amount} </H3>
-          ) : (
-            <Text style={{color: 'blue'}}></Text>
-          )}
+          <View>
+            <Text>Site: {item.site} </Text>
+            <Text>Item: {item.item_name} </Text>
+            {item.total_balance_amount > 0 ? (
+              <Text>
+                Payable Amount(Nu): {commaNumber(item.total_balance_amount)}/-
+              </Text>
+            ) : (
+                <Text style={{ color: 'blue' }}></Text>
+              )}
+          </View>
+
         </CardItem>
       </Card>
     );
@@ -107,26 +114,26 @@ export const ListOrder = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.listContent}>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {order.length > 0 ? (
-        <FlatList
-          data={order}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
+      <Container style={globalStyles.listContent}>
+        <NavigationEvents
+          onWillFocus={_ => {
+            setReload(1);
+          }}
+          onWillBlur={_ => {
+            setReload(0);
+          }}
         />
-      ) : (
-        <Text style={globalStyles.emptyString}>Place your first order</Text>
-      )}
-    </Container>
-  );
+        {order.length > 0 ? (
+          <FlatList
+            data={order}
+            renderItem={renderItem}
+            keyExtractor={item => item.name}
+          />
+        ) : (
+            <Text style={globalStyles.emptyString}>Place your first order</Text>
+          )}
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

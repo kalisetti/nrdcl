@@ -15,20 +15,20 @@ export default () => {
             <Text style={globalStyle.iconText}>Home</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('About')}>
-            <Icon name="apps" style={globalStyle.icon} />
+            <Icon name="list" style={globalStyle.icon} />
             <Text style={globalStyle.iconText}>About</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('Help')}>
             <Icon name="information-circle-outline" style={globalStyle.icon} />
             <Text style={globalStyle.iconText}>Help</Text>
           </Button>
-          <Button vertical onPress={() => NavigationService.navigate('Waha')}>
-            <Icon name="pin" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Waha</Text>
+          <Button vertical onPress={() => NavigationService.navigate('ContactUs')}>
+            <Icon name="call" style={globalStyle.icon} />
+            <Text style={globalStyle.iconText}>Contact</Text>
           </Button>
-          <Button vertical onPress={() => NavigationService.navigate('Some')}>
-            <Icon name="paw" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Some</Text>
+          <Button vertical onPress={() => NavigationService.navigate('Faq')}>
+            <Icon name="question" style={globalStyle.icon} />
+            <Text style={globalStyle.iconText}>FAQ</Text>
           </Button>
         </FooterTab>
       </Footer>

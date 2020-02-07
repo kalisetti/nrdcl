@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -11,9 +11,9 @@ import {
   Body,
   CardItem,
 } from 'native-base';
-import {StyleSheet} from 'react-native';
+import { StyleSheet, AsyncStorage } from 'react-native';
 
-export const CustomerTerms = ({userState, navigation}) => {
+export const CustomerTerms = ({ userState, navigation }) => {
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -21,6 +21,15 @@ export const CustomerTerms = ({userState, navigation}) => {
       navigation.navigate('UserDetail');
     }
   }, []);
+
+  const customerTearmsAgreed = async () => {
+    try {
+      await AsyncStorage.setItem('customerTermsAgreed', 'yes');
+    } catch (error) {
+      // Error saving data
+    }
+    navigation.navigate('CustomerDashboard')
+  };
 
   return (
     <Content>
@@ -49,7 +58,9 @@ export const CustomerTerms = ({userState, navigation}) => {
       <Container style={style.innerContainer}>
         <Button
           success
-          onPress={() => navigation.navigate('CustomerDashboard')}>
+          //onPress={() => navigation.navigate('CustomerDashboard')}
+          onPress={customerTearmsAgreed}
+          >
           <Icon name="thumbs-up" />
           <Text>Agree</Text>
         </Button>

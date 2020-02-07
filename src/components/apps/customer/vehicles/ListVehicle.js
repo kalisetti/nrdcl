@@ -52,11 +52,11 @@ export const ListVehicle = ({
           onPress={() => navigation.navigate('VehicleDetail', {id: item.name})}
           style={globalStyles.tableHeader}>
           <Body>
-            {item.vehilce_status === 'Suspended' ? (
-              <Text style={{color: 'red'}}>{item.name}</Text>
+            {item.approval_status === 'Pending' ? (
+              <Text style={{ color: 'red' }}>{item.vehicle_no}</Text>
             ) : (
-              <Text style={{color: 'blue'}}>{item.name}</Text>
-            )}
+                <Text style={{ color: 'blue' }}>{item.vehicle_no}</Text>
+              )}
           </Body>
 
           <Right>
@@ -64,8 +64,10 @@ export const ListVehicle = ({
           </Right>
         </CardItem>
         <CardItem>
-          <H3>Driver: {item.drivers_name} </H3>
-          <Text>({item.contact_no})</Text>
+          <Text>Vehicle Capacity: {item.vehicle_capacity} m3</Text>
+        </CardItem>
+        <CardItem>
+          <Text> Status: {item.approval_status}</Text>
         </CardItem>
       </Card>
     );
@@ -75,20 +77,22 @@ export const ListVehicle = ({
     const params = {
       fields: JSON.stringify([
         'name',
-        'vehicle_status',
+        'vehicle_capacity',
+        'vehicle_no',
         'drivers_name',
         'contact_no',
+        'approval_status'
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
         ['self_arranged', '=', 1],
-        ['vehicle_status', '!=', 'Deregistered'],
+        // ['vehicle_status', '!=', 'Deregistered'],
       ]),
     };
 
     try {
       const response = await callAxios(
-        'resource/Vehicle?order_by=creation%20desc,vehicle_status%20asc',
+        'resource/Transport Request?order_by=creation%20desc,approval_status%20asc',
         'GET',
         params,
       );

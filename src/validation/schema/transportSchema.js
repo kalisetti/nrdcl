@@ -12,24 +12,23 @@ export const transportSchema = yup.object().shape({
     .string()
     .trim()
     .required('User is mandatory'),
-  vehicle_no: yup
-    .string()
-    .trim()
-    .required('Vehilce No is mandatory'),
+  contact_no: yup
+    .number()
+    .positive('Invalid Driver Contact No')
+    .required('Driver Contact No is mandatory')
+    .typeError('Invalid Driver Contact No'),
   drivers_name: yup
     .string()
     .trim()
     .required('Driver Name is mandatory'),
-  contact_no: yup
-    .number()
-    .positive('Invalid Owner CID')
-    .required('Contact No is mandatory')
-    .typeError('Invalid Owner CID'),
-  owner_cid: yup
-    .number()
-    .positive('Invalid Owner CID')
-    .required('Driver CID is mandatory')
-    .typeError('Invalid Owner CID'),
+  vehicle_capacity: yup
+    .string()
+    .trim()
+    .required('Vehilce Capacity is mandatory'),
+  vehicle_no: yup
+    .string()
+    .trim()
+    .required('Vehilce No is mandatory'),
   common_pool: yup
     .number()
     .integer()

@@ -1,46 +1,56 @@
 import * as yup from 'yup';
 
+
+
 export const siteSchema = yup.object().shape({
   user: yup
     .string()
     .trim()
     .required('User is mandatory'),
-  purpose: yup
-    .string()
-    .trim()
-    .required('Purpose is mandatory'),
-  construction_type: yup
-    .string()
-    .trim()
-    .required('Construction Type is mandatory'),
-  construction_start_date: yup.date().required('Start Date is mandatory'),
-  construction_end_date: yup.date().required('End Date is mandatory'),
-  number_of_floors: yup
-    .number('Number of Floors should be number')
-    .required('Number of Floors is mandatory')
-    .integer('Number of Floors should be integer')
-    .positive('Number of Floors should positive integer'),
-  approval_no: yup
-    .string()
-    .trim()
-    .required('Approval No is mandatory'),
-  dzongkhag: yup
-    .string()
-    .trim()
-    .required('Dzongkhag is mandatory'),
-  plot_no: yup
-    .string('Plot No is mandatory')
-    .trim()
-    .required('Plot No is mandatory'),
-  location: yup
-    .string()
-    .trim()
-    .required('Location is mandatory'),
+
+  items: yup.array()
+    .required('Expected materials are mandatory'),
   remarks: yup
     .string()
     .trim()
     .nullable(),
-  items: yup.array().required('Items are mandatory'),
+  location: yup
+    .string()
+    .trim()
+    .typeError('Location is mandatory')
+    .required('Location is mandatory'),
+  plot_no: yup
+    .string('Plot No is mandatory')
+    .trim()
+    .typeError('Plot No is mandatory')
+    .required('Plot No is mandatory'),
+  dzongkhag: yup
+    .string()
+    .trim()
+    .required('Dzongkhag is mandatory'),
+  construction_end_date: yup.date()
+    .typeError('End Date is mandatory')
+    .required('End Date is mandatory'),
+  construction_start_date: yup.date()
+    .typeError('Start Date is mandatory')
+    .required('Start Date is mandatory'),
+  number_of_floors: yup
+    .string()
+    .trim()
+    .typeError('Number of Floor is mandatory')
+    .required('Number of Floor is mandatory'),
+  approval_no: yup
+    .string()
+    .trim()
+    .required('Approval No is mandatory'),
+  construction_type: yup
+    .string()
+    .trim()
+    .required('Construction Type is mandatory'),
+  purpose: yup
+    .string()
+    .trim()
+    .required('Purpose is mandatory'),
 });
 
 //Object for Site Item
@@ -156,22 +166,26 @@ export const vehilceSchema = yup.object().shape({
     .string()
     .trim()
     .required('User is mandatory'),
-  vehicle_no: yup
-    .string()
-    .trim()
-    .required('Vehilce No is mandatory'),
-  drivers_name: yup
-    .string()
-    .trim()
-    .required('Driver Name is mandatory'),
   contact_no: yup
     .string()
     .trim()
     .required('Contact No is mandatory'),
-  driver_cid: yup
+  drivers_name: yup
     .string()
     .trim()
-    .required('Driver CID is mandatory'),
+    .required('Driver Name is mandatory'),
+  vehicle_capacity: yup
+    .string()
+    .trim()
+    .required('Vehicle Capacity is mandatory'),
+  owner: yup
+    .string()
+    .trim()
+    .required('Vehicle Owner is mandatory'),
+  vehicle_no: yup
+    .string()
+    .trim()
+    .required('Vehilce No is mandatory'),
   self_arranged: yup
     .number()
     .integer()
@@ -195,16 +209,95 @@ export const driverInfoSchema = yup.object().shape({
     .string()
     .trim()
     .required('Driver Name is mandatory'),
-  driver_mobile_no: yup
+    driver_contact_no: yup
     .string()
     .trim()
     .required('Driver Contact No is mandatory'),
-  driver_cid: yup
-    .string()
-    .trim()
-    .required('Driver CID is mandatory'),
+  // driver_cid: yup
+  //   .string()
+  //   .trim()
+  //   .required('Driver CID is mandatory'),
   remarks: yup
     .string()
     .trim()
     .nullable(),
+});
+
+export const driverInfoSchemaSelf = yup.object().shape({
+  approval_status: yup
+    .string()
+    .required()
+    .oneOf(['Pending']),
+  user: yup
+    .string()
+    .trim()
+    .required('User is mandatory'),
+  vehicle: yup
+    .string()
+    .trim()
+    .required('User is mandatory'),
+  driver_name: yup
+    .string()
+    .trim()
+    .required('Driver Name is mandatory'),
+    driver_mobile_no: yup
+    .string()
+    .trim()
+    .required('Driver Contact No is mandatory'),
+  remarks: yup
+    .string()
+    .trim()
+    .nullable(),
+});
+
+export const orderSchema = yup.object().shape({
+  user: yup
+    .string()
+    .trim()
+    .required('User is mandatory'),
+
+
+  items: yup.array()
+    .required('Expected materials are mandatory'),
+
+  remarks: yup
+    .string()
+    .trim()
+    .nullable(),
+  location: yup
+    .string()
+    .trim()
+    .typeError('Location is mandatory')
+    .required('Location is mandatory'),
+  plot_no: yup
+    .string('Plot No is mandatory')
+    .trim()
+    .typeError('Plot No is mandatory')
+    .required('Plot No is mandatory'),
+  dzongkhag: yup
+    .string()
+    .trim()
+    .required('Dzongkhag is mandatory'),
+  construction_end_date: yup.date()
+    .typeError('End Date is mandatory')
+    .required('End Date is mandatory'),
+  construction_start_date: yup.date()
+    .typeError('Start Date is mandatory')
+    .required('Start Date is mandatory'),
+  number_of_floors: yup
+    .string()
+    .trim()
+    .required('Number of Floor is mandatory'),
+  approval_no: yup
+    .string()
+    .trim()
+    .required('Approval No is mandatory'),
+  construction_type: yup
+    .string()
+    .trim()
+    .required('Construction Type is mandatory'),
+  purpose: yup
+    .string()
+    .trim()
+    .required('Purpose is mandatory'),
 });

@@ -1,7 +1,7 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import {connect} from 'react-redux';
-import {View, Image} from 'react-native';
-import {NavigationEvents} from 'react-navigation';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { View, Image } from 'react-native';
+import { NavigationEvents } from 'react-navigation';
 
 import {
   Container,
@@ -22,8 +22,9 @@ import {
   handleError,
   getImages,
   setLoading,
+  showToast
 } from '../../../../redux/actions/commonActions';
-import {startVehicleRegistration} from '../../../../redux/actions/siteActions';
+import { startVehicleRegistration } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 
@@ -109,179 +110,188 @@ export const AddVehicle = ({
       self_arranged: 1,
       vehicle_no: vehicle_no.toUpperCase(),
       vehicle_capacity,
-      vehicle_owner,
+      owner: vehicle_owner,
+      owner_cid: vehicle_owner == 'Self' ? userState.login_id : driver_cid,
       drivers_name,
-      contact_no,
-      driver_cid,
+      contact_no
+      // driver_cid,
     };
+    // alert(images.length)
 
     startVehicleRegistration(site_info, images, mc);
+
   };
 
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setState({});
-        }}
-        onWillBlur={_ => {
-          setState(undefined);
-        }}
-      />
-      <Content style={globalStyles.content}>
-        <Form>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={vehicle_no}
-              onChangeText={val => setVehicle_no(val)}
-              placeholder="Vehicle No."
-            />
-          </Item>
-
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={vehicle_owner}
-              onValueChange={val => setvehicle_owner(val)}>
-              <Picker.Item
-                label={'Select Vehicle Owner'}
-                value={undefined}
-                key={0}
+      <Container>
+        <NavigationEvents
+          onWillFocus={_ => {
+            setState({});
+          }}
+          onWillBlur={_ => {
+            setState(undefined);
+          }}
+        />
+        <Content style={globalStyles.content}>
+          <Form>
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={vehicle_no}
+                onChangeText={val => setVehicle_no(val)}
+                placeholder="Vehicle No."
               />
-              <Picker.Item label={'Self'} value={'Self'} key={1} />
-              <Picker.Item label={'Spouse'} value={'Spouse'} key={2} />
-            </Picker>
-          </Item>
+            </Item>
 
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={vehicle_capacity}
-              onValueChange={val => setVehicle_capacity(val)}>
-              <Picker.Item
-                label={'Select Vehicle Capacity'}
-                value={undefined}
-                key={-1}
-              />
-              {all_capacities &&
-                all_capacities.map((pur, idx) => {
-                  return (
-                    <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
-
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={drivers_name}
-              onChangeText={val => setdrivers_name(val)}
-              placeholder="Driver Name"
-            />
-          </Item>
-
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={contact_no}
-              onChangeText={val => setcontact_no(val)}
-              placeholder="Driver's Contact No"
-            />
-          </Item>
-
-          <Button info style={globalStyles.mb10} onPress={getBluebook}>
-            <Text>Attach Bluebook</Text>
-          </Button>
-          {images.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 20}}>
-              <Text style={{alignSelf: 'center', color: 'red'}}>
-                Swipe to review all images
-              </Text>
-              <DeckSwiper
-                dataSource={registration_document}
-                renderItem={image => (
-                  <Card style={{elevation: 3}}>
-                    <CardItem cardBody>
-                      <Image
-                        source={{
-                          uri: image.path,
-                        }}
-                        style={{height: 250, width: '100%'}}
-                      />
-                    </CardItem>
-                    <CardItem>
-                      <Icon name="heart" style={{color: '#ED4A6A'}} />
-                      <Text>
-                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                      </Text>
-                    </CardItem>
-                  </Card>
-                )}
-              />
-            </View>
-          )}
-          <View style={{marginBottom: 20}}></View>
-
-          {vehicle_owner === 'Spouse' ? (
-            <Fragment>
-              <Item regular style={globalStyles.mb10}>
-                <Input
-                  value={driver_cid}
-                  onChangeText={val => setdriver_cid(val)}
-                  placeholder="Owner's CID"
+            <Item regular style={globalStyles.mb10}>
+              <Picker
+                mode="dropdown"
+                selectedValue={vehicle_owner}
+                onValueChange={val => setvehicle_owner(val)}>
+                <Picker.Item
+                  label={'Select Vehicle Owner'}
+                  value={undefined}
+                  key={0}
                 />
-              </Item>
+                <Picker.Item label={'Self'} value={'Self'} key={1} />
+                <Picker.Item label={'Spouse'} value={'Spouse'} key={2} />
+                {/* <Picker.Item label={'Others(Not applicable to Sha)'} value={'Other'} key={2} /> */}
+              </Picker>
+            </Item>
 
-              <Button
-                info
-                style={globalStyles.mb10}
-                onPress={getMarriageCertificate}>
-                <Text>Attach Marriage Certificate</Text>
-              </Button>
-              {mc.length === 0 ? null : (
-                <View style={{height: 300, width: '100%', marginBottom: 20}}>
-                  <Text style={{alignSelf: 'center', color: 'red'}}>
-                    Swipe to review all images
-                  </Text>
-                  <DeckSwiper
-                    dataSource={marriage_certificate}
-                    renderItem={image => (
-                      <Card style={{elevation: 3}}>
-                        <CardItem cardBody>
-                          <Image
-                            source={{
-                              uri: image.path,
-                            }}
-                            style={{height: 250, width: '100%'}}
-                          />
-                        </CardItem>
-                        <CardItem>
-                          <Icon name="heart" style={{color: '#ED4A6A'}} />
-                          <Text>
-                            {image.path.substring(
-                              image.path.lastIndexOf('/') + 1,
-                            )}
-                          </Text>
-                        </CardItem>
-                      </Card>
-                    )}
+            <Item regular style={globalStyles.mb10}>
+              <Picker
+                mode="dropdown"
+                selectedValue={vehicle_capacity}
+                onValueChange={val => setVehicle_capacity(val)}>
+                <Picker.Item
+                  label={'Select Vehicle Capacity'}
+                  value={undefined}
+                  key={-1}
+                />
+                {all_capacities &&
+                  all_capacities.map((pur, idx) => {
+                    return (
+                      <Picker.Item label={pur.name} value={pur.name} key={idx} />
+                    );
+                  })}
+              </Picker>
+            </Item>
+
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={drivers_name}
+                onChangeText={val => setdrivers_name(val)}
+                placeholder="Driver Name"
+              />
+            </Item>
+
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={contact_no}
+                onChangeText={val => setcontact_no(val)}
+                placeholder="Driver's Contact No"
+                keyboardType="numeric"
+              />
+            </Item>
+
+            <Button block info style={globalStyles.mb10} onPress={getBluebook}>
+              <Text>Attach Bluebook</Text>
+            </Button>
+            {images.length === 0 ? null : (
+              <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                <Text style={{ alignSelf: 'center', color: 'red' }}>
+                  Swipe to review all images
+              </Text>
+                <DeckSwiper
+                  dataSource={registration_document}
+                  renderItem={image => (
+                    <Card style={{ elevation: 3 }}>
+                      <CardItem cardBody>
+                        <Image
+                          source={{
+                            uri: image.path,
+                          }}
+                          style={{ height: 250, width: '100%' }}
+                        />
+                      </CardItem>
+                      <CardItem>
+                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Text>
+                          {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                        </Text>
+                      </CardItem>
+                    </Card>
+                  )}
+                />
+              </View>
+            )}
+            <View style={{ marginBottom: 20 }}></View>
+
+            {vehicle_owner === 'Spouse' ? (
+              <Fragment>
+                <Item regular style={globalStyles.mb10}>
+                  <Input
+                    value={driver_cid}
+                    onChangeText={val => setdriver_cid(val)}
+                    placeholder="Spouse CID Number"
+                    keyboardType="numeric"
                   />
-                </View>
-              )}
-              <View style={{marginBottom: 20}}></View>
-            </Fragment>
-          ) : (
-            <Fragment></Fragment>
-          )}
+                </Item>
 
-          <Button success style={globalStyles.mb50} onPress={submitVehicleInfo}>
-            <Text>Submit for Approval</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  );
+                <Button
+                  block
+                  info
+                  style={globalStyles.mb10}
+                  onPress={getMarriageCertificate}>
+                  <Text>Attach Marriage Certificate</Text>
+                </Button>
+                {mc.length === 0 ? null : (
+                  <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                    <Text style={{ alignSelf: 'center', color: 'red' }}>
+                      Swipe to review all images
+                  </Text>
+                    <DeckSwiper
+                      dataSource={marriage_certificate}
+                      renderItem={image => (
+                        <Card style={{ elevation: 3 }}>
+                          <CardItem cardBody>
+                            <Image
+                              source={{
+                                uri: image.path,
+                              }}
+                              style={{ height: 250, width: '100%' }}
+                            />
+                          </CardItem>
+                          <CardItem>
+                            <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                            <Text>
+                              {image.path.substring(
+                                image.path.lastIndexOf('/') + 1,
+                              )}
+                            </Text>
+                          </CardItem>
+                        </Card>
+                      )}
+                    />
+                  </View>
+                )}
+                <View style={{ marginBottom: 20 }}></View>
+              </Fragment>
+            ) : (
+                <Fragment></Fragment>
+              )}
+
+            <Button success
+              block
+              style={globalStyles.mb10} onPress={submitVehicleInfo}>
+              <Text>Submit for Approval</Text>
+            </Button>
+          </Form>
+        </Content>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

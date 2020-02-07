@@ -50,7 +50,7 @@ export const VehicleDetail = ({
 
   const getVehicleStatus = async id => {
     try {
-      const response = await callAxios(`resource/Vehicle/${id}`);
+      const response = await callAxios(`resource/Transport Request/${id}`);
       setVehicle(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -87,7 +87,7 @@ export const VehicleDetail = ({
         </View>
       )}
       <Grid style={{marginTop: 5}}>
-        {vehicle.vehicle_status === 'Active' ? (
+        {vehicle.approval_status === 'Approved' ? (
           <Row
             style={{
               height: 55,
@@ -101,7 +101,7 @@ export const VehicleDetail = ({
                 style={{alignSelf: 'center'}}
                 onPress={() =>
                   navigation.navigate('UpdateDriver', {
-                    id: vehicle.name,
+                    id: vehicle.vehicle_no,
                     driver_name: vehicle.drivers_name,
                     driver_mobile_no: vehicle.contact_no,
                   })
@@ -140,12 +140,15 @@ export const VehicleDetail = ({
               <Text style={globalStyle.label}>Vehicle Status</Text>
             </Col>
             <Col size={3}>
-              {vehicle.vehicle_status === 'Suspended' ? (
+              {(vehicle.approval_status === 'Suspended' 
+              ||vehicle.approval_status === 'Pending' )? (
                 <Text style={{color: 'red', fontWeight: 'bold'}}>
-                  Suspended
+                  {vehicle.approval_status}
                 </Text>
               ) : (
-                <Text style={{color: 'blue', fontWeight: 'bold'}}>Active</Text>
+                <Text style={{color: 'blue', fontWeight: 'bold'}}>
+                  {vehicle.approval_status}
+                  </Text>
               )}
             </Col>
           </Row>
@@ -155,7 +158,7 @@ export const VehicleDetail = ({
               <Text style={globalStyle.label}>Vehicle Number</Text>
             </Col>
             <Col size={3}>
-              <Text>{vehicle.name}</Text>
+              <Text>{vehicle.vehicle_no}</Text>
             </Col>
           </Row>
 
@@ -186,14 +189,14 @@ export const VehicleDetail = ({
             </Col>
           </Row>
 
-          <Row style={globalStyle.labelContainer}>
+          {/* <Row style={globalStyle.labelContainer}>
             <Col size={2}>
               <Text style={globalStyle.label}>Driver's CID</Text>
             </Col>
             <Col size={3}>
               <Text>{vehicle.driver_cid}</Text>
             </Col>
-          </Row>
+          </Row> */}
         </Content>
       </Grid>
     </Container>

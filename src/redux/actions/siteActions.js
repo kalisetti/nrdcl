@@ -14,8 +14,10 @@ import {
   qtyExtensionSchema,
   driverInfoSchema,
   vehilceSchema,
+  driverInfoSchemaSelf,
 } from '../../validation/schema/siteSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
+
 
 /**
  *
@@ -33,27 +35,101 @@ export const startSiteRegistration = (site_info, images) => {
           dispatch(handleError(error));
         }
       });
-
       await siteSchema.validate(site_info);
+      if (images.length <= 0) {
+        dispatch(showToast('Construction Approval Doc Attachment is mandatory'))
+      } else {
+        let res = await callAxios(
+          'resource/Site Registration/',
+          'POST',
+          {},
+          site_info,
+        );
+        const docname = res.data.data.name;
+        const doctype = res.data.data.doctype;
 
-      let res = await callAxios(
-        'resource/Site Registration/',
+        images.map(async image => {
+          await attachFile(doctype, docname, image);
+        });
+
+        NavigationService.navigate('SiteDashboard');
+        dispatch(setLoading(false));
+        dispatch(showToast('Site Registration request sent, please wait for approval.', 'success'));
+      }
+
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+//Submitting the sales order and nagivate to payment screen.
+export const submitSalesOrder = (data, totalPayableAmount) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      const res = await callAxios(
+        'resource/Customer Order/',
         'POST',
         {},
-        site_info,
+        data,
       );
+      if (res.status == 200) {
 
-      const docname = res.data.data.name;
-      const doctype = res.data.data.doctype;
-
-      images.map(async image => {
-        await attachFile(doctype, docname, image);
-      });
-
-      NavigationService.navigate('SiteDashboard');
-      dispatch(setLoading(false));
-      dispatch(showToast('Site Registration request sent', 'success'));
+        NavigationService.navigate('Payment',
+          {
+            orderNumber: res.data.data.name,
+            site_type: res.data.data.site_type,
+            totalPayableAmount: totalPayableAmount
+          })
+      }
     } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+//Credit payment 
+export const submitCreditPayment = (data) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      const res = await callAxios(
+        'resource/Customer Payment/',
+        'POST',
+        {},
+        data,
+      );
+      console.log(res)
+      if (res.status == 200) {
+        dispatch(setLoading(false));
+        dispatch(showToast('Your order was placed successfully.', 'success'));
+        NavigationService.navigate('OrderDashboard');
+      }
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+//Payment confrimation from remitter 
+export const submitMakePayment = (data) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      // await siteSchema.validate(site_info);
+      const res = await callAxios(
+        'method/erpnext.crm_api.make_payment',
+        'post',
+        data,
+      );
+      if (res.status == 200) {
+        dispatch(setLoading(false));
+        dispatch(showToast('Your order was placed successfully.', 'success'));
+        NavigationService.navigate('OrderDashboard');
+      }
+    } catch (error) {
+      console.log(error)
       dispatch(handleError(error));
     }
   };
@@ -68,9 +144,7 @@ export const startSiteStatusChange = site_info => {
     dispatch(setLoading(true));
     try {
       await siteStatusSchema.validate(site_info);
-
       await callAxios('resource/Site Status/', 'POST', {}, site_info);
-
       NavigationService.navigate('ListSite');
       dispatch(setLoading(false));
       dispatch(showToast('Your request has been sent', 'success'));
@@ -147,9 +221,9 @@ export const startQtyExtension = (site_info, images) => {
         await attachFile(doctype, docname, image);
       });
 
-      NavigationService.navigate('ListSite');
+      NavigationService.navigate('SiteDashboard');
       dispatch(setLoading(false));
-      dispatch(showToast('Your request has been sent', 'success'));
+      dispatch(showToast('Your request has been sent, please wait for approval', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -171,28 +245,33 @@ export const startVehicleRegistration = (
     dispatch(setLoading(true));
     try {
       await vehilceSchema.validate(vehicle_info);
+      if (bluebook.length <= 0) {
+        dispatch(showToast('Bluebook Attachment is mandatory'))
+      } else if (vehicle_info.owner_cid == '') {
+        dispatch(showToast('Spouse CID Number is mandatory'))
+      } else if (vehicle_info.owner == "Spouse" && mc.length <= 0) {
+        dispatch(showToast('Marriage certificate Attachment is mandatory'))
+      } else {
+        let res = await callAxios(
+          'resource/Transport Request/',
+          'POST',
+          {},
+          vehicle_info,
+        );
+        const docname = res.data.data.name;
+        const doctype = res.data.data.doctype;
 
-      let res = await callAxios(
-        'resource/Transport Request/',
-        'POST',
-        {},
-        vehicle_info,
-      );
+        bluebook.map(async image => {
+          await attachFile(doctype, docname, image);
+        });
 
-      const docname = res.data.data.name;
-      const doctype = res.data.data.doctype;
-
-      bluebook.map(async image => {
-        await attachFile(doctype, docname, image);
-      });
-
-      mc.map(async image => {
-        await attachFile(doctype, docname, image);
-      });
-
-      NavigationService.navigate('ListVehicle');
-      dispatch(setLoading(false));
-      dispatch(showToast('Vehicle Registration request sent', 'success'));
+        mc.map(async image => {
+          await attachFile(doctype, docname, image);
+        });
+        dispatch(setLoading(false));
+        dispatch(showToast('Vehicle Registration request sent, Please wait for approval.', 'success'));
+        NavigationService.navigate('VehicleDashboard');
+      }
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -208,12 +287,30 @@ export const startUpdateDriverDetail = driver_info => {
     dispatch(setLoading(true));
     try {
       await driverInfoSchema.validate(driver_info);
+      await callAxios('resource/Vehicle Update/', 'POST', {}, driver_info);
 
+      NavigationService.navigate('ListTransport');
+      dispatch(setLoading(false));
+      dispatch(showToast('Update Info request sent, Please wait for approval', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+/**
+ *
+ * @param {driver's information} driver_info
+ */
+export const startUpdateDriverDetailSelf = driver_info => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      await driverInfoSchemaSelf.validate(driver_info);
       await callAxios('resource/Vehicle Update/', 'POST', {}, driver_info);
 
       NavigationService.navigate('ListVehicle');
       dispatch(setLoading(false));
-      dispatch(showToast('Update Info request sent', 'success'));
+      dispatch(showToast('Update Info request sent, Please wait for approval', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }

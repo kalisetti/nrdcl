@@ -1,10 +1,11 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
-import {Text, Button, Icon, Grid, Row, Col} from 'native-base';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Text, Button, Icon, Grid, Row, Col } from 'native-base';
 import Logo from '../../base/header/Logo';
 import globalStyle from '../../../styles/globalStyle';
+import { StyleSheet, AsyncStorage } from 'react-native';
 
-export const ModeSelector = ({userState, navigation}) => {
+export const ModeSelector = ({ userState, navigation }) => {
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -15,10 +16,40 @@ export const ModeSelector = ({userState, navigation}) => {
     }
   }, []);
 
+  //Check customer aggreed tearms and condition before. If yes then navigate to customer deshboard
+  const checkLocalStorageForCustomer = async () => {
+    try {
+      const value = await AsyncStorage.getItem('customerTermsAgreed');
+      // console.log(value);
+      if (value == null) {
+        navigation.navigate('CustomerTerms')
+      } else {
+        navigation.navigate('CustomerDashboard')
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  //Check transporter aggreed tearms and condition before. If yes then navigate to transporter deshboard
+  const checkLocalStorageTransporter = async () => {
+    try {
+      const value = await AsyncStorage.getItem('transporterTermsAgreed');
+      // console.log(value);
+      if (value == null) {
+        navigation.navigate('TransporterTerms')
+      } else {
+        navigation.navigate('TransporterDashboard');
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
   return (
     <Grid>
       <Row>
-        <Col style={{justifyContent: 'space-evenly'}}>
+        <Col style={{ justifyContent: 'space-evenly' }}>
           <Logo />
         </Col>
       </Row>
@@ -27,8 +58,8 @@ export const ModeSelector = ({userState, navigation}) => {
           <Button
             vertical
             transparent
-            style={{alignSelf: 'center'}}
-            onPress={() => navigation.navigate('CustomerTerms')}>
+            style={{ alignSelf: 'center' }}
+            onPress={checkLocalStorageForCustomer}>
             <Icon name="ios-people" style={globalStyle.modeIcon} />
             <Text style={globalStyle.homeIconText}>Customer</Text>
           </Button>
@@ -37,8 +68,8 @@ export const ModeSelector = ({userState, navigation}) => {
           <Button
             vertical
             transparent
-            style={{alignSelf: 'center'}}
-            onPress={() => navigation.navigate('TransporterTerms')}>
+            style={{ alignSelf: 'center' }}
+            onPress={checkLocalStorageTransporter}>
             <Icon
               name="dump-truck"
               type="MaterialCommunityIcons"

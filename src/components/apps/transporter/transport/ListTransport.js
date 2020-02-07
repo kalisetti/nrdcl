@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -18,8 +18,8 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
 
 export const ListTransport = ({
   userState,
@@ -42,7 +42,7 @@ export const ListTransport = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
@@ -50,15 +50,16 @@ export const ListTransport = ({
           bordered
           button
           onPress={() => {
-            navigation.navigate('TransportDetail', {id: item.name});
+            navigation.navigate('TransportDetail', { id: item.name });
           }}
           style={globalStyles.tableHeader}>
+            
           <Body>
-            {item.vehilce_status === 'Suspended' ? (
-              <Text style={{color: 'red'}}>{item.name}</Text>
+            {item.approval_status === 'Pending' ? (
+              <Text style={{ color: 'red' }}>{item.vehicle_no}</Text>
             ) : (
-              <Text style={{color: 'blue'}}>{item.name}</Text>
-            )}
+                <Text style={{ color: 'blue' }}>{item.vehicle_no}</Text>
+              )}
           </Body>
 
           <Right>
@@ -69,10 +70,7 @@ export const ListTransport = ({
           <Text>Vehicle Capacity: {item.vehicle_capacity} m3</Text>
         </CardItem>
         <CardItem>
-          <Text>Driver Name: {item.drivers_name}</Text>
-        </CardItem>
-        <CardItem>
-          <Text>Contact No : {item.contact_no}</Text>
+          <Text> Status: {item.approval_status}</Text>
         </CardItem>
       </Card>
     );
@@ -83,20 +81,21 @@ export const ListTransport = ({
       fields: JSON.stringify([
         'name',
         'vehicle_capacity',
-        'vehicle_status',
+        'vehicle_no',
         'drivers_name',
         'contact_no',
+        'approval_status'
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
-        ['common_pool', '=', 1],
-        ['vehicle_status', '!=', 'Deregistered'],
+        ['common_pool', '=', 1]
+        // ['vehicle_status', '!=', 'Deregistered'],
       ]),
     };
-
+    
     try {
       const response = await callAxios(
-        'resource/Vehicle?order_by=creation%20desc,vehicle_status%20asc',
+        'resource/Transport Request?order_by=creation%20desc,approval_status%20asc',
         'GET',
         params,
       );
@@ -110,26 +109,26 @@ export const ListTransport = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.listContent}>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {vehicle.length > 0 ? (
-        <FlatList
-          data={vehicle}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
+      <Container style={globalStyles.listContent}>
+        <NavigationEvents
+          onWillFocus={_ => {
+            setReload(1);
+          }}
+          onWillBlur={_ => {
+            setReload(0);
+          }}
         />
-      ) : (
-        <Text style={globalStyles.emptyString}>No approved transports yet</Text>
-      )}
-    </Container>
-  );
+        {vehicle.length > 0 ? (
+          <FlatList
+            data={vehicle}
+            renderItem={renderItem}
+            keyExtractor={item => item.name}
+          />
+        ) : (
+            <Text style={globalStyles.emptyString}>No common pool transports yet under your name.</Text>
+          )}
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({
