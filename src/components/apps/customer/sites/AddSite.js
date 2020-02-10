@@ -126,6 +126,10 @@ export const AddSite = ({
     } catch (error) {
       handleError(error);
     }
+  }; 
+  
+  const removeImage = () => { 
+    setapproval_document(images.filter((_, ind) => ind > 0));
   };
 
   const getFormData = async () => {
@@ -137,7 +141,6 @@ export const AddSite = ({
       const all_ct = await callAxios('resource/Construction Type');
       // const all_ct = await callAxios('resource/Construction Type?fields=["*"]');
       setall_construction_type(all_ct.data.data);
-      console.log(all_ct.data.data)
 
       const dz_all = await callAxios('resource/Dzongkhags', 'get');
       setall_dzongkhag(dz_all.data.data);
@@ -208,7 +211,7 @@ export const AddSite = ({
       items,
     };
 
-    startSiteRegistration(site_info, images,isBuilding);
+    startSiteRegistration(site_info, images, isBuilding);
   };
 
   return commonState.isLoading ? (
@@ -275,7 +278,7 @@ export const AddSite = ({
 
             <Item regular style={globalStyles.mb11}>
               <DatePicker
-                style={{ width: '50%'}}
+                style={{ width: '50%' }}
                 date={construction_start_date}
                 mode="date"
                 customStyles={{ dateInput: { borderWidth: 0 } }}
@@ -339,7 +342,7 @@ export const AddSite = ({
                 />
               </Item>
             ) : null
-            } 
+            }
             <Item regular style={globalStyles.mb10}>
               <Input
                 value={location}
@@ -397,7 +400,9 @@ export const AddSite = ({
                         />
                       </CardItem>
                       <CardItem>
-                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeImage(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                         <Text>
                           {image.path.substring(image.path.lastIndexOf('/') + 1)}
                         </Text>

@@ -83,6 +83,10 @@ const UserDetail = ({
     setImgFrontReqMsg('');
   };
 
+  const removeCidFront= () => { 
+    setCidFrontImage(imagesFront.filter((_, ind) => ind > 0));
+  };
+
   /**
    * image picker cid back page
    */
@@ -91,6 +95,11 @@ const UserDetail = ({
     setCidBackImage(backPageImage);
     setImgBackReqMsg('');
   };
+
+  const removeCidBack= () => { 
+    setCidBackImage(imagesBack.filter((_, ind) => ind > 0));
+  };
+
 
   const submitInformation = async () => {
     if (imagesFront.length < 1) {
@@ -176,7 +185,9 @@ const UserDetail = ({
                           />
                         </CardItem>
                         <CardItem>
-                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeCidFront(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                           <Text>
                             {image.path.substring(image.path.lastIndexOf('/') + 1)}
                           </Text>
@@ -209,7 +220,9 @@ const UserDetail = ({
                           />
                         </CardItem>
                         <CardItem>
-                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeCidBack(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                           <Text>
                             {image.path.substring(image.path.lastIndexOf('/') + 1)}
                           </Text>

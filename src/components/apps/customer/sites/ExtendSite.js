@@ -37,7 +37,7 @@ export const ExtendSite = ({
   const [extension_till_date, setTillDate] = useState(undefined);
   const [images, setImages] = useState([]);
   const [extendDateErrorMsg, setExtendDateErrorMsg] = useState('');
-  const [docErrorMsg, setDocErrorMsg] = useState(''); 
+  const [docErrorMsg, setDocErrorMsg] = useState('');
 
   useEffect(() => {
     if (!userState.logged_in) {
@@ -80,6 +80,9 @@ export const ExtendSite = ({
     const img = await getImages('Front');
     setImages(img);
     setDocErrorMsg('')
+  };
+  const removeImage = () => {
+    setImages(document.filter((_, ind) => ind > 0));
   };
 
   const extendSite = () => {
@@ -172,7 +175,9 @@ export const ExtendSite = ({
                         />
                       </CardItem>
                       <CardItem>
-                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeImage(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                         <Text>
                           {image.path.substring(image.path.lastIndexOf('/') + 1)}
                         </Text>
@@ -187,34 +192,6 @@ export const ExtendSite = ({
                 {docErrorMsg}
               </Text>
             </Item>
-            {/* {extension_approval_document.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 20}}>
-              <Text style={{alignSelf: 'center', color: 'red'}}>
-                Swipe to review all images
-              </Text>
-              <DeckSwiper
-                dataSource={extension_approval_document}
-                renderItem={image => (
-                  <Card style={{elevation: 3}}>
-                    <CardItem cardBody>
-                      <Image
-                        source={{
-                          uri: image.path,
-                        }}
-                        style={{height: 250, width: '100%'}}
-                      />
-                    </CardItem>
-                    <CardItem>
-                      <Icon name="heart" style={{color: '#ED4A6A'}} />
-                      <Text>
-                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                      </Text>
-                    </CardItem>
-                  </Card>
-                )}
-              />
-            </View>
-          )} */}
             <View style={{ marginBottom: 20 }}></View>
             <Button
               success
