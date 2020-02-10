@@ -24,7 +24,7 @@ import NavigationService from '../../components/base/navigation/NavigationServic
  * @param {details of site to be registered} site_info
  * @param {any supporting documents} images
  */
-export const startSiteRegistration = (site_info, images) => {
+export const startSiteRegistration = (site_info, images, isBuilding) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -36,8 +36,13 @@ export const startSiteRegistration = (site_info, images) => {
         }
       });
       await siteSchema.validate(site_info);
-      if (images.length <= 0) {
-        dispatch(showToast('Construction Approval Doc Attachment is mandatory'))
+      if (isBuilding == 1 && site_info.number_of_floors == null) {
+        dispatch(showToast('Number of floors is madatory'))
+      } else if (isBuilding == 1 && site_info.plot_no == null) {
+        dispatch(showToast('Plot/Thram No is mandatory'));
+      }
+      else if (images.length <= 0) {
+        dispatch(showToast('Please Attach Construction Approval Documents'));
       } else {
         let res = await callAxios(
           'resource/Site Registration/',

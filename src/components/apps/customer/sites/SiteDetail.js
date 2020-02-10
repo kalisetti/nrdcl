@@ -51,6 +51,7 @@ export const SiteDetail = ({
     try {
       const response = await callAxios(`resource/Site/${id}`);
       setSite(response.data.data);
+      
       setLoading(false);
     } catch (error) {
       handleError(error);
@@ -389,44 +390,60 @@ export const SiteDetail = ({
             <Container style={globalStyle.modal}>
               <Grid style={{marginTop: 5}}>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Material</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Material:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.item_sub_group}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>UoM</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>UoM:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.uom}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Initial Qty</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Initial Qty:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.expected_quantity}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Additional Qty</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Additional Qty:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.extended_quantity}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Total Qty</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Overall Expected Quantity:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.overall_expected_quantity}</Text>
                   </Col>
+                </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Ordered Quantity:</Text>
+                  </Col>
+                  <Col size={2}>
+                    <Text>{currentItem.ordered_quantity}</Text>
+                  </Col>
+                </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Balance Quantity:</Text>
+                  </Col>
+                  <Col size={2}>
+                    <Text>{currentItem.balance_quantity}</Text>
+                  </Col>  
                 </Row>
                 {/* <Row style={globalStyle.labelContainer}>
                   <Col size={2}>
@@ -445,10 +462,10 @@ export const SiteDetail = ({
                   </Col>
                 </Row> */}
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
+                  <Col size={4}>
                     <Text style={globalStyle.lb}>Remarks</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.remarks}</Text>
                   </Col>
                 </Row>

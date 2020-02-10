@@ -285,16 +285,14 @@ const AuthNavigator = createStackNavigator(
 
 const InfoNavigator = createStackNavigator(
   {
-    About: {
-      screen: About,
-      navigationOptions: { title: 'About', headerLeft: <MyBackButton /> },
-    },
-    ContactUs: { screen: ContactUs, navigationOptions: { title: 'Contact Us', headerLeft: <MyBackButton /> } },
-    Faq: { screen: Faq, navigationOptions: { title: 'FAQ', headerLeft: <MyBackButton /> } },
-    Help: { screen: Help, navigationOptions: { title: 'Help', headerLeft: <MyBackButton /> } },
+    Login: { screen: Login, navigationOptions: { title: ''} },
+    About: {  screen: About, navigationOptions: { title: 'About' } },
+    ContactUs: { screen: ContactUs, navigationOptions: { title: 'Contact Us'} },
+    Faq: { screen: Faq, navigationOptions: { title: 'FAQ'} },
+    Help: { screen: Help, navigationOptions: { title: 'Help'} },
   },
   {
-    initialRouteName: 'About',
+    initialRouteName: 'Login',
     defaultNavigationOptions: {
       gestureEnabled: true,
       cardOverlayEnabled: true,

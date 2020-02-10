@@ -208,7 +208,7 @@ export const AddSite = ({
       items,
     };
 
-    startSiteRegistration(site_info, images);
+    startSiteRegistration(site_info, images,isBuilding);
   };
 
   return commonState.isLoading ? (

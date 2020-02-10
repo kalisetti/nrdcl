@@ -20,7 +20,7 @@ import {
     handleError,
 } from '../../../../redux/actions/commonActions';
 import { startVehicleDeregistration, confirmRecived } from '../../../../redux/actions/siteActions';
-
+import Moment from 'moment';
 export const OrderDetail = ({
     userState,
     commonState,
@@ -83,13 +83,13 @@ export const OrderDetail = ({
                         <Text>Branch  : {deliver.branch} </Text>
                         <Text>Vehicle No : {deliver.vehicle}</Text>
                         <Text>Driver Name  : {deliver.drivers_name}</Text>
-                        <Text>Driver Contact  : {deliver.contact_no}</Text>
-                        <Text>Exist Time  : {deliver.exit_date_time}</Text>
-                        <Text>Recived Time  : {deliver.received_date_time}</Text>
-
+                        <Text>Driver Mobile No  : {deliver.contact_no}</Text>
+                        <Text>Exit Time  :  {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mm:ss')}</Text>
+                        <Text>Received Time  : {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mm:ss')}</Text>
                     </View>
 
                 </CardItem>
+                {deliver.confirmation_status === 'In Transit' ? (
                 <Textarea
                     rowSpan={2}
                     width="100%"
@@ -98,9 +98,11 @@ export const OrderDetail = ({
                     value={remarks}
                     onChangeText={val => setremarks(val)}
                     style={globalStyle.mb10}
-                />
+                /> ):(
+                    <Text></Text>
+                )}
 
-                {deliver.confirmation_status === 'In Transit' ? (
+                 {deliver.confirmation_status === 'In Transit' ? (
                     <Button
                         block
                         success
