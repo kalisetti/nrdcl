@@ -97,6 +97,7 @@ export const AddSite = ({
   const [all_construction_type, setall_construction_type] = useState([]);
   const [all_dzongkhag, setall_dzongkhag] = useState([]);
   const [all_sub_item, setall_sub_item] = useState([]);
+  const [isBuilding, setIsBuilding] = useState(0);
 
   //For proper navigation/auth settings
   useEffect(() => {
@@ -117,6 +118,16 @@ export const AddSite = ({
     }, 600);
   }, [approval_document]);
 
+  const getIsBuilding = async id => {
+    try {
+      const response = await callAxios(`resource/Construction Type/${id}`);
+      setIsBuilding(response.data.data.is_building);
+      setLoading(false);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
   const getFormData = async () => {
     try {
       setLoading(true);
@@ -124,7 +135,9 @@ export const AddSite = ({
       setall_purpose(all_pur.data.data);
 
       const all_ct = await callAxios('resource/Construction Type');
+      // const all_ct = await callAxios('resource/Construction Type?fields=["*"]');
       setall_construction_type(all_ct.data.data);
+      console.log(all_ct.data.data)
 
       const dz_all = await callAxios('resource/Dzongkhags', 'get');
       setall_dzongkhag(dz_all.data.data);
@@ -226,7 +239,7 @@ export const AddSite = ({
               <Picker
                 mode="dropdown"
                 selectedValue={construction_type}
-                onValueChange={val => setconstruction_type(val)}>
+                onValueChange={val => { setconstruction_type(val), getIsBuilding(val) }}>
                 <Picker.Item
                   label={'Select Construction Type'}
                   value={undefined}
@@ -247,16 +260,22 @@ export const AddSite = ({
                 placeholder="Construction Approval No."
               />
             </Item>
-            <Item regular style={globalStyles.mb10}>
-              <Input
-                value={number_of_floors}
-                onChangeText={val => setnumber_of_floors(val)}
-                placeholder="Number of Floors"
-              />
-            </Item>
-            <Item regular style={globalStyles.mb10}>
+
+            {isBuilding === 1 ? (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={number_of_floors}
+                  onChangeText={val => setnumber_of_floors(val)}
+                  placeholder="Number of Floors"
+                />
+              </Item>
+            ) : null
+            }
+
+
+            <Item regular style={globalStyles.mb11}>
               <DatePicker
-                style={{ width: '100%' }}
+                style={{ width: '50%'}}
                 date={construction_start_date}
                 mode="date"
                 customStyles={{ dateInput: { borderWidth: 0 } }}
@@ -266,8 +285,19 @@ export const AddSite = ({
                 cancelBtnText="Cancel"
                 onDateChange={date => setStartDate(date)}
               />
+              <DatePicker
+                style={{ width: '50%' }}
+                date={construction_end_date}
+                mode="date"
+                customStyles={{ dateInput: { borderWidth: 0 } }}
+                placeholder="Construction End Date"
+                format="DD-MM-YYYY"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                onDateChange={date => setEndDate(date)}
+              />
             </Item>
-            <Item regular style={globalStyles.mb10}>
+            {/* <Item regular style={globalStyles.mb10}>
               <DatePicker
                 style={{ width: '100%' }}
                 date={construction_end_date}
@@ -279,7 +309,7 @@ export const AddSite = ({
                 cancelBtnText="Cancel"
                 onDateChange={date => setEndDate(date)}
               />
-            </Item>
+            </Item> */}
             <Item regular style={globalStyles.mb10}>
               <Picker
                 mode="dropdown"
@@ -299,33 +329,32 @@ export const AddSite = ({
               </Picker>
             </Item>
 
+
+            {isBuilding === 1 ? (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={plot_no}
+                  onChangeText={val => setplot_no(val)}
+                  placeholder="Plot/Thram No."
+                />
+              </Item>
+            ) : null
+            } 
             <Item regular style={globalStyles.mb10}>
               <Input
-                value={plot_no}
-                onChangeText={val => setplot_no(val)}
-                placeholder="Plot/Thram No."
+                value={location}
+                onChangeText={val => setlocation(val)}
+                placeholder="Location Details"
               />
             </Item>
 
-            <Textarea
-              rowSpan={3}
-              width="100%"
-              bordered
-              placeholder="Location Details"
-              value={location}
-              onChangeText={val => setlocation(val)}
-              style={globalStyles.mb10}
-            />
-
-            <Textarea
-              rowSpan={3}
-              width="100%"
-              bordered
-              placeholder="Remarks"
-              value={remarks}
-              onChangeText={val => setremarks(val)}
-              style={globalStyles.mb10}
-            />
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={remarks}
+                onChangeText={val => setremarks(val)}
+                placeholder="Remarks"
+              />
+            </Item>
 
             <Button
               info
@@ -380,9 +409,9 @@ export const AddSite = ({
             )}
             <View style={{ marginBottom: 15 }}></View>
 
-            <Button info style={globalStyles.mb10} onPress={getGPS}>
+            {/* <Button info style={globalStyles.mb10} onPress={getGPS}>
               <Text>Set Site GPS Location</Text>
-            </Button>
+            </Button> */}
             {showmap && (
               <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
                 <MapView

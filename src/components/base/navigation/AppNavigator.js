@@ -51,6 +51,7 @@ import AddOrder from '../../apps/customer/orders/AddOrder';
 import Payment from '../../apps/customer/orders/Payment';
 import OrderDetail from '../../apps/customer/orders/OrderDetail';
 import DeliveryList from '../../apps/customer/Delivery/DeliveryList'
+import DeliveryDetail from '../../apps/customer/Delivery/DeliveryDetail'
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
@@ -192,6 +193,13 @@ const AppNavigator = createStackNavigator(
       screen: DeliveryList,
       navigationOptions: {
         title: 'Delivery List',
+      },
+    },
+
+    DeliveryDetail: {
+      screen: DeliveryDetail,
+      navigationOptions: {
+        title: 'Delivery Detail',
       },
     },
     TransporterDashboard: {

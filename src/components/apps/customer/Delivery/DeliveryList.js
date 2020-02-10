@@ -51,13 +51,13 @@ export const DeliveryList = ({
                     header
                     bordered
                     button
-                    onPress={() => navigation.navigate('OrderDetail', { id: item.name })}
+                    onPress={() => navigation.navigate('DeliveryDetail', { id: item.name })}
                     style={globalStyles.tableHeader}>
                     <Body>
                         {item.docstatus === 0 ? (
-                            <Text style={{ color: 'red' }}>{item.name}</Text>
+                            <Text style={{ color: 'red' }}>{item.delivery_note}</Text>
                         ) : (
-                                <Text style={{ color: 'blue' }}>{item.name}</Text>
+                                <Text style={globalStyles.label}>{item.delivery_note}</Text>
                             )}
                     </Body>
 

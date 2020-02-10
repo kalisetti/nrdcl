@@ -159,7 +159,7 @@ export const startSiteStatusChange = site_info => {
  * @param {details of site to extend end date} site_info
  * @param {supporting documents, if any} images
  */
-export const startSiteExtension = (site_info, images) => {
+export const startSiteExtension = (site_info, images = []) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -214,12 +214,12 @@ export const startQtyExtension = (site_info, images) => {
         site_info,
       );
 
-      const docname = res.data.data.name;
-      const doctype = res.data.data.doctype;
+      // const docname = res.data.data.name;
+      // const doctype = res.data.data.doctype;
 
-      images.map(async image => {
-        await attachFile(doctype, docname, image);
-      });
+      // images.map(async image => {
+      //   await attachFile(doctype, docname, image);
+      // });
 
       NavigationService.navigate('SiteDashboard');
       dispatch(setLoading(false));
@@ -357,6 +357,29 @@ export const startVehicleDeregistration = vehicle => {
       dispatch(setLoading(false));
       NavigationService.navigate('ListVehicle');
       dispatch(showToast('Successfully deregistered vehicle', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+/**
+ * 
+ */
+export const confirmRecived = (data) => {
+  return async dispatch => {
+    // alert(delivery_note)
+    dispatch(setLoading(true));
+    try {
+      const res = await callAxios(
+        'method/erpnext.crm_api.delivery_confirmation',
+        'post',
+        data
+      );
+      console.log(res)
+      dispatch(setLoading(false));
+      NavigationService.navigate('DeliveryList');
+      dispatch(showToast('Infomartation successfuly updated', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }

@@ -68,10 +68,10 @@ export const AddOrder = ({
   //modal
   const [showModal, setShowModal] = useState(false);
   const [items, setItems] = useState([]);
+  const [branchWiseLocation, setBranchWiseLocation] = useState(undefined);
+  const [allLocation, setAllLocation] = useState([]);
+  const [locationItemRate, setLocationItemRate] = useState(undefined);
 
-  const [cp, setCp] = useState(undefined);
-  const [self, setSelf] = useState(undefined);
-  const [Others, setOthers] = useState(undefined);
   //For proper navigation/auth settings
   useEffect(() => {
     if (!userState.logged_in) {
@@ -102,7 +102,13 @@ export const AddOrder = ({
   useEffect(() => {
     setLoading(true);
     getItemDetails();
+    getBranchWiseLocation();
   }, [branch, item]);
+
+  useEffect(() => {
+    setLoading(true);
+    getItemRateByLocation();
+  }, [branch, item, branchWiseLocation]);
 
   useEffect(() => {
     setLoading(true);
@@ -112,7 +118,7 @@ export const AddOrder = ({
 
   useEffect(() => {
     setLoading(true);
-    caculateInvoice();
+    calculateInvoice();
   }, [items]);
 
 
@@ -186,6 +192,7 @@ export const AddOrder = ({
     }
   };
 
+
   const getItemDetails = async () => {
     if (item === undefined || branch === undefined) {
       setLoading(false);
@@ -202,15 +209,71 @@ export const AddOrder = ({
           },
         );
         setItemDetail(all_its.data.message[0]);
-        // if (branch != undefined) {
-        //   setCp(all_its.data.message[0].has_common_pool);
-        //   setSelf(all_its.data.message[0].allow_self_owned_transport);
-        //   setOthers(all_its.data.message[0].allow_other_transport);
-        // }
         setLoading(false);
       } catch (error) {
         handleError(error);
       }
+    }
+  };
+
+
+  /**
+   * to get location based on branch selection 
+   */
+  const getBranchWiseLocation = async () => {
+    if (branch === undefined) {
+      setLoading(false);
+    } else {
+      try {
+        const res = await callAxios(
+          'method/erpnext.crm_utils.get_branch_location',
+          'post',
+          {
+            branch,
+            item,
+          },
+        );
+        const locationList = res.data.message.filter(
+          (data) => data.location != null
+        );
+        setAllLocation(locationList);
+        if (locationList.length === 0) {
+          setLocationItemRate(res.data.message[0].item_rate);
+        }
+        setLoading(false);
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
+  /**
+   * to get item Rate based on location selection 
+   */
+  const getItemRateByLocation = async () => {
+    if (branch === undefined) {
+      setLoading(false);
+    } else {
+      if (branchWiseLocation) {
+        try {
+          const res = await callAxios(
+            'method/erpnext.crm_utils.get_branch_location',
+            'post',
+            {
+              branch,
+              item,
+              location: branchWiseLocation
+            },
+          );
+          if (allLocation.length > 0) {
+            setLocationItemRate(res.data.message[0].item_rate);
+          }
+          setLoading(false);
+        } catch (error) {
+          handleError(error);
+        }
+      }
+
     }
   };
 
@@ -319,20 +382,11 @@ export const AddOrder = ({
    * @param {to select transportation mode by defualt if there is only one value} val 
    */
   const selectTransportMode = () => {
-    // if (others === 1 && cp !== 1 && self != 1) {
-    //   setTransportMode('Others');
-    // }
-    // if (others !== 1 && cp === 1 && self !== 1) {
-    //   setTransportMode('Common Pool');
-    // }
-    // if (others !== 1 && cp !== 1 && self === 1) {
-    //   setTransportMode('Self Owned Transport');
-    // }
     setTransportMode(undefined);
   };
 
 
-  const caculateInvoice = async () => {
+  const calculateInvoice = async () => {
     if (items.length > 0) {
       var totalOrderQty = items.reduce(function (prev, cur) {
         return prev + (cur.noof_truck_load * cur.vehicle_capacity);
@@ -340,7 +394,7 @@ export const AddOrder = ({
 
       settotalOrderQty(totalOrderQty);
 
-      var totalItemRate = totalOrderQty * itemDetail.item_rate;
+      var totalItemRate = totalOrderQty * locationItemRate;
       settotalItemRate(totalItemRate.toFixed(2));
       var totalTransportationRate = transport_mode == 'Common Pool' ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00;
       settotalTransportationRate(totalTransportationRate.toFixed(2));
@@ -373,7 +427,6 @@ export const AddOrder = ({
                 <Picker.Item label={'Select Site'} value={undefined} key={-1} />
                 {all_sites &&
                   all_sites.map((pur, idx) => {
-
                     return (
                       <Picker.Item
                         label={`${pur.name} \n(${pur.purpose} at ${pur.location})`}
@@ -409,9 +462,9 @@ export const AddOrder = ({
                     <Col size={2} style={globalStyles.colContainer}>
                       <Text>Region</Text>
                     </Col>
-                    <Col size={1.5} style={globalStyles.colContainer}>
+                    {/* <Col size={1.5} style={globalStyles.colContainer}>
                       <Text>Rate</Text>
-                    </Col>
+                    </Col> */}
                     <Col size={1.5} style={globalStyles.colContainer}>
                       <Text>Lead Time</Text>
                     </Col>
@@ -422,13 +475,13 @@ export const AddOrder = ({
                   {all_branches.map((item, idx) => (
                     <Row key={idx} style={globalStyles.rowContainer}>
                       <Col size={2} style={globalStyles.colContainer}
-                        onPress={() => setBranch(item.branch)} >
+                        onPress={() => {setBranch(item.branch),setBranchWiseLocation(undefined)}} >
                         <Text>{item.branch}</Text>
                       </Col>
-                      <Col size={1.5} style={globalStyles.colContainer}
+                      {/* <Col size={1.5} style={globalStyles.colContainer}
                         onPress={() => setBranch(item.branch)}>
                         <Text>Nu.{item.item_rate}</Text>
-                      </Col>
+                      </Col> */}
                       <Col size={1.5} style={globalStyles.colContainer}
                         onPress={() => setBranch(item.branch)}>
                         <Text> {item.lead_time} Days</Text>
@@ -466,14 +519,56 @@ export const AddOrder = ({
 
             {(itemDetail !== undefined && branch !== undefined) ? (
               <Fragment>
-                <Text style={{ color: 'gray' }}>
-                  <Icon name="info-circle"
-                    type="FontAwesome"
-                    style={globalStyles.smallIcon}
-                  ></Icon>
-                  Will take approximately {itemDetail.lead_time} working days
-                  at the rate of Nu. {itemDetail.item_rate}/{itemDetail.stock_uom}{' '}
+                {(allLocation.length == 0) ? (
+                  <Text style={{ color: 'gray' }}>
+                    <Icon name="info-circle"
+                      type="FontAwesome"
+                      style={globalStyles.smallIcon}
+                    ></Icon>
+                    Will take approximately {itemDetail.lead_time} working days
+                    at the rate of Nu.
+                  {locationItemRate}
+                    /{itemDetail.stock_uom}{' '}
+                  </Text>
+                ) : (
+                    <Text style={{ color: 'gray' }}>
+                      <Icon name="info-circle"
+                        type="FontAwesome"
+                        style={globalStyles.smallIcon}
+                      ></Icon>
+                      Will take approximately {itemDetail.lead_time} working days
                 </Text>
+                  )}
+
+                {(allLocation.length > 0) && (
+                  <Item regular style={globalStyles.mb10}>
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={branchWiseLocation}
+                      onValueChange={val => setBranchWiseLocation(val)}>
+                      <Picker.Item label={'Select Location Unit'} value={undefined} key={-1} />
+                      {allLocation && allLocation.map((pur, idx) => {
+                        return (
+                          <Picker.Item
+                            label={pur.location}
+                            value={pur.location}
+                            key={idx}
+                          />
+                        );
+                      })}
+                    </Picker>
+                  </Item>
+                )}
+                {(branchWiseLocation && allLocation.length > 0) && (
+                  <Text style={{ color: 'gray' }}>
+                    <Icon name="info-circle"
+                      type="FontAwesome"
+                      style={globalStyles.smallIcon}
+                    ></Icon>
+                    Item Rate Nu.
+                     {locationItemRate}
+                  </Text>
+                )}
 
                 <Item regular style={globalStyles.mb10}>
                   {/* to select self owned */}
@@ -659,7 +754,6 @@ export const AddOrder = ({
                         />
                       </Picker>
                     )}
-
                 </Item>
 
                 {transport_mode && (
@@ -687,17 +781,10 @@ export const AddOrder = ({
                 <Text></Text>
               )}
 
-
             {(items.length > 0 && branch !== undefined && transport_mode !== undefined) ? (
               // <Text></Text>
               <Fragment>
                 <Row style={globalStyles.labelContainer}>
-                  {/* <Col size={3}>
-                    <Text></Text>
-                  </Col>
-                  <Col size={2}>
-                    <Text style={{ textAlign: 'right' }}></Text>
-                  </Col> */}
                 </Row>
                 <Row style={globalStyles.labelContainer}>
                   <Col size={3}>

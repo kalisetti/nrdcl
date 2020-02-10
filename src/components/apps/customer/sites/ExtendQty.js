@@ -110,6 +110,7 @@ export const ExtendQty = ({
             <Input
               value={additional_quantity}
               onChangeText={val => setQty(val)}
+              keyboardType='numeric'
             />
           </Item>
 
@@ -123,12 +124,13 @@ export const ExtendQty = ({
             style={globalStyles.mb10}
           />
 
-          <Button
+          {/* <Button
             info
             style={globalStyles.mb10}
             onPress={getSupportingDocuments}>
             <Text>Attach Supporting Documents</Text>
-          </Button>
+          </Button> */}
+          
           {extension_approval_document.length === 0 ? null : (
             <View style={{height: 300, width: '100%', marginBottom: 20}}>
               <Text style={{alignSelf: 'center', color: 'red'}}>
@@ -166,7 +168,7 @@ export const ExtendQty = ({
           </Button>
           <Button
             warning
-            style={[globalStyles.mb50, globalStyles.button]}
+            style={[globalStyles.mb10, globalStyles.button]}
             onPress={() => navigation.goBack()}>
             <Icon name="ios-arrow-back" />
             <Text>Go Back</Text>
