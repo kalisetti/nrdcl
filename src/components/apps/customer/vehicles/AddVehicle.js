@@ -103,6 +103,14 @@ export const AddVehicle = ({
     setmarriage_certificate(images);
   };
 
+  const removeBlueBook = () => {
+    setregistration_document(images.filter((_, ind) => ind > 0));
+  };
+
+  const removeMc = () => {
+    setmarriage_certificate(mc.filter((_, ind) => ind > 0));
+  };
+
   const submitVehicleInfo = async () => {
     const site_info = {
       approval_status: 'Pending',
@@ -114,12 +122,8 @@ export const AddVehicle = ({
       owner_cid: vehicle_owner == 'Self' ? userState.login_id : driver_cid,
       drivers_name,
       contact_no
-      // driver_cid,
     };
-    // alert(images.length)
-
     startVehicleRegistration(site_info, images, mc);
-
   };
 
   return commonState.isLoading ? (
@@ -217,7 +221,9 @@ export const AddVehicle = ({
                         />
                       </CardItem>
                       <CardItem>
-                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeBlueBook(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                         <Text>
                           {image.path.substring(image.path.lastIndexOf('/') + 1)}
                         </Text>
@@ -265,7 +271,10 @@ export const AddVehicle = ({
                             />
                           </CardItem>
                           <CardItem>
-                            <Icon name="heart" style={{ color: '#ED4A6A' }} />
+
+                            <Button transparent small onPress={val => removeMc(val)}>
+                              <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                            </Button>
                             <Text>
                               {image.path.substring(
                                 image.path.lastIndexOf('/') + 1,

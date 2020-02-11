@@ -24,7 +24,7 @@ import NavigationService from '../../components/base/navigation/NavigationServic
  * @param {details of site to be registered} site_info
  * @param {any supporting documents} images
  */
-export const startSiteRegistration = (site_info, images) => {
+export const startSiteRegistration = (site_info, images, isBuilding) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -36,8 +36,13 @@ export const startSiteRegistration = (site_info, images) => {
         }
       });
       await siteSchema.validate(site_info);
-      if (images.length <= 0) {
-        dispatch(showToast('Construction Approval Doc Attachment is mandatory'))
+      if (isBuilding == 1 && site_info.number_of_floors == null) {
+        dispatch(showToast('Number of floors is madatory'))
+      } else if (isBuilding == 1 && site_info.plot_no == null) {
+        dispatch(showToast('Plot/Thram No is mandatory'));
+      }
+      else if (images.length <= 0) {
+        dispatch(showToast('Please Attach Construction Approval Documents'));
       } else {
         let res = await callAxios(
           'resource/Site Registration/',
@@ -159,7 +164,7 @@ export const startSiteStatusChange = site_info => {
  * @param {details of site to extend end date} site_info
  * @param {supporting documents, if any} images
  */
-export const startSiteExtension = (site_info, images) => {
+export const startSiteExtension = (site_info, images = []) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -214,12 +219,12 @@ export const startQtyExtension = (site_info, images) => {
         site_info,
       );
 
-      const docname = res.data.data.name;
-      const doctype = res.data.data.doctype;
+      // const docname = res.data.data.name;
+      // const doctype = res.data.data.doctype;
 
-      images.map(async image => {
-        await attachFile(doctype, docname, image);
-      });
+      // images.map(async image => {
+      //   await attachFile(doctype, docname, image);
+      // });
 
       NavigationService.navigate('SiteDashboard');
       dispatch(setLoading(false));
@@ -357,6 +362,29 @@ export const startVehicleDeregistration = vehicle => {
       dispatch(setLoading(false));
       NavigationService.navigate('ListVehicle');
       dispatch(showToast('Successfully deregistered vehicle', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+/**
+ * 
+ */
+export const confirmRecived = (data) => {
+  return async dispatch => {
+    // alert(delivery_note)
+    dispatch(setLoading(true));
+    try {
+      const res = await callAxios(
+        'method/erpnext.crm_api.delivery_confirmation',
+        'post',
+        data
+      );
+      console.log(res)
+      dispatch(setLoading(false));
+      NavigationService.navigate('DeliveryList');
+      dispatch(showToast('Infomartation successfuly updated', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }

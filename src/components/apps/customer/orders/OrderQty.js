@@ -34,7 +34,6 @@ const OrderQty = ({ data, removeItem, transport_mode }) => {
   };
 
   return (
-    <Row style={[globalStyles.tableContainer]}>
       <Grid
         style={{
           width: '100%',
@@ -73,7 +72,6 @@ const OrderQty = ({ data, removeItem, transport_mode }) => {
           return <RenderItem item={val} index={index} key={index} />;
         })}
       </Grid>
-    </Row>
   );
 };
 

@@ -39,8 +39,7 @@ export const AddTransport = ({
   const [vehicle_no, setVehicle_no] = useState('');
   const [vehicle_capacity, setVehicle_capacity] = useState(undefined);
   const [drivers_name, setdrivers_name] = useState(undefined);
-  const [contact_no, setcontact_no] = useState(undefined);
-  const [owner_cid, setowner_cid] = useState(undefined);
+  const [contact_no, setcontact_no] = useState(undefined); 
   const [registration_document, setregistration_document] = useState([]);
   const [images, setImages] = useState([]);
 
@@ -73,6 +72,10 @@ export const AddTransport = ({
     setregistration_document(bluebooks);
   };
 
+  const removeImage = () => { 
+    setregistration_document(images.filter((_, ind) => ind > 0));
+  };
+
   const getCapacities = async () => {
     try {
       const all_st = await callAxios('resource/Vehicle Capacity');
@@ -93,7 +96,6 @@ export const AddTransport = ({
       contact_no,
       owner_cid: userState.login_id,
     };
-
     startTransportRegistration(vehicle_info, registration_document);
   };
 
@@ -110,14 +112,6 @@ export const AddTransport = ({
                 placeholder="Vehicle No."
               />
             </Item>
-
-            {/* <Item regular style={globalStyles.mb10}>
-            <Input
-              value={owner_cid}
-              onChangeText={val => setowner_cid(val)}
-              placeholder="Owner's CID"
-            />
-          </Item> */}
 
             <Item regular style={globalStyles.mb10}>
               <Picker
@@ -176,7 +170,9 @@ export const AddTransport = ({
                         />
                       </CardItem>
                       <CardItem>
-                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeImage(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                         <Text>
                           {image.path.substring(image.path.lastIndexOf('/') + 1)}
                         </Text>

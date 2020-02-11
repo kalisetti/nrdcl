@@ -1,5 +1,5 @@
 import React from 'react';
-import {Container, Text, Footer, FooterTab, Button, Icon} from 'native-base';
+import { Container, Text, Footer, FooterTab, Button, Icon } from 'native-base';
 import Config from 'react-native-config';
 
 import NavigationService from '../navigation/NavigationService';
@@ -9,26 +9,26 @@ export default () => {
   return (
     <Container style={globalStyle.bottom}>
       <Footer>
-        <FooterTab style={{backgroundColor: Config.APP_HEADER_COLOR}}>
+        <FooterTab style={{ backgroundColor: Config.APP_HEADER_COLOR }}>
           <Button vertical onPress={() => NavigationService.navigate('Login')}>
             <Icon name="home" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Home</Text>
+            <Text style={globalStyle.iconTextFooter}>Home</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('About')}>
             <Icon name="list" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>About</Text>
+            <Text style={globalStyle.iconTextFooter}>About</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('Help')}>
             <Icon name="information-circle-outline" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Help</Text>
+            <Text style={globalStyle.iconTextFooter}>Help</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('ContactUs')}>
             <Icon name="call" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Contact</Text>
+            <Text style={globalStyle.iconTextFooter}>Contact</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('Faq')}>
-            <Icon name="question" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>FAQ</Text>
+          <Icon name="paw" style={globalStyle.icon} /> 
+            <Text style={globalStyle.iconTextFooter}>FAQ</Text>
           </Button>
         </FooterTab>
       </Footer>

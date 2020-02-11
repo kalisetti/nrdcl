@@ -51,6 +51,7 @@ export const SiteDetail = ({
     try {
       const response = await callAxios(`resource/Site/${id}`);
       setSite(response.data.data);
+      
       setLoading(false);
     } catch (error) {
       handleError(error);
@@ -209,7 +210,7 @@ export const SiteDetail = ({
         <Content style={globalStyle.content}>
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Site Status</Text>
+              <Text style={globalStyle.lb}>Site Status</Text>
             </Col>
             <Col size={3}>
               {site.enabled ? (
@@ -222,7 +223,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Site ID</Text>
+              <Text style={globalStyle.lb}>Site ID</Text>
             </Col>
             <Col size={3}>
               <Text>{site.name}</Text>
@@ -231,7 +232,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Site Type</Text>
+              <Text style={globalStyle.lb}>Site Type</Text>
             </Col>
             <Col size={3}>
               <Text>{site.site_type}</Text>
@@ -240,7 +241,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Purpose</Text>
+              <Text style={globalStyle.lb}>Purpose</Text>
             </Col>
             <Col size={3}>
               <Text>{site.purpose}</Text>
@@ -249,7 +250,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Construction Type</Text>
+              <Text style={globalStyle.lb}>Construction Type</Text>
             </Col>
             <Col size={3}>
               <Text>{site.construction_type}</Text>
@@ -258,7 +259,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Start Date</Text>
+              <Text style={globalStyle.lb}>Start Date</Text>
             </Col>
             <Col size={3}>
               <Text>
@@ -271,7 +272,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>End Date</Text>
+              <Text style={globalStyle.lb}>End Date</Text>
             </Col>
             <Col size={3}>
               <Text>
@@ -284,7 +285,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Number of Floors</Text>
+              <Text style={globalStyle.lb}>Number of Floors</Text>
             </Col>
             <Col size={3}>
               <Text>{site.number_of_floors}</Text>
@@ -293,7 +294,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Approval No.</Text>
+              <Text style={globalStyle.lb}>Approval No.</Text>
             </Col>
             <Col size={3}>
               <Text>{site.approval_no}</Text>
@@ -302,7 +303,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Dzongkhag</Text>
+              <Text style={globalStyle.lb}>Dzongkhag</Text>
             </Col>
             <Col size={3}>
               <Text>{site.dzongkhag}</Text>
@@ -311,7 +312,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Plot/Thram No.</Text>
+              <Text style={globalStyle.lb}>Plot/Thram No.</Text>
             </Col>
             <Col size={3}>
               <Text>{site.plot_no}</Text>
@@ -320,7 +321,7 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Location</Text>
+              <Text style={globalStyle.lb}>Location</Text>
             </Col>
             <Col size={3}>
               <Text>{site.location}</Text>
@@ -329,22 +330,22 @@ export const SiteDetail = ({
 
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Remarks</Text>
+              <Text style={globalStyle.lb}>Remarks</Text>
             </Col>
             <Col size={3}>
               <Text>{site.remarks}</Text>
             </Col>
           </Row>
 
-          <Row style={[globalStyle.labelContainer]}>
-            <Text style={globalStyle.label}>EXPECTED MATERIAL DETAILS</Text>
+          <Row style={[globalStyle.ss]}>
+            <Text style={globalStyle.lb}>EXPECTED MATERIAL DETAILS</Text>
           </Row>
           <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
             <Grid>
               <Row style={globalStyle.tableHeaderContainer}>
-                <Col size={2} style={globalStyle.colContainer}>
+                {/* <Col size={2} style={globalStyle.colContainer}>
                   <Text>From</Text>
-                </Col>
+                </Col> */}
                 <Col size={1.5} style={globalStyle.colContainer}>
                   <Text>Material</Text>
                 </Col>
@@ -355,9 +356,9 @@ export const SiteDetail = ({
               </Row>
               {site.items.map((item, idx) => (
                 <Row key={idx} style={globalStyle.rowContainer}>
-                  <Col size={2} style={globalStyle.colContainer}>
+                  {/* <Col size={2} style={globalStyle.colContainer}>
                     <Text>{item.branch}</Text>
-                  </Col>
+                  </Col> */}
                   <Col size={1.5} style={globalStyle.colContainer}>
                     <Text>{item.item_sub_group}</Text>
                   </Col>
@@ -372,7 +373,7 @@ export const SiteDetail = ({
                       transparent
                       onPress={() => openModal(item)}
                       style={{
-                        width: 40,
+                        width: 100,
                       }}>
                       <Icon name="md-more" />
                     </Button>
@@ -389,48 +390,64 @@ export const SiteDetail = ({
             <Container style={globalStyle.modal}>
               <Grid style={{marginTop: 5}}>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.label}>Material</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Material:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.item_sub_group}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.label}>UoM</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>UoM:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.uom}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.label}>Initial Qty</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Initial Qty:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.expected_quantity}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.label}>Additional Qty</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Additional Qty:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.extended_quantity}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.label}>Total Qty</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Overall Expected Quantity:</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.overall_expected_quantity}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyle.labelContainer}>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Ordered Quantity:</Text>
+                  </Col>
                   <Col size={2}>
-                    <Text style={globalStyle.label}>Material Source</Text>
+                    <Text>{currentItem.ordered_quantity}</Text>
+                  </Col>
+                </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Balance Quantity:</Text>
+                  </Col>
+                  <Col size={2}>
+                    <Text>{currentItem.balance_quantity}</Text>
+                  </Col>  
+                </Row>
+                {/* <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Material Source</Text>
                   </Col>
                   <Col size={3}>
                     <Text>{currentItem.branch}</Text>
@@ -438,17 +455,17 @@ export const SiteDetail = ({
                 </Row>
                 <Row style={globalStyle.labelContainer}>
                   <Col size={2}>
-                    <Text style={globalStyle.label}>Transport Mode</Text>
+                    <Text style={globalStyle.lb}>Transport Mode</Text>
                   </Col>
                   <Col size={3}>
                     <Text>{currentItem.transport_mode}</Text>
                   </Col>
-                </Row>
+                </Row> */}
                 <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.label}>Remarks</Text>
+                  <Col size={4}>
+                    <Text style={globalStyle.lb}>Remarks</Text>
                   </Col>
-                  <Col size={3}>
+                  <Col size={2}>
                     <Text>{currentItem.remarks}</Text>
                   </Col>
                 </Row>
