@@ -1,6 +1,6 @@
-import {SET_ERROR, SET_LOADING, SET_TITLE, SET_RANDOM} from './actionTypes';
-import {Toast} from 'native-base';
-import {PermissionsAndroid, Platform} from 'react-native';
+import { SET_ERROR, SET_LOADING, SET_TITLE, SET_RANDOM } from './actionTypes';
+import { Toast } from 'native-base';
+import { PermissionsAndroid, Platform } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
 //import ImagePicker from 'react-native-image-crop-picker';
@@ -54,7 +54,7 @@ export const showToast = (error, type = 'danger') => {
       text: error,
       position: 'bottom',
       type: type,
-      duration: 4000,
+      duration: 6000,
     });
   };
 };
@@ -73,7 +73,7 @@ export const callAxios = (
   return axios({
     url: Config.API_URL + url,
     method: method,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     params: params,
     data: data,
     responseType: responseType,
@@ -86,7 +86,7 @@ export const uploadAxios = data => {
     url: 'method/uploadfile',
     method: 'post',
     baseURL: Config.API_URL,
-    headers: {'Content-Type': 'multipart/form-data'},
+    headers: { 'Content-Type': 'multipart/form-data' },
     data: data,
   });
 };
@@ -147,10 +147,10 @@ export const getImages = (
         cropping: cropping,
         width: width,
         height: height,
-        minCompressSize: 512,
+        minCompressSize: 2028, //2 MB
         title: title,
-      });
-
+        cropping: true, 
+      }); 
       return image;
     } catch (error) {
       dispatch(handleError(error));

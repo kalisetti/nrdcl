@@ -8,7 +8,8 @@ import {
     CardItem,
     Right,
     Icon,
-    View
+    View,
+    Button
 
 } from 'native-base';
 
@@ -95,16 +96,27 @@ export const DeliveryList = ({
                 'GET',
                 params,
             );
+            console.log(response)
             setDeliverList(response.data.data);
             setLoading(false);
         } catch (error) {
             handleError(error);
         }
     };
+
+
     return commonState.isLoading ? (
         <SpinnerScreen />
     ) : (
             <Container style={globalStyles.listContent}>
+                <Button
+                    block
+                    success
+                    iconLeft
+                    style={globalStyles.mb10}
+                    onPress={() => navigation.navigate('DeliverySummary')}>
+                    <Text>Delivery Summary</Text>
+                </Button>
                 <NavigationEvents
                     onWillFocus={_ => {
                         setReload(1);

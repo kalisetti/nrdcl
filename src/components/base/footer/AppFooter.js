@@ -27,7 +27,7 @@ export default () => {
             <Text style={globalStyle.iconTextFooter}>Contact</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('Faq')}>
-          <Icon name="paw" style={globalStyle.icon} /> 
+          <Icon name="help-circle-outline" style={globalStyle.icon} /> 
             <Text style={globalStyle.iconTextFooter}>FAQ</Text>
           </Button>
         </FooterTab>

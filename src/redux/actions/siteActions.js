@@ -69,24 +69,27 @@ export const startSiteRegistration = (site_info, images, isBuilding) => {
 };
 
 //Submitting the sales order and nagivate to payment screen.
-export const submitSalesOrder = (data, totalPayableAmount) => {
+export const submitSalesOrder = (data, allLocation, totalPayableAmount, ) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
-      const res = await callAxios(
-        'resource/Customer Order/',
-        'POST',
-        {},
-        data,
-      );
-      if (res.status == 200) {
-
-        NavigationService.navigate('Payment',
-          {
-            orderNumber: res.data.data.name,
-            site_type: res.data.data.site_type,
-            totalPayableAmount: totalPayableAmount
-          })
+      if (allLocation.length > 0 && data.location == undefined) {
+        dispatch(showToast('Please select location'));
+      } else {
+        const res = await callAxios(
+          'resource/Customer Order/',
+          'POST',
+          {},
+          data,
+        );
+        if (res.status == 200) {
+          NavigationService.navigate('Payment',
+            {
+              orderNumber: res.data.data.name,
+              site_type: res.data.data.site_type,
+              totalPayableAmount: totalPayableAmount
+            })
+        }
       }
     } catch (error) {
       dispatch(handleError(error));
@@ -95,7 +98,7 @@ export const submitSalesOrder = (data, totalPayableAmount) => {
 };
 
 //Credit payment 
-export const submitCreditPayment = (data) => {
+export const submitCreditPayment = (data, approvalDocmage = []) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -103,12 +106,18 @@ export const submitCreditPayment = (data) => {
         'resource/Customer Payment/',
         'POST',
         {},
-        data,
+        data
       );
-      console.log(res)
+  
+      const docname = res.data.data.name;
+      const doctype = res.data.data.doctype;
+      approvalDocmage.map(async image => {
+        await attachFile(doctype, docname, image);
+      });
+
       if (res.status == 200) {
         dispatch(setLoading(false));
-        dispatch(showToast('Your order was placed successfully.', 'success'));
+        dispatch(showToast('Your request for the credit payment was submitted successfully, please wait for approval.', 'success'));
         NavigationService.navigate('OrderDashboard');
       }
     } catch (error) {
