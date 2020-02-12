@@ -9,7 +9,7 @@ export const siteSchema = yup.object().shape({
     .required('User is mandatory'),
 
   items: yup.array()
-    .required('Expected materials are mandatory'),
+    .required('Expected materials is mandatory'),
   remarks: yup
     .string()
     .trim()
@@ -19,11 +19,11 @@ export const siteSchema = yup.object().shape({
     .trim()
     .typeError('Location is mandatory')
     .required('Location is mandatory'),
-  plot_no: yup
-    .string('Plot No is mandatory')
-    .trim()
-    .typeError('Plot No is mandatory')
-    .required('Plot No is mandatory'),
+  // plot_no: yup
+  //   .string('Plot No is mandatory')
+  //   .trim()
+  //   .typeError('Plot No is mandatory')
+  //   .required('Plot No is mandatory'),
   dzongkhag: yup
     .string()
     .trim()
@@ -33,16 +33,11 @@ export const siteSchema = yup.object().shape({
     .required('End Date is mandatory'),
   construction_start_date: yup.date()
     .typeError('Start Date is mandatory')
-    .required('Start Date is mandatory'),
-  number_of_floors: yup
-    .string()
-    .trim()
-    .typeError('Number of Floor is mandatory')
-    .required('Number of Floor is mandatory'),
+    .required('Start Date is mandatory'), 
   approval_no: yup
     .string()
     .trim()
-    .required('Approval No is mandatory'),
+    .required('Construction Approval No is mandatory'),
   construction_type: yup
     .string()
     .trim()
@@ -59,26 +54,13 @@ export const siteItemSchema = yup.object().shape({
     .string()
     .trim()
     .required('Item is mandatory'),
-
   uom: yup
     .string()
     .trim()
     .required('Unit of Measure is mandatory'),
-
-  branch: yup
-    .string()
-    .trim()
-    .required('Item Source is mandatory'),
-
   expected_quantity: yup
     .number('Expected Quantity should be number')
-    .positive('Expected Quantity should be grater than 0'),
-
-  transport_mode: yup
-    .mixed()
-    .required('Transport Mode is mandatory')
-    .oneOf(['Common Pool', 'Self Owned Transport']),
-
+    .positive('Expected Quantity should be greater than 0'),
   remarks: yup.string().nullable(),
 });
 
@@ -147,7 +129,6 @@ export const qtyExtensionSchema = yup.object().shape({
  */
 export const qtyItemExtensionSchema = yup.object().shape({
   site_item_name: yup.string().required('Name is mandatory'),
-  site_sub_group: yup.string().required('Item is mandatory'),
   additional_quantity: yup
     .number('Additional Qty is mandatory')
     .moreThan(0, 'Additional Qty should be more than 0'),

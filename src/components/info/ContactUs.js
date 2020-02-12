@@ -20,8 +20,7 @@ export const ContactUs = () => {
               Post Box 192 {'\n'}     
               Tel: 975-2-323834/323868/328959 {'\n'}     
               Fax: 00975-2-325585 {'\n'}     
-              E-mail:info@nrdcl.bt{'\n'}     
-              Contact Centre:Tollfree Number 1091.         
+              E-mail:info@nrdcl.bt{'\n'}              
               </Text> 
           </View>
         </CardItem> 

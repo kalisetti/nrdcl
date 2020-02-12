@@ -97,6 +97,7 @@ export const AddSite = ({
   const [all_construction_type, setall_construction_type] = useState([]);
   const [all_dzongkhag, setall_dzongkhag] = useState([]);
   const [all_sub_item, setall_sub_item] = useState([]);
+  const [isBuilding, setIsBuilding] = useState(0);
 
   //For proper navigation/auth settings
   useEffect(() => {
@@ -117,13 +118,29 @@ export const AddSite = ({
     }, 600);
   }, [approval_document]);
 
+  const getIsBuilding = async id => {
+    try {
+      const response = await callAxios(`resource/Construction Type/${id}`);
+      setIsBuilding(response.data.data.is_building);
+      setLoading(false);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  const removeImage = () => {
+    setapproval_document(images.filter((_, ind) => ind > 0));
+  };
+
   const getFormData = async () => {
     try {
       setLoading(true);
-      const all_pur = await callAxios('resource/Site Purpose');
-      setall_purpose(all_pur.data.data);
-
-      const all_ct = await callAxios('resource/Construction Type');
+      const params = {
+        filters: JSON.stringify([
+          ['is_crm_item', '=', 1],
+        ]),
+      };
+      const all_ct = await callAxios('resource/Construction Type', 'get', params);
       setall_construction_type(all_ct.data.data);
 
       const dz_all = await callAxios('resource/Dzongkhags', 'get');
@@ -195,7 +212,7 @@ export const AddSite = ({
       items,
     };
 
-    startSiteRegistration(site_info, images);
+    startSiteRegistration(site_info, images, isBuilding);
   };
 
   return commonState.isLoading ? (
@@ -207,26 +224,8 @@ export const AddSite = ({
             <Item regular style={globalStyles.mb10}>
               <Picker
                 mode="dropdown"
-                selectedValue={purpose}
-                onValueChange={val => setPurpose(val)}>
-                <Picker.Item
-                  label={'Select Purpose'}
-                  value={undefined}
-                  key={-1}
-                />
-                {all_purpose &&
-                  all_purpose.map((pur, idx) => {
-                    return (
-                      <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                    );
-                  })}
-              </Picker>
-            </Item>
-            <Item regular style={globalStyles.mb10}>
-              <Picker
-                mode="dropdown"
                 selectedValue={construction_type}
-                onValueChange={val => setconstruction_type(val)}>
+                onValueChange={val => { setconstruction_type(val), getIsBuilding(val) }}>
                 <Picker.Item
                   label={'Select Construction Type'}
                   value={undefined}
@@ -247,16 +246,22 @@ export const AddSite = ({
                 placeholder="Construction Approval No."
               />
             </Item>
-            <Item regular style={globalStyles.mb10}>
-              <Input
-                value={number_of_floors}
-                onChangeText={val => setnumber_of_floors(val)}
-                placeholder="Number of Floors"
-              />
-            </Item>
-            <Item regular style={globalStyles.mb10}>
+
+            {isBuilding === 1 ? (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={number_of_floors}
+                  onChangeText={val => setnumber_of_floors(val)}
+                  placeholder="Number of Floors"
+                />
+              </Item>
+            ) : null
+            }
+
+
+            <Item regular style={globalStyles.mb11}>
               <DatePicker
-                style={{ width: '100%' }}
+                style={{ width: '50%' }}
                 date={construction_start_date}
                 mode="date"
                 customStyles={{ dateInput: { borderWidth: 0 } }}
@@ -266,8 +271,19 @@ export const AddSite = ({
                 cancelBtnText="Cancel"
                 onDateChange={date => setStartDate(date)}
               />
+              <DatePicker
+                style={{ width: '50%' }}
+                date={construction_end_date}
+                mode="date"
+                customStyles={{ dateInput: { borderWidth: 0 } }}
+                placeholder="Construction End Date"
+                format="DD-MM-YYYY"
+                confirmBtnText="Confirm"
+                cancelBtnText="Cancel"
+                onDateChange={date => setEndDate(date)}
+              />
             </Item>
-            <Item regular style={globalStyles.mb10}>
+            {/* <Item regular style={globalStyles.mb10}>
               <DatePicker
                 style={{ width: '100%' }}
                 date={construction_end_date}
@@ -279,7 +295,7 @@ export const AddSite = ({
                 cancelBtnText="Cancel"
                 onDateChange={date => setEndDate(date)}
               />
-            </Item>
+            </Item> */}
             <Item regular style={globalStyles.mb10}>
               <Picker
                 mode="dropdown"
@@ -299,33 +315,32 @@ export const AddSite = ({
               </Picker>
             </Item>
 
+
+            {isBuilding === 1 ? (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={plot_no}
+                  onChangeText={val => setplot_no(val)}
+                  placeholder="Plot/Thram No."
+                />
+              </Item>
+            ) : null
+            }
             <Item regular style={globalStyles.mb10}>
               <Input
-                value={plot_no}
-                onChangeText={val => setplot_no(val)}
-                placeholder="Plot/Thram No."
+                value={location}
+                onChangeText={val => setlocation(val)}
+                placeholder="Location (Specific Location of Construction Site)"
               />
             </Item>
 
-            <Textarea
-              rowSpan={3}
-              width="100%"
-              bordered
-              placeholder="Location Details"
-              value={location}
-              onChangeText={val => setlocation(val)}
-              style={globalStyles.mb10}
-            />
-
-            <Textarea
-              rowSpan={3}
-              width="100%"
-              bordered
-              placeholder="Remarks"
-              value={remarks}
-              onChangeText={val => setremarks(val)}
-              style={globalStyles.mb10}
-            />
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={remarks}
+                onChangeText={val => setremarks(val)}
+                placeholder="Remarks"
+              />
+            </Item>
 
             <Button
               info
@@ -368,7 +383,9 @@ export const AddSite = ({
                         />
                       </CardItem>
                       <CardItem>
-                        <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                        <Button transparent small onPress={val => removeImage(val)}>
+                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                        </Button>
                         <Text>
                           {image.path.substring(image.path.lastIndexOf('/') + 1)}
                         </Text>
@@ -380,9 +397,9 @@ export const AddSite = ({
             )}
             <View style={{ marginBottom: 15 }}></View>
 
-            <Button info style={globalStyles.mb10} onPress={getGPS}>
+            {/* <Button info style={globalStyles.mb10} onPress={getGPS}>
               <Text>Set Site GPS Location</Text>
-            </Button>
+            </Button> */}
             {showmap && (
               <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
                 <MapView

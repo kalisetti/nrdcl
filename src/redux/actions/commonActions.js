@@ -1,6 +1,6 @@
-import {SET_ERROR, SET_LOADING, SET_TITLE, SET_RANDOM} from './actionTypes';
-import {Toast} from 'native-base';
-import {PermissionsAndroid, Platform} from 'react-native';
+import { SET_ERROR, SET_LOADING, SET_TITLE, SET_RANDOM } from './actionTypes';
+import { Toast } from 'native-base';
+import { PermissionsAndroid, Platform } from 'react-native';
 import axios from 'axios';
 import Config from 'react-native-config';
 //import ImagePicker from 'react-native-image-crop-picker';
@@ -54,7 +54,7 @@ export const showToast = (error, type = 'danger') => {
       text: error,
       position: 'bottom',
       type: type,
-      duration: 4000,
+      duration: 6000,
     });
   };
 };
@@ -73,7 +73,7 @@ export const callAxios = (
   return axios({
     url: Config.API_URL + url,
     method: method,
-    headers: {'Content-Type': 'application/json'},
+    headers: { 'Content-Type': 'application/json' },
     params: params,
     data: data,
     responseType: responseType,
@@ -86,7 +86,7 @@ export const uploadAxios = data => {
     url: 'method/uploadfile',
     method: 'post',
     baseURL: Config.API_URL,
-    headers: {'Content-Type': 'multipart/form-data'},
+    headers: { 'Content-Type': 'multipart/form-data' },
     data: data,
   });
 };
@@ -115,10 +115,15 @@ export const getImages = (
 ) => {
   return async dispatch => {
     try {
+      
       if (Platform.OS === 'android') {
+
+
+
         const perm = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.CAMERA,
         );
+
 
         if (perm === false) {
           const granted = await PermissionsAndroid.request(
@@ -137,20 +142,54 @@ export const getImages = (
             );
           }
         }
+        const writePram = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
+
+        if (writePram === false) {
+          const writePramGranted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: `${Config.APP_NAME} Storage Permission`,
+              message: `${Config.APP_NAME} needs access to your storage`,
+            },
+          );
+
+          if (writePramGranted !== PermissionsAndroid.RESULTS.GRANTED) {
+            dispatch(
+              handleError({
+                message: 'Cannot proceed without camera permission',
+              }),
+            );
+          }
+        }
       }
 
-      const image = await ImagePicker.openPicker({
+
+      const image = ImagePicker.openPicker({
         multiple: multiple,
         includeBase64: true,
         isCamera: true,
         forceJpg: true,
-        compressQuality: 50,
+        compressQuality: 10,
         cropping: cropping,
         width: width,
         height: height,
-        minCompressSize: 512,
+        minCompressSize: 20000, //2 MB
         title: title,
+        cropping: true,
       });
+
+      // CompressImage.createCompressedImage(imageUri, appDirectory).then((response) => {
+      //   // response.uri is the URI of the new image that can now be displayed, uploaded...
+      //   // response.path is the path of the new image
+      //   // response.name is the name of the new image with the extension
+      //   // response.size is the size of the new image
+      // }).catch((err) => {
+      //   // Oops, something went wrong. Check that the filename is correct and
+      //   // inspect err to get more details.
+      // });
+
       return image;
     } catch (error) {
       dispatch(handleError(error));
@@ -213,7 +252,7 @@ export const startSubmitBillingAddress = (billingAddressChangeRequestData) => {
         {},
         billingAddressChangeRequestData,
       );
-     
+
       dispatch(setLoading(false));
       dispatch(showToast('Your request submited successfully, please wait for approval.', 'success'));
     } catch (error) {
@@ -232,7 +271,7 @@ export const startSubmitPerAddress = (perAddressChangeRequestData) => {
         {},
         perAddressChangeRequestData,
       );
-     
+
       dispatch(setLoading(false));
       dispatch(showToast('Your request submited successfully', 'success'));
     } catch (error) {
@@ -251,7 +290,7 @@ export const startSubmitBankAddress = (bankAddressChangeRequestData) => {
         {},
         bankAddressChangeRequestData,
       );
-     
+
       dispatch(setLoading(false));
       dispatch(showToast('Your request submited successfully', 'success'));
     } catch (error) {

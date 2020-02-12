@@ -5,13 +5,10 @@ import { View, Image } from 'react-native';
 import {
   Container,
   Button,
-  Input,
   Text,
   Content,
   Form,
-  Thumbnail,
   Item,
-  Label,
   Spinner,
   Icon,
   Card,
@@ -19,14 +16,10 @@ import {
   DeckSwiper,
 } from 'native-base';
 import {
-  setLoading,
-  callAxios,
-  handleError,
   getImages,
 } from '../../../redux/actions/commonActions';
-import DatePicker from 'react-native-datepicker';
 import globalStyles from '../../../styles/globalStyle';
-import { showToast, selectImage } from '../../../redux/actions/commonActions';
+import { showToast } from '../../../redux/actions/commonActions';
 import { startProfileSubmission } from '../../../redux/actions/userActions';
 
 const UserDetail = ({
@@ -34,7 +27,8 @@ const UserDetail = ({
   commonState,
   startProfileSubmission,
   navigation,
-  getImages
+  getImages,
+  showToast
 }) => {
   useEffect(() => {
     if (userState.profile_verified) {
@@ -83,6 +77,10 @@ const UserDetail = ({
     setImgFrontReqMsg('');
   };
 
+  const removeCidFront = () => {
+    setCidFrontImage(imagesFront.filter((_, ind) => ind > 0));
+  };
+
   /**
    * image picker cid back page
    */
@@ -92,13 +90,18 @@ const UserDetail = ({
     setImgBackReqMsg('');
   };
 
+  const removeCidBack = () => {
+    setCidBackImage(imagesBack.filter((_, ind) => ind > 0));
+  };
+
+
   const submitInformation = async () => {
     if (imagesFront.length < 1) {
-      setImgFrontReqMsg('CID front side is required');
+      showToast('CID Copy is mandatory');
     }
-    else if (imagesBack.length < 1) {
-      setImgBackReqMsg('CID back side is required');
-    }
+    // else if (imagesBack.length < 1) {
+    //   setImgBackReqMsg('CID back side is required');
+    // }
     else {
       const userRequest = {
         approval_status: 'Pending',
@@ -155,7 +158,7 @@ const UserDetail = ({
               <Text></Text>
 
               <Button block info style={globalStyles.mb10} onPress={getCidFrontPage}>
-                <Text>Upload CID (Front Side) *</Text>
+                <Text>Upload CID COPY</Text>
               </Button>
 
               {imagesFront.length === 0 ? null : (
@@ -176,7 +179,9 @@ const UserDetail = ({
                           />
                         </CardItem>
                         <CardItem>
-                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                          <Button transparent small onPress={val => removeCidFront(val)}>
+                            <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                          </Button>
                           <Text>
                             {image.path.substring(image.path.lastIndexOf('/') + 1)}
                           </Text>
@@ -187,9 +192,9 @@ const UserDetail = ({
                 </View>
               )}
               <View style={{ marginBottom: 20 }}></View>
-              <Button block info style={globalStyles.mb10} onPress={getCidBackPage}>
+              {/* <Button block info style={globalStyles.mb10} onPress={getCidBackPage}>
                 <Text>Upload CID (Back Side) *</Text>
-              </Button>
+              </Button> */}
 
               {imagesBack.length === 0 ? null : (
                 <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
@@ -209,7 +214,9 @@ const UserDetail = ({
                           />
                         </CardItem>
                         <CardItem>
-                          <Icon name="heart" style={{ color: '#ED4A6A' }} />
+                          <Button transparent small onPress={val => removeCidBack(val)}>
+                            <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                          </Button>
                           <Text>
                             {image.path.substring(image.path.lastIndexOf('/') + 1)}
                           </Text>

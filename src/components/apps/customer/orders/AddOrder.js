@@ -25,11 +25,13 @@ import {
   handleError,
   getImages,
   setLoading,
+  showToast
 } from '../../../../redux/actions/commonActions';
 import { submitSalesOrder } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import OrderQty from './OrderQty';
+
 export const AddOrder = ({
   userState,
   commonState,
@@ -37,6 +39,7 @@ export const AddOrder = ({
   submitSalesOrder,
   handleError,
   setLoading,
+  showToast
 }) => {
   //state info for forms
   let [, setState] = useState();
@@ -67,11 +70,14 @@ export const AddOrder = ({
   const [totalPayableAmount, settotalPayableAmount] = useState(undefined);
   //modal
   const [showModal, setShowModal] = useState(false);
-  const [items, setItems] = useState([]);
+  const [regionModal, setRegionModal] = useState(false);
 
-  const [cp, setCp] = useState(undefined);
-  const [self, setSelf] = useState(undefined);
-  const [Others, setOthers] = useState(undefined);
+  const [items, setItems] = useState([]);
+  const [branchWiseLocation, setBranchWiseLocation] = useState(undefined);
+  const [allLocation, setAllLocation] = useState([]);
+  const [locationItemRate, setLocationItemRate] = useState(undefined);
+
+  const [otherBranchInfo, setOtherBranchInfo] = useState([]);
   //For proper navigation/auth settings
   useEffect(() => {
     if (!userState.logged_in) {
@@ -102,7 +108,13 @@ export const AddOrder = ({
   useEffect(() => {
     setLoading(true);
     getItemDetails();
+    getBranchWiseLocation();
   }, [branch, item]);
+
+  useEffect(() => {
+    setLoading(true);
+    getItemRateByLocation();
+  }, [branch, item, branchWiseLocation]);
 
   useEffect(() => {
     setLoading(true);
@@ -112,7 +124,7 @@ export const AddOrder = ({
 
   useEffect(() => {
     setLoading(true);
-    caculateInvoice();
+    calculateInvoice();
   }, [items]);
 
 
@@ -202,15 +214,100 @@ export const AddOrder = ({
           },
         );
         setItemDetail(all_its.data.message[0]);
-        // if (branch != undefined) {
-        //   setCp(all_its.data.message[0].has_common_pool);
-        //   setSelf(all_its.data.message[0].allow_self_owned_transport);
-        //   setOthers(all_its.data.message[0].allow_other_transport);
-        // }
+        if (all_its.data.message[0].has_common_pool == 1) {
+          setRegionModal(true);
+        } else {
+          setRegionModal(false);
+        }
         setLoading(false);
       } catch (error) {
         handleError(error);
       }
+    }
+  };
+
+
+  /**
+   * to get other branch info
+   */
+  const getOtherBranchInfo = async () => {
+    try {
+      const res = await callAxios(
+        'method/erpnext.crm_utils.get_branch_location',
+        'post',
+        {
+          item,
+        },
+      );
+      const displayList = res.data.message.filter(
+        (data) => (data.display == 1)
+      );
+      setOtherBranchInfo(displayList);
+      setLoading(false);
+    } catch (error) {
+      handleError(error);
+    }
+  };
+
+  /**
+   * to get location based on branch selection 
+   */
+  const getBranchWiseLocation = async () => {
+    if (branch === undefined) {
+      setLoading(false);
+    } else {
+      try {
+        const res = await callAxios(
+          'method/erpnext.crm_utils.get_branch_location',
+          'post',
+          {
+            branch,
+            item,
+          },
+        );
+        const locationList = res.data.message.filter(
+          (data) => data.location != null
+        );
+        // console.log(res.data.message)
+        setAllLocation(locationList);
+        if (locationList.length === 0) {
+          setLocationItemRate(res.data.message[0].item_rate);
+        }
+        setLoading(false);
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
+  /**
+   * to get item Rate based on location selection 
+   */
+  const getItemRateByLocation = async () => {
+    if (branch == undefined) {
+      setLoading(false);
+    } else {
+      if (branchWiseLocation) {
+        try {
+          const res = await callAxios(
+            'method/erpnext.crm_utils.get_branch_location',
+            'post',
+            {
+              branch,
+              item,
+              location: branchWiseLocation
+            },
+          );
+
+          if (allLocation.length > 0) {
+            setLocationItemRate(res.data.message[0].item_rate);
+          }
+          setLoading(false);
+        } catch (error) {
+          handleError(error);
+        }
+      }
+
     }
   };
 
@@ -251,11 +348,19 @@ export const AddOrder = ({
     }
   };
 
+
   const resetModal = () => {
     setvehicle(undefined);
     setcapacity(undefined);
     settruckload(undefined);
     setVehicle_capacities(undefined)
+  };
+
+  const checkLocation = () => {
+    if (allLocation.length > 0 && branchWiseLocation === undefined) {
+      setShowModal(false);
+      showToast('Please select location');
+    }
   };
 
   const resetErrorMsg = () => {
@@ -302,11 +407,12 @@ export const AddOrder = ({
       item,
       branch,
       transport_mode,
+      location: branchWiseLocation,
       vehicles: items,//for self owned
       pool_vehicles: items// for common pool
     };
     // loop(order_details);
-    submitSalesOrder(order_details,totalPayableAmount);
+    submitSalesOrder(order_details, allLocation);
   };
 
   const resetDataGrid = val => {
@@ -319,20 +425,10 @@ export const AddOrder = ({
    * @param {to select transportation mode by defualt if there is only one value} val 
    */
   const selectTransportMode = () => {
-    // if (others === 1 && cp !== 1 && self != 1) {
-    //   setTransportMode('Others');
-    // }
-    // if (others !== 1 && cp === 1 && self !== 1) {
-    //   setTransportMode('Common Pool');
-    // }
-    // if (others !== 1 && cp !== 1 && self === 1) {
-    //   setTransportMode('Self Owned Transport');
-    // }
     setTransportMode(undefined);
   };
 
-
-  const caculateInvoice = async () => {
+  const calculateInvoice = async () => {
     if (items.length > 0) {
       var totalOrderQty = items.reduce(function (prev, cur) {
         return prev + (cur.noof_truck_load * cur.vehicle_capacity);
@@ -340,13 +436,12 @@ export const AddOrder = ({
 
       settotalOrderQty(totalOrderQty);
 
-      var totalItemRate = totalOrderQty * itemDetail.item_rate;
-      // settotalItemRate(totalItemRate.toFixed(2));
-      settotalItemRate(100);
+      var totalItemRate = totalOrderQty * locationItemRate;
+      settotalItemRate(totalItemRate.toFixed(2));
       var totalTransportationRate = transport_mode == 'Common Pool' ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00;
-      settotalTransportationRate(50);
+      settotalTransportationRate(totalTransportationRate.toFixed(2));
       var totalPayableAmount = totalTransportationRate + totalItemRate;
-      settotalPayableAmount(100);
+      settotalPayableAmount(totalPayableAmount.toFixed(2));
       setLoading(false);
     }
     setLoading(false);
@@ -370,14 +465,14 @@ export const AddOrder = ({
               <Picker
                 mode="dropdown"
                 selectedValue={site}
-                onValueChange={val => setSite(val)}>
+                onValueChange={val => setSite(val)}
+              >
                 <Picker.Item label={'Select Site'} value={undefined} key={-1} />
                 {all_sites &&
                   all_sites.map((pur, idx) => {
-
                     return (
                       <Picker.Item
-                        label={`${pur.name} \n(${pur.purpose} at ${pur.location})`}
+                        label={`${pur.name} \n(${pur.construction_type} at ${pur.location})`}
                         value={pur.name}
                         key={idx}
                       />
@@ -389,7 +484,8 @@ export const AddOrder = ({
               <Picker
                 mode="dropdown"
                 selectedValue={item}
-                onValueChange={val => setItem(val)}>
+                onValueChange={val => setItem(val)} 
+              >
                 <Picker.Item label={'Select Item'} value={undefined} key={-1} />
                 {all_items &&
                   all_items.map((pur, idx) => {
@@ -403,54 +499,16 @@ export const AddOrder = ({
                   })}
               </Picker>
             </Item>
-            {item && (
-              <Row style={[globalStyles.tableContainer]}>
-                <Grid>
-                  <Row style={globalStyles.tableHeaderContainer}>
-                    <Col size={2} style={globalStyles.colContainer}>
-                      <Text>Region</Text>
-                    </Col>
-                    <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text>Rate</Text>
-                    </Col>
-                    <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text>Lead Time</Text>
-                    </Col>
-                    <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text>Transport Rate</Text>
-                    </Col>
-                  </Row>
-                  {all_branches.map((item, idx) => (
-                    <Row key={idx} style={globalStyles.rowContainer}>
-                      <Col size={2} style={globalStyles.colContainer}
-                        onPress={() => setBranch(item.branch)} >
-                        <Text>{item.branch}</Text>
-                      </Col>
-                      <Col size={1.5} style={globalStyles.colContainer}
-                        onPress={() => setBranch(item.branch)}>
-                        <Text>Nu.{item.item_rate}</Text>
-                      </Col>
-                      <Col size={1.5} style={globalStyles.colContainer}
-                        onPress={() => setBranch(item.branch)}>
-                        <Text> {item.lead_time} Days</Text>
-                      </Col>
-                      <Col size={1.5} style={globalStyles.colContainer}
-                        onPress={() => setBranch(item.branch)}>
-                        {(item.has_common_pool === 1) && (
-                          <Text>Nu.{item.tr_rate} </Text>
-                        )}
-                      </Col>
-                    </Row>
-                  ))}
-                </Grid>
-              </Row>
-            )}
 
             <Item regular style={globalStyles.mb10}>
               <Picker
                 mode="dropdown"
                 selectedValue={branch}
-                onValueChange={val => { setBranch(val), selectTransportMode() }}>
+                onValueChange={val => {
+                  setBranch(val), selectTransportMode(),
+                    getOtherBranchInfo(val),
+                    setBranchWiseLocation(undefined)
+                }}>
                 <Picker.Item label={'Select Branch'} value={undefined} key={-1} />
                 {all_branches &&
                   all_branches.map((pur, idx) => {
@@ -465,16 +523,140 @@ export const AddOrder = ({
               </Picker>
             </Item>
 
+            <Modal
+              animationType="fade"
+              transparent={false}
+              visible={regionModal}
+              onRequestClose={() => setRegionModal(false)}
+            >
+              <Content style={globalStyles.content}>
+                <Text
+                  style={{
+                    fontSize: 25,
+                    fontWeight: 'bold',
+                    alignSelf: 'center',
+                    marginBottom: 10,
+                    color: Config.APP_HEADER_COLOR,
+                  }}>
+                  Other Region Information
+                 </Text>
+                {branch && (
+                  <Row style={[globalStyles.tableContainer]}>
+                    <Grid>
+                      <Row style={globalStyles.tableHeaderContainer}>
+                        <Col size={2} style={globalStyles.colContainer}>
+                          <Text>Region</Text>
+                        </Col>
+                        <Col size={1.5} style={globalStyles.colContainer}>
+                          <Text>Location</Text>
+                        </Col>
+                        <Col size={1.5} style={globalStyles.colContainer}>
+                          <Text>Lead Time</Text>
+                        </Col>
+                        <Col size={1.5} style={globalStyles.colContainer}>
+                          <Text>Item Rate/m3</Text>
+                        </Col>
+                      </Row>
+                      {otherBranchInfo.map((item, idx) => (
+                        <Row key={idx} style={globalStyles.rowContainer}>
+                          <Col size={2} style={globalStyles.colContainer}
+                            onPress={() => {
+                              setBranch(item.branch), setRegionModal(false)
+                            }} >
+                            <Text>{item.branch}</Text>
+                          </Col>
+                          <Col size={1.5} style={globalStyles.colContainer}>
+                            <Text>{item.location}</Text>
+                          </Col>
+                          <Col size={1.5} style={globalStyles.colContainer}>
+                            <Text> {item.lead_time} Days</Text>
+                          </Col>
+                          <Col size={1.5} style={globalStyles.colContainer}>
+                            <Text>Nu.{item.item_rate} </Text>
+                          </Col>
+                        </Row>
+                      ))}
+                    </Grid>
+                  </Row>
+                )}
+                <Container
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    maxHeight: 'auto',
+                  }}>
+                  <Text style={globalStyles.tapRegion}>Tap on the region to select</Text>
+                  <Button danger onPress={() => { setRegionModal(false) }}>
+                    <Text>Cancel</Text>
+                  </Button>
+                </Container>
+              </Content>
+            </Modal>
+
             {(itemDetail !== undefined && branch !== undefined) ? (
               <Fragment>
-                <Text style={{ color: 'gray' }}>
-                  <Icon name="info-circle"
-                    type="FontAwesome"
-                    style={globalStyles.smallIcon}
-                  ></Icon>
-                  Will take approximately {itemDetail.lead_time} working days
-                  at the rate of Nu. {itemDetail.item_rate}/{itemDetail.stock_uom}{' '}
-                </Text>
+                {(allLocation.length == 0) ? (
+                  <Text style={{ color: 'gray' }}>
+                    <Icon name="info-circle"
+                      type="FontAwesome"
+                      style={globalStyles.smallIcon}
+                    ></Icon>
+                    Will take approximately {itemDetail.lead_time} working days to deliver
+                    at the rate of Nu.
+                  {locationItemRate}/{itemDetail.stock_uom}{'. '}
+                    {' '} Click {' '}
+                    <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
+                      here
+                       </Text>
+                    {' '} to see other branch information
+                  </Text>
+                ) : (
+                    <Text style={{ color: 'gray' }}>
+                      <Icon name="info-circle"
+                        type="FontAwesome"
+                        style={globalStyles.smallIcon}
+                      ></Icon>
+                      Will take approximately {itemDetail.lead_time} working days to deliver.
+                    {' '} Click {' '}
+                      <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
+                        here
+                       </Text>
+                      {' '} to see other branch information
+                    </Text>
+                  )}
+
+                {(allLocation.length > 0) && (
+                  <Item regular style={globalStyles.mb10}>
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={branchWiseLocation}
+                      onValueChange={val => {
+                        if (val !== undefined) {
+                          setBranchWiseLocation(val)
+                        }
+                      }}>
+                      <Picker.Item label={'Select Location'} value={undefined} key={-1} />
+                      {allLocation && allLocation.map((pur, idx) => {
+                        return (
+                          <Picker.Item
+                            label={pur.location}
+                            value={pur.location}
+                            key={idx}
+                          />
+                        );
+                      })}
+                    </Picker>
+                  </Item>
+                )}
+                {(branchWiseLocation && allLocation.length > 0) && (
+                  <Text style={{ color: 'gray' }}>
+                    <Icon name="info-circle"
+                      type="FontAwesome"
+                      style={globalStyles.smallIcon}
+                    ></Icon>
+                    Item Rate Nu. {locationItemRate}/m3
+                  </Text>
+                )}
 
                 <Item regular style={globalStyles.mb10}>
                   {/* to select self owned */}
@@ -660,14 +842,13 @@ export const AddOrder = ({
                         />
                       </Picker>
                     )}
-
                 </Item>
 
                 {transport_mode && (
                   <Fragment>
                     <Button
                       info
-                      onPress={() => { setShowModal(true), resetErrorMsg(), resetModal() }}
+                      onPress={() => { setShowModal(true), resetErrorMsg(), resetModal(), checkLocation() }}
                       style={globalStyles.mb10}>
                       {items.length > 0 ? (
                         <Text>Add More Qty</Text>
@@ -688,17 +869,10 @@ export const AddOrder = ({
                 <Text></Text>
               )}
 
-
             {(items.length > 0 && branch !== undefined && transport_mode !== undefined) ? (
               // <Text></Text>
               <Fragment>
                 <Row style={globalStyles.labelContainer}>
-                  {/* <Col size={3}>
-                    <Text></Text>
-                  </Col>
-                  <Col size={2}>
-                    <Text style={{ textAlign: 'right' }}></Text>
-                  </Col> */}
                 </Row>
                 <Row style={globalStyles.labelContainer}>
                   <Col size={3}>
@@ -870,6 +1044,7 @@ const mapDispatchToProps = {
   handleError,
   getImages,
   setLoading,
+  showToast
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddOrder);

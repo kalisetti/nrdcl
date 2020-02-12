@@ -30,6 +30,11 @@ export default StyleSheet.create({
     marginBottom: 10,
     paddingLeft:5
   },
+  mb11: {
+    borderRadius: 4,
+    marginBottom: 10,
+    paddingLeft:5
+  },
 
   bottom: {
     flex: 1,
@@ -44,6 +49,11 @@ export default StyleSheet.create({
   iconText: {
     fontWeight: 'bold',
     color: Config.ICON_COLOR,
+  },
+  iconTextFooter: {
+    fontWeight: 'bold',
+    color: Config.ICON_COLOR,
+    fontSize:9
   },
 
   mb50: {
@@ -115,14 +125,22 @@ export default StyleSheet.create({
 
   label: {
     fontWeight: 'bold',
-    fontStyle: 'italic',
-    
+    // color:'white'
+    // fontStyle: 'italic',
+  },
+  
+  lb:{
+    fontWeight: 'bold',
   },
 
   tableContainer: {
     marginBottom: 10,
     borderWidth: 0.5,
     // paddingLeft:4
+  },
+
+  materialContainer: {
+    marginBottom: 10, 
   },
 
   tableHeaderContainer: {
@@ -155,6 +173,10 @@ export default StyleSheet.create({
   modalButtonContainer: {
     justifyContent: 'space-between',
   },
+
+  // label:{
+  //   color: 'white',
+  // },
 
   itemButton: {width: '45%', justifyContent: 'center'},
   button: {justifyContent: 'center'},
@@ -196,5 +218,8 @@ italicFont: {
   fontStyle: 'italic',
 },
 
+tapRegion: { 
+  paddingTop: 7,
+}
 
 });

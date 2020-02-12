@@ -7,6 +7,7 @@ import {
     Row,
     Col,
     Content,
+    Button
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import globalStyle from '../../../../styles/globalStyle';
@@ -42,10 +43,20 @@ export const OrderDetail = ({
         try {
             const response = await callAxios(`resource/Customer Order/${id}`);
             setOrder(response.data.data);
+            console.log(response.data.data)
             setLoading(false);
         } catch (error) {
             handleError(error);
         }
+    };
+    const proceedPayment = async () => {
+        navigation.navigate('Payment',
+            {
+                orderNumber: navigation.state.params.id,
+                site_type: order.site_type,
+                totalPayableAmount: order.total_balance_amount,
+                docstatus: order.approval_status
+            })
     };
     return commonState.isLoading ? (
         <SpinnerScreen />
@@ -93,12 +104,7 @@ export const OrderDetail = ({
                 <Col size={3}>
                     <Text>{order.transport_mode}</Text>
                 </Col>
-            </Row>
-
-
-            <Row style={[globalStyle.labelContainer]}>
-                <Text style={globalStyle.label}>Invoice Details</Text>
-            </Row>
+            </Row> 
             <Row style={globalStyle.labelContainer}>
                 <Col size={2}>
                     <Text style={globalStyle.label}>Total Order Qty:</Text>
@@ -106,6 +112,10 @@ export const OrderDetail = ({
                 <Col size={3}>
                     <Text>{order.total_quantity} M3</Text>
                 </Col>
+            </Row>
+            
+            <Row style={[globalStyle.labelContainer]}>
+                <Text style={globalStyle.label}>Invoice Details</Text>
             </Row>
             <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
                 <Grid>
@@ -141,8 +151,30 @@ export const OrderDetail = ({
                             <Text style={{ textAlign: 'right', fontWeight: 'bold' }}>{commaNumber(order.total_payable_amount)}</Text>
                         </Col>
                     </Row>
+                    <Row style={globalStyle.rowContainer}>
+                        <Col size={2} style={globalStyle.colContainer}>
+                            <Text style={{ fontWeight: 'bold' }}>Total Balace Amount</Text>
+                        </Col>
+                        <Col size={1} style={globalStyle.colContainer}>
+                            <Text style={{ textAlign: 'right', fontWeight: 'bold' }}>{commaNumber(order.total_balance_amount)}</Text>
+                        </Col>
+                    </Row>
                 </Grid>
             </Row>
+
+            {order.total_balance_amount > 0 ? (
+                <Button
+                    block
+                    success
+                    iconLeft
+                    style={globalStyle.mb10}
+                    onPress={proceedPayment}>
+                    <Text>Proceed for Payment</Text>
+                </Button>
+            ) : (
+                    <Text></Text>
+                )}
+
         </Content>
     </Container>
         );

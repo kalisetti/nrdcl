@@ -50,7 +50,9 @@ import ListOrder from '../../apps/customer/orders/ListOrder';
 import AddOrder from '../../apps/customer/orders/AddOrder';
 import Payment from '../../apps/customer/orders/Payment';
 import OrderDetail from '../../apps/customer/orders/OrderDetail';
-import DeliveryList from '../../apps/customer/Delivery/DeliveryList'
+import DeliveryList from '../../apps/customer/Delivery/DeliveryList';
+import DeliveryDetail from '../../apps/customer/Delivery/DeliveryDetail';
+import DeliverySummary from '../../apps/customer/Delivery/DeliverySummary'
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
@@ -194,6 +196,20 @@ const AppNavigator = createStackNavigator(
         title: 'Delivery List',
       },
     },
+
+    DeliveryDetail: {
+      screen: DeliveryDetail,
+      navigationOptions: {
+        title: 'Delivery Detail',
+      },
+    },
+
+    DeliverySummary: {
+      screen: DeliverySummary,
+      navigationOptions: {
+        title: 'Delivery Summary',
+      },
+    },
     TransporterDashboard: {
       screen: TransporterDashboard,
       navigationOptions: {
@@ -277,16 +293,14 @@ const AuthNavigator = createStackNavigator(
 
 const InfoNavigator = createStackNavigator(
   {
-    About: {
-      screen: About,
-      navigationOptions: { title: 'About', headerLeft: <MyBackButton /> },
-    },
-    ContactUs: { screen: ContactUs, navigationOptions: { title: 'Contact Us', headerLeft: <MyBackButton /> } },
-    Faq: { screen: Faq, navigationOptions: { title: 'FAQ', headerLeft: <MyBackButton /> } },
-    Help: { screen: Help, navigationOptions: { title: 'Help', headerLeft: <MyBackButton /> } },
+    Login: { screen: Login, navigationOptions: { title: '' } },
+    About: { screen: About, navigationOptions: { title: 'About' } },
+    ContactUs: { screen: ContactUs, navigationOptions: { title: 'Contact Us' } },
+    Faq: { screen: Faq, navigationOptions: { title: 'FAQ' } },
+    Help: { screen: Help, navigationOptions: { title: 'Help' } },
   },
   {
-    initialRouteName: 'About',
+    initialRouteName: 'Login',
     defaultNavigationOptions: {
       gestureEnabled: true,
       cardOverlayEnabled: true,

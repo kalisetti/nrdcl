@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Modal} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Modal } from 'react-native';
 import {
   Container,
   Input,
@@ -9,11 +9,11 @@ import {
   Button,
   Text,
   Textarea,
+  View
 } from 'native-base';
-import {callAxios, handleError} from '../../../../redux/actions/commonActions';
+import { callAxios, handleError } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 import Config from 'react-native-config';
-
 const SiteItem = ({
   showModal,
   setShowModal,
@@ -32,7 +32,7 @@ const SiteItem = ({
   const [common_pool, setcommon_pool] = useState(0);
 
   const [all_branch, setall_branch] = useState([]);
-
+  const [errorMsg, setErrorMsg] = useState('');
   useEffect(() => {
     if (item_sub_group) {
       setItemUom(item_sub_group);
@@ -96,18 +96,32 @@ const SiteItem = ({
   };
 
   const addItemToList = () => {
-    const item = {
-      idx,
-      branch,
-      item_sub_group,
-      uom,
-      expected_quantity,
-      transport_mode,
-      remarks,
-    };
-    addItem(item);
-    resetState();
-    setShowModal(false);
+    if (item_sub_group === null) {
+      setErrorMsg('');
+      setErrorMsg('Please Select Item');
+    }
+    else if (expected_quantity === null) {
+      setErrorMsg('');
+      setErrorMsg('Expected Quantity is required');
+    }
+    else if (expected_quantity < 8) {
+      setErrorMsg('');
+      setErrorMsg('Minimum Expected Quantity must be greater than 8 m3');
+    } else {
+      setErrorMsg('');
+      const item = {
+        idx,
+        branch,
+        item_sub_group,
+        uom,
+        expected_quantity,
+        transport_mode,
+        remarks,
+      };
+      addItem(item);
+      resetState();
+      setShowModal(false);
+    }
   };
 
   return (
@@ -148,11 +162,11 @@ const SiteItem = ({
             disabled
             value={uom}
             onChangeText={val => setuom(val)}
-            placeholder="Unit of Measure"
+            placeholder="Unit of Measurement"
           />
         </Item>
 
-        {item_sub_group && (
+        {/* {item_sub_group && (
           <Item regular style={globalStyles.mb10}>
             <Picker
               mode="dropdown"
@@ -171,9 +185,9 @@ const SiteItem = ({
                 })}
             </Picker>
           </Item>
-        )}
+        )} */}
 
-        {branch && (
+        {/* {branch && (
           <Item regular style={globalStyles.mb10}>
             {common_pool ? (
               <Picker
@@ -197,43 +211,40 @@ const SiteItem = ({
                 />
               </Picker>
             ) : (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => settransport_mode(val)}>
-                <Picker.Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Picker.Item
-                  label={'Self Owned Transport'}
-                  value={'Self Owned Transport'}
-                  key={0}
-                />
-              </Picker>
-            )}
+                <Picker
+                  mode="dropdown"
+                  selectedValue={transport_mode}
+                  onValueChange={val => settransport_mode(val)}>
+                  <Picker.Item
+                    label={'Select Transport Mode'}
+                    value={undefined}
+                    key={-1}
+                  />
+                  <Picker.Item
+                    label={'Self Owned Transport'}
+                    value={'Self Owned Transport'}
+                    key={0}
+                  />
+                </Picker>
+              )}
           </Item>
-        )}
+        )} */}
 
         <Item regular style={globalStyles.mb10}>
           <Input
             value={expected_quantity}
-            onChangeText={val => setexpected_quantity(val)}
+            onChangeText={val => {setexpected_quantity(val),setErrorMsg('')}}
             placeholder="Expected Quantity"
+            keyboardType='numeric'
           />
         </Item>
-
-        <Textarea
-          rowSpan={5}
-          width="100%"
-          bordered
-          placeholder="Remarks"
-          value={remarks}
-          onChangeText={val => setremarks(val)}
-          style={globalStyles.mb10}
-        />
-
+        <Item regular style={globalStyles.mb10}>
+          <Input
+            value={remarks}
+            onChangeText={val => setremarks(val)}
+            placeholder="Remarks"
+          />
+        </Item> 
         <Container
           style={{
             flexDirection: 'row',
@@ -247,7 +258,15 @@ const SiteItem = ({
             <Text>Cancel</Text>
           </Button>
         </Container>
+        <Container>
+          <View>
+            <Text style={globalStyles.errorMsg}>
+              {errorMsg}
+            </Text>
+          </View>
+        </Container>
       </Content>
+
     </Modal>
   );
 };

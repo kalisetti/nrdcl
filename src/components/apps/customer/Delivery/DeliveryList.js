@@ -8,7 +8,8 @@ import {
     CardItem,
     Right,
     Icon,
-    View
+    View,
+    Button
 
 } from 'native-base';
 
@@ -51,13 +52,13 @@ export const DeliveryList = ({
                     header
                     bordered
                     button
-                    onPress={() => navigation.navigate('OrderDetail', { id: item.name })}
+                    onPress={() => navigation.navigate('DeliveryDetail', { id: item.name })}
                     style={globalStyles.tableHeader}>
                     <Body>
                         {item.docstatus === 0 ? (
-                            <Text style={{ color: 'red' }}>{item.name}</Text>
+                            <Text style={{ color: 'red' }}>{item.delivery_note}</Text>
                         ) : (
-                                <Text style={{ color: 'blue' }}>{item.name}</Text>
+                                <Text style={globalStyles.label}>{item.delivery_note}</Text>
                             )}
                     </Body>
 
@@ -95,16 +96,27 @@ export const DeliveryList = ({
                 'GET',
                 params,
             );
+            console.log(response)
             setDeliverList(response.data.data);
             setLoading(false);
         } catch (error) {
             handleError(error);
         }
     };
+
+
     return commonState.isLoading ? (
         <SpinnerScreen />
     ) : (
             <Container style={globalStyles.listContent}>
+                <Button
+                    block
+                    success
+                    iconLeft
+                    style={globalStyles.mb10}
+                    onPress={() => navigation.navigate('DeliverySummary')}>
+                    <Text>Delivery Summary</Text>
+                </Button>
                 <NavigationEvents
                     onWillFocus={_ => {
                         setReload(1);
