@@ -138,19 +138,19 @@ export const getImages = (
           }
         }
       }
-
       const image = await ImagePicker.openPicker({
         multiple: multiple,
         includeBase64: true,
         isCamera: true,
         forceJpg: true,
-        compressQuality: 50,
+        compressQuality: 30,
         cropping: cropping,
         width: width,
         height: height,
         minCompressSize: 512,
         title: title,
       });
+
       return image;
     } catch (error) {
       dispatch(handleError(error));
@@ -202,7 +202,7 @@ export const handleError = error => {
   }
 };
 
-export const startSubmitBillingAddress = (billingAddressChangeRequestData) => {
+export const startSubmitBillingAddress = billingAddressChangeRequestData => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -213,15 +213,20 @@ export const startSubmitBillingAddress = (billingAddressChangeRequestData) => {
         {},
         billingAddressChangeRequestData,
       );
-     
+
       dispatch(setLoading(false));
-      dispatch(showToast('Your request submited successfully, please wait for approval.', 'success'));
+      dispatch(
+        showToast(
+          'Your request submited successfully, please wait for approval.',
+          'success',
+        ),
+      );
     } catch (error) {
       dispatch(handleError(error));
     }
   };
 };
-export const startSubmitPerAddress = (perAddressChangeRequestData) => {
+export const startSubmitPerAddress = perAddressChangeRequestData => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -232,7 +237,7 @@ export const startSubmitPerAddress = (perAddressChangeRequestData) => {
         {},
         perAddressChangeRequestData,
       );
-     
+
       dispatch(setLoading(false));
       dispatch(showToast('Your request submited successfully', 'success'));
     } catch (error) {
@@ -240,7 +245,7 @@ export const startSubmitPerAddress = (perAddressChangeRequestData) => {
     }
   };
 };
-export const startSubmitBankAddress = (bankAddressChangeRequestData) => {
+export const startSubmitBankAddress = bankAddressChangeRequestData => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
@@ -251,7 +256,7 @@ export const startSubmitBankAddress = (bankAddressChangeRequestData) => {
         {},
         bankAddressChangeRequestData,
       );
-     
+
       dispatch(setLoading(false));
       dispatch(showToast('Your request submited successfully', 'success'));
     } catch (error) {

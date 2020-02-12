@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, {useEffect, useState, Fragment} from 'react';
+import {connect} from 'react-redux';
 import DatePicker from 'react-native-datepicker';
-import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
-import { View, Image } from 'react-native';
+import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import {View, Image} from 'react-native';
 import moment from 'moment';
 
 import {
@@ -26,9 +26,9 @@ import {
   handleError,
   getImages,
 } from '../../../../redux/actions/commonActions';
-import { startSiteRegistration } from '../../../../redux/actions/siteActions';
+import {startSiteRegistration} from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
-import { getGPSLocation } from '../../../helper/Geolocation';
+import {getGPSLocation} from '../../../helper/Geolocation';
 import ModalSiteItem from './ModalSiteItem';
 import SiteItemList from './SiteItemList';
 import SpinnerScreen from '../../../base/SpinnerScreen';
@@ -88,7 +88,7 @@ export const AddSite = ({
     setShowmap(true);
     const gps = await getGPSLocation();
     if (gps) {
-      setLatLong({ latitude: gps.latitude, longitude: gps.longitude });
+      setLatLong({latitude: gps.latitude, longitude: gps.longitude});
     }
   };
 
@@ -126,9 +126,9 @@ export const AddSite = ({
     } catch (error) {
       handleError(error);
     }
-  }; 
-  
-  const removeImage = () => { 
+  };
+
+  const removeImage = () => {
     setapproval_document(images.filter((_, ind) => ind > 0));
   };
 
@@ -180,8 +180,10 @@ export const AddSite = ({
 
   //image picker
   const getSiteDocuments = async () => {
-    const images = await getImages();
-    setapproval_document(images);
+    const returned_images = await getImages();
+    if (returned_images) {
+      setapproval_document(returned_images);
+    }
   };
 
   const addItem = item => {
@@ -217,90 +219,90 @@ export const AddSite = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-      <Container>
-        <Content style={globalStyles.content}>
-          <Form>
-            <Item regular style={globalStyles.mb10}>
-              <Picker
-                mode="dropdown"
-                selectedValue={purpose}
-                onValueChange={val => setPurpose(val)}>
-                <Picker.Item
-                  label={'Select Purpose'}
-                  value={undefined}
-                  key={-1}
-                />
-                {all_purpose &&
-                  all_purpose.map((pur, idx) => {
-                    return (
-                      <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                    );
-                  })}
-              </Picker>
-            </Item>
-            <Item regular style={globalStyles.mb10}>
-              <Picker
-                mode="dropdown"
-                selectedValue={construction_type}
-                onValueChange={val => { setconstruction_type(val), getIsBuilding(val) }}>
-                <Picker.Item
-                  label={'Select Construction Type'}
-                  value={undefined}
-                  key={-1}
-                />
-                {all_construction_type &&
-                  all_construction_type.map((val, idx) => {
-                    return (
-                      <Picker.Item label={val.name} value={val.name} key={idx} />
-                    );
-                  })}
-              </Picker>
-            </Item>
+    <Container>
+      <Content style={globalStyles.content}>
+        <Form>
+          <Item regular style={globalStyles.mb10}>
+            <Picker
+              mode="dropdown"
+              selectedValue={purpose}
+              onValueChange={val => setPurpose(val)}>
+              <Picker.Item
+                label={'Select Purpose'}
+                value={undefined}
+                key={-1}
+              />
+              {all_purpose &&
+                all_purpose.map((pur, idx) => {
+                  return (
+                    <Picker.Item label={pur.name} value={pur.name} key={idx} />
+                  );
+                })}
+            </Picker>
+          </Item>
+          <Item regular style={globalStyles.mb10}>
+            <Picker
+              mode="dropdown"
+              selectedValue={construction_type}
+              onValueChange={val => {
+                setconstruction_type(val), getIsBuilding(val);
+              }}>
+              <Picker.Item
+                label={'Select Construction Type'}
+                value={undefined}
+                key={-1}
+              />
+              {all_construction_type &&
+                all_construction_type.map((val, idx) => {
+                  return (
+                    <Picker.Item label={val.name} value={val.name} key={idx} />
+                  );
+                })}
+            </Picker>
+          </Item>
+          <Item regular style={globalStyles.mb10}>
+            <Input
+              value={approval_no}
+              onChangeText={val => setapproval_no(val)}
+              placeholder="Construction Approval No."
+            />
+          </Item>
+
+          {isBuilding === 1 ? (
             <Item regular style={globalStyles.mb10}>
               <Input
-                value={approval_no}
-                onChangeText={val => setapproval_no(val)}
-                placeholder="Construction Approval No."
+                value={number_of_floors}
+                onChangeText={val => setnumber_of_floors(val)}
+                placeholder="Number of Floors"
               />
             </Item>
+          ) : null}
 
-            {isBuilding === 1 ? (
-              <Item regular style={globalStyles.mb10}>
-                <Input
-                  value={number_of_floors}
-                  onChangeText={val => setnumber_of_floors(val)}
-                  placeholder="Number of Floors"
-                />
-              </Item>
-            ) : null
-            }
-
-
-            <Item regular style={globalStyles.mb11}>
-              <DatePicker
-                style={{ width: '50%' }}
-                date={construction_start_date}
-                mode="date"
-                customStyles={{ dateInput: { borderWidth: 0 } }}
-                placeholder="Construction Start Date"
-                format="DD-MM-YYYY"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={date => setStartDate(date)}
-              />
-              <DatePicker
-                style={{ width: '50%' }}
-                date={construction_end_date}
-                mode="date"
-                customStyles={{ dateInput: { borderWidth: 0 } }}
-                placeholder="Construction End Date"
-                format="DD-MM-YYYY"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={date => setEndDate(date)}
-              />
-            </Item>
-            {/* <Item regular style={globalStyles.mb10}>
+          <Item regular style={globalStyles.mb11}>
+            <DatePicker
+              style={{width: '50%'}}
+              date={construction_start_date}
+              mode="date"
+              customStyles={{dateInput: {borderWidth: 0}}}
+              placeholder="Construction Start Date"
+              format="DD-MM-YYYY"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              onDateChange={date => setStartDate(date)}
+            />
+            <DatePicker
+              style={{width: '50%'}}
+              date={construction_end_date}
+              mode="date"
+              customStyles={{dateInput: {borderWidth: 0}}}
+              placeholder="Construction End Date"
+              format="DD-MM-YYYY"
+              confirmBtnText="Confirm"
+              cancelBtnText="Cancel"
+              onDateChange={date => setEndDate(date)}
+            />
+          </Item>
+          {/* <Item regular style={globalStyles.mb10}>
               <DatePicker
                 style={{ width: '100%' }}
                 date={construction_end_date}
@@ -313,139 +315,147 @@ export const AddSite = ({
                 onDateChange={date => setEndDate(date)}
               />
             </Item> */}
-            <Item regular style={globalStyles.mb10}>
-              <Picker
-                mode="dropdown"
-                selectedValue={dzongkhag}
-                onValueChange={val => setdzongkhag(val)}>
-                <Picker.Item
-                  label={'Select Dzongkhag'}
-                  value={undefined}
-                  key={-1}
-                />
-                {all_dzongkhag &&
-                  all_dzongkhag.map((val, idx) => {
-                    return (
-                      <Picker.Item label={val.name} value={val.name} key={idx} />
-                    );
-                  })}
-              </Picker>
-            </Item>
+          <Item regular style={globalStyles.mb10}>
+            <Picker
+              mode="dropdown"
+              selectedValue={dzongkhag}
+              onValueChange={val => setdzongkhag(val)}>
+              <Picker.Item
+                label={'Select Dzongkhag'}
+                value={undefined}
+                key={-1}
+              />
+              {all_dzongkhag &&
+                all_dzongkhag.map((val, idx) => {
+                  return (
+                    <Picker.Item label={val.name} value={val.name} key={idx} />
+                  );
+                })}
+            </Picker>
+          </Item>
 
-
-            {isBuilding === 1 ? (
-              <Item regular style={globalStyles.mb10}>
-                <Input
-                  value={plot_no}
-                  onChangeText={val => setplot_no(val)}
-                  placeholder="Plot/Thram No."
-                />
-              </Item>
-            ) : null
-            }
+          {isBuilding === 1 ? (
             <Item regular style={globalStyles.mb10}>
               <Input
-                value={location}
-                onChangeText={val => setlocation(val)}
-                placeholder="Location Details"
+                value={plot_no}
+                onChangeText={val => setplot_no(val)}
+                placeholder="Plot/Thram No."
               />
             </Item>
-
-            <Item regular style={globalStyles.mb10}>
-              <Input
-                value={remarks}
-                onChangeText={val => setremarks(val)}
-                placeholder="Remarks"
-              />
-            </Item>
-
-            <Button
-              info
-              onPress={() => setShowModal(true)}
-              style={globalStyles.mb10}>
-              <Text>
-                {items.length == 0
-                  ? 'Add Expected Materials'
-                  : 'Add More Expected Materials'}
-              </Text>
-            </Button>
-
-            <ModalSiteItem
-              showModal={showModal}
-              setShowModal={setShowModal}
-              addItem={addItem}
-              all_sub_item={all_sub_item}
+          ) : null}
+          <Item regular style={globalStyles.mb10}>
+            <Input
+              value={location}
+              onChangeText={val => setlocation(val)}
+              placeholder="Location Details"
             />
+          </Item>
 
-            <SiteItemList data={items} removeItem={removeItem} />
+          <Item regular style={globalStyles.mb10}>
+            <Input
+              value={remarks}
+              onChangeText={val => setremarks(val)}
+              placeholder="Remarks"
+            />
+          </Item>
 
-            <Button info style={globalStyles.mb10} onPress={getSiteDocuments}>
-              <Text>Attach Construction approval Documents</Text>
-            </Button>
-            {images.length === 0 ? null : (
-              <View style={{ height: 300, width: '100%', marginBottom: 15 }}>
-                <Text style={{ alignSelf: 'center', color: 'red' }}>
-                  Swipe to review all images
+          <Button
+            info
+            onPress={() => setShowModal(true)}
+            style={globalStyles.mb10}>
+            <Text>
+              {items.length == 0
+                ? 'Add Expected Materials'
+                : 'Add More Expected Materials'}
+            </Text>
+          </Button>
+
+          <ModalSiteItem
+            showModal={showModal}
+            setShowModal={setShowModal}
+            addItem={addItem}
+            all_sub_item={all_sub_item}
+          />
+
+          <SiteItemList data={items} removeItem={removeItem} />
+
+          <Button info style={globalStyles.mb10} onPress={getSiteDocuments}>
+            <Text>Attach Construction approval Documents</Text>
+          </Button>
+          {images.length === 0 ? (
+            <Fragment></Fragment>
+          ) : (
+            <View style={{height: 300, width: '100%', marginBottom: 15}}>
+              <Text style={{alignSelf: 'center', color: 'red'}}>
+                Swipe to review all images
               </Text>
-                <DeckSwiper
-                  dataSource={approval_document}
-                  renderItem={image => (
-                    <Card style={{ elevation: 3 }}>
-                      <CardItem cardBody>
-                        <Image
-                          source={{
-                            uri: image.path,
-                          }}
-                          style={{ height: 250, width: '100%' }}
+              <DeckSwiper
+                dataSource={approval_document}
+                renderItem={image => (
+                  <Card style={{elevation: 3}}>
+                    <CardItem cardBody>
+                      <Image
+                        source={{
+                          uri: image.path,
+                        }}
+                        style={{height: 250, width: '100%'}}
+                      />
+                    </CardItem>
+                    <CardItem>
+                      <Button
+                        transparent
+                        small
+                        onPress={val => removeImage(val)}>
+                        <Icon
+                          name="delete"
+                          type="AntDesign"
+                          style={{color: 'red'}}
                         />
-                      </CardItem>
-                      <CardItem>
-                        <Button transparent small onPress={val => removeImage(val)}>
-                          <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
-                        </Button>
-                        <Text>
-                          {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                        </Text>
-                      </CardItem>
-                    </Card>
-                  )}
-                />
-              </View>
-            )}
-            <View style={{ marginBottom: 15 }}></View>
+                      </Button>
+                      <Text>
+                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                      </Text>
+                    </CardItem>
+                  </Card>
+                )}
+              />
+            </View>
+          )}
+          <View style={{marginBottom: 15}}></View>
 
-            {/* <Button info style={globalStyles.mb10} onPress={getGPS}>
+          {/* <Button info style={globalStyles.mb10} onPress={getGPS}>
               <Text>Set Site GPS Location</Text>
             </Button> */}
-            {showmap && (
-              <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
-                <MapView
-                  provider={PROVIDER_GOOGLE}
-                  style={globalStyles.map}
-                  initialRegion={region}
-                  showUserLocation={true}
-                  onLongPress={e => setLatLong(e.nativeEvent.coordinate)}>
-                  <Marker
-                    draggable
-                    coordinate={coordinate}
-                    onDragEnd={e => setLatLong(e.nativeEvent.coordinate)}
-                  />
-                </MapView>
-              </View>
-            )}
-            <View style={{ marginBottom: 15 }}></View>
-            <Button
-              block
-              info
-              iconLeft
-
-              success style={globalStyles.mb10} onPress={submitSiteInfo}>
-              <Text>Submit for Approval</Text>
-            </Button>
-          </Form>
-        </Content>
-      </Container>
-    );
+          {showmap && (
+            <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={globalStyles.map}
+                initialRegion={region}
+                showUserLocation={true}
+                onLongPress={e => setLatLong(e.nativeEvent.coordinate)}>
+                <Marker
+                  draggable
+                  coordinate={coordinate}
+                  onDragEnd={e => setLatLong(e.nativeEvent.coordinate)}
+                />
+              </MapView>
+            </View>
+          )}
+          <View style={{marginBottom: 15}}></View>
+          <Button
+            block
+            info
+            iconLeft
+            success
+            style={globalStyles.mb10}
+            onPress={submitSiteInfo}>
+            <Text>Submit for Approval</Text>
+          </Button>
+        </Form>
+      </Content>
+    </Container>
+  );
 };
 
 const mapStateToProps = state => ({
