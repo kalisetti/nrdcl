@@ -347,7 +347,7 @@ export const AddSite = ({
               <Input
                 value={location}
                 onChangeText={val => setlocation(val)}
-                placeholder="Location Details"
+                placeholder="Location (Specific Location of Construction Site)"
               />
             </Item>
 

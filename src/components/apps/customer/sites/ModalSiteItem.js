@@ -99,11 +99,15 @@ const SiteItem = ({
     if (item_sub_group === null) {
       setErrorMsg('');
       setErrorMsg('Please Select Item');
-    } 
-    else if(expected_quantity === null){
+    }
+    else if (expected_quantity === null) {
       setErrorMsg('');
       setErrorMsg('Expected Quantity is required');
-    }else{
+    }
+    else if (expected_quantity < 8) {
+      setErrorMsg('');
+      setErrorMsg('Minimum Expected Quantity must be greater than 8 m3');
+    } else {
       setErrorMsg('');
       const item = {
         idx,
@@ -158,7 +162,7 @@ const SiteItem = ({
             disabled
             value={uom}
             onChangeText={val => setuom(val)}
-            placeholder="Unit of Measure"
+            placeholder="Unit of Measurement"
           />
         </Item>
 
@@ -229,22 +233,18 @@ const SiteItem = ({
         <Item regular style={globalStyles.mb10}>
           <Input
             value={expected_quantity}
-            onChangeText={val => setexpected_quantity(val)}
+            onChangeText={val => {setexpected_quantity(val),setErrorMsg('')}}
             placeholder="Expected Quantity"
             keyboardType='numeric'
           />
         </Item>
-
-        <Textarea
-          rowSpan={5}
-          width="100%"
-          bordered
-          placeholder="Remarks"
-          value={remarks}
-          onChangeText={val => setremarks(val)}
-          style={globalStyles.mb10}
-        />
-
+        <Item regular style={globalStyles.mb10}>
+          <Input
+            value={remarks}
+            onChangeText={val => setremarks(val)}
+            placeholder="Remarks"
+          />
+        </Item> 
         <Container
           style={{
             flexDirection: 'row',

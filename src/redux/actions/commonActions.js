@@ -115,10 +115,15 @@ export const getImages = (
 ) => {
   return async dispatch => {
     try {
+      
       if (Platform.OS === 'android') {
+
+
+
         const perm = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.CAMERA,
         );
+
 
         if (perm === false) {
           const granted = await PermissionsAndroid.request(
@@ -137,21 +142,54 @@ export const getImages = (
             );
           }
         }
+        const writePram = await PermissionsAndroid.check(
+          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+        );
+
+        if (writePram === false) {
+          const writePramGranted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+            {
+              title: `${Config.APP_NAME} Storage Permission`,
+              message: `${Config.APP_NAME} needs access to your storage`,
+            },
+          );
+
+          if (writePramGranted !== PermissionsAndroid.RESULTS.GRANTED) {
+            dispatch(
+              handleError({
+                message: 'Cannot proceed without camera permission',
+              }),
+            );
+          }
+        }
       }
 
-      const image = await ImagePicker.openPicker({
+
+      const image = ImagePicker.openPicker({
         multiple: multiple,
         includeBase64: true,
         isCamera: true,
         forceJpg: true,
-        compressQuality: 50,
+        compressQuality: 10,
         cropping: cropping,
         width: width,
         height: height,
-        minCompressSize: 2028, //2 MB
+        minCompressSize: 20000, //2 MB
         title: title,
-        cropping: true, 
-      }); 
+        cropping: true,
+      });
+
+      // CompressImage.createCompressedImage(imageUri, appDirectory).then((response) => {
+      //   // response.uri is the URI of the new image that can now be displayed, uploaded...
+      //   // response.path is the path of the new image
+      //   // response.name is the name of the new image with the extension
+      //   // response.size is the size of the new image
+      // }).catch((err) => {
+      //   // Oops, something went wrong. Check that the filename is correct and
+      //   // inspect err to get more details.
+      // });
+
       return image;
     } catch (error) {
       dispatch(handleError(error));

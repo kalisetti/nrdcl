@@ -499,7 +499,6 @@ export const AddOrder = ({
                   })}
               </Picker>
             </Item>
-            {/* //grid cut */}
 
             <Item regular style={globalStyles.mb10}>
               <Picker

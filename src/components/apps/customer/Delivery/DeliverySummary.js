@@ -16,7 +16,6 @@ import {
     handleError,
     callAxios,
 } from '../../../../redux/actions/commonActions';
-import { startVehicleDeregistration } from '../../../../redux/actions/siteActions';
 
 export const DeliverySummary = ({
     userState,
@@ -25,7 +24,6 @@ export const DeliverySummary = ({
     handleError,
     setLoading,
 }) => {
-    const [order, setOrder] = useState({});
     const [deliverList, setDeliverList] = useState([]);
 
     useEffect(() => {
@@ -46,6 +44,8 @@ export const DeliverySummary = ({
                 'docstatus',
                 'delivery_note',
                 'branch',
+                'qty',
+                'customer_order',
                 'confirmation_status',
             ]),
             filters: JSON.stringify([
@@ -72,51 +72,37 @@ export const DeliverySummary = ({
             <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
                 <Grid>
                     <Row style={globalStyle.tableHeaderContainer}>
-                        <Col size={2} style={globalStyle.colContainer}>
-                            <Text>DN No.</Text>
+                        <Col size={1.7} style={globalStyle.colContainer}>
+                            <Text style={{fontSize:14}}>DN No.</Text>
                         </Col>
-                        <Col size={2} style={globalStyle.colContainer}>
-                            <Text>Order No.</Text>
+                        <Col size={2.1} style={globalStyle.colContainer}>
+                            <Text style={{fontSize:14}}>Order No.</Text>
                         </Col>
-                        <Col size={2} style={globalStyle.colContainer}>
-                            <Text>Qty(Cubic Meter)</Text>
+                        <Col size={1} style={globalStyle.colContainer}>
+                            <Text style={{fontSize:14}}>Qty(M3)</Text>
                         </Col>
-                        <Col size={2} style={globalStyle.colContainer}>
-                            <Text>Status</Text>
+                        <Col size={1.5} style={globalStyle.colContainer}>
+                            <Text style={{fontSize:14}}>Status</Text>
                         </Col>
                     </Row>
                     {deliverList.map((deliver, idx) => (
                         <Row key={idx} style={globalStyle.rowContainer}>
-                            <Col size={2} style={globalStyle.colContainer}>
-                                <Text>{deliver.delivery_note}</Text>
+                            <Col size={1.7} style={globalStyle.colContainer}>
+                                <Text style={{fontSize:14}}>{deliver.delivery_note}</Text>
+                            </Col>
+                            <Col size={2.1} style={globalStyle.colContainer}>
+                                <Text style={{fontSize:14}}>{deliver.customer_order}</Text>
+                            </Col>
+                            <Col size={1} style={globalStyle.colContainer}>
+                                <Text style={{fontSize:14}}>{deliver.qty}</Text>
                             </Col>
                             <Col size={1.5} style={globalStyle.colContainer}>
-                                <Text></Text>
-                            </Col>
-                            <Col size={1.5} style={globalStyle.colContainer}>
-                                <Text></Text>
-                            </Col>
-                            <Col size={1.5} style={globalStyle.colContainer}>
-                                <Text></Text>
+                                <Text style={{fontSize:14}}>{deliver.confirmation_status}</Text>
                             </Col>
                         </Row>
                     ))}
                 </Grid>
             </Row>
-
-            {order.total_balance_amount > 0 ? (
-                <Button
-                    block
-                    success
-                    iconLeft
-                    style={globalStyle.mb10}
-                    onPress={proceedPayment}>
-                    <Text>Proceed for Payment</Text>
-                </Button>
-            ) : (
-                    <Text></Text>
-                )}
-
         </Content>
     </Container>
         );
