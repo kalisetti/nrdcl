@@ -472,7 +472,7 @@ export const AddOrder = ({
                   all_sites.map((pur, idx) => {
                     return (
                       <Picker.Item
-                        label={`${pur.name} \n(${pur.purpose} at ${pur.location})`}
+                        label={`${pur.name} \n(${pur.construction_type} at ${pur.location})`}
                         value={pur.name}
                         key={idx}
                       />
@@ -499,7 +499,6 @@ export const AddOrder = ({
                   })}
               </Picker>
             </Item>
-            {/* //grid cut */}
 
             <Item regular style={globalStyles.mb10}>
               <Picker

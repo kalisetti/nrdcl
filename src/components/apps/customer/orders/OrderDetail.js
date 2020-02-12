@@ -104,12 +104,7 @@ export const OrderDetail = ({
                 <Col size={3}>
                     <Text>{order.transport_mode}</Text>
                 </Col>
-            </Row>
-
-
-            <Row style={[globalStyle.labelContainer]}>
-                <Text style={globalStyle.label}>Invoice Details</Text>
-            </Row>
+            </Row> 
             <Row style={globalStyle.labelContainer}>
                 <Col size={2}>
                     <Text style={globalStyle.label}>Total Order Qty:</Text>
@@ -117,6 +112,10 @@ export const OrderDetail = ({
                 <Col size={3}>
                     <Text>{order.total_quantity} M3</Text>
                 </Col>
+            </Row>
+            
+            <Row style={[globalStyle.labelContainer]}>
+                <Text style={globalStyle.label}>Invoice Details</Text>
             </Row>
             <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
                 <Grid>

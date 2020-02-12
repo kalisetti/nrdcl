@@ -24,7 +24,7 @@ export const TransporterDashboard = ({userState, navigation}) => {
           </Col>
         </Row>
         <Row size={1}>
-          <Col style={globalStyle.homeButton}>
+          {/* <Col style={globalStyle.homeButton}>
             <Button
               vertical
               transparent
@@ -37,7 +37,7 @@ export const TransporterDashboard = ({userState, navigation}) => {
               />
               <Text style={globalStyle.homeIconText}>Manage Transport</Text>
             </Button>
-          </Col>
+          </Col> */}
           <Col style={globalStyle.homeButton}>
             <Button vertical transparent style={{alignSelf: 'center'}}>
               <Icon

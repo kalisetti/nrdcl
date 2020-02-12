@@ -135,11 +135,12 @@ export const AddSite = ({
   const getFormData = async () => {
     try {
       setLoading(true);
-      const all_pur = await callAxios('resource/Site Purpose');
-      setall_purpose(all_pur.data.data);
-
-      const all_ct = await callAxios('resource/Construction Type');
-      // const all_ct = await callAxios('resource/Construction Type?fields=["*"]');
+      const params = {
+        filters: JSON.stringify([
+          ['is_crm_item', '=', 1],
+        ]),
+      };
+      const all_ct = await callAxios('resource/Construction Type', 'get', params);
       setall_construction_type(all_ct.data.data);
 
       const dz_all = await callAxios('resource/Dzongkhags', 'get');
@@ -219,53 +220,33 @@ export const AddSite = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={purpose}
-              onValueChange={val => setPurpose(val)}>
-              <Picker.Item
-                label={'Select Purpose'}
-                value={undefined}
-                key={-1}
+      <Container>
+        <Content style={globalStyles.content}>
+          <Form>
+            <Item regular style={globalStyles.mb10}>
+              <Picker
+                mode="dropdown"
+                selectedValue={construction_type}
+                onValueChange={val => { setconstruction_type(val), getIsBuilding(val) }}>
+                <Picker.Item
+                  label={'Select Construction Type'}
+                  value={undefined}
+                  key={-1}
+                />
+                {all_construction_type &&
+                  all_construction_type.map((val, idx) => {
+                    return (
+                      <Picker.Item label={val.name} value={val.name} key={idx} />
+                    );
+                  })}
+              </Picker>
+            </Item>
+            <Item regular style={globalStyles.mb10}>
+              <Input
+                value={approval_no}
+                onChangeText={val => setapproval_no(val)}
+                placeholder="Construction Approval No."
               />
-              {all_purpose &&
-                all_purpose.map((pur, idx) => {
-                  return (
-                    <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={construction_type}
-              onValueChange={val => {
-                setconstruction_type(val), getIsBuilding(val);
-              }}>
-              <Picker.Item
-                label={'Select Construction Type'}
-                value={undefined}
-                key={-1}
-              />
-              {all_construction_type &&
-                all_construction_type.map((val, idx) => {
-                  return (
-                    <Picker.Item label={val.name} value={val.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={approval_no}
-              onChangeText={val => setapproval_no(val)}
-              placeholder="Construction Approval No."
-            />
           </Item>
 
           {isBuilding === 1 ? (
@@ -276,7 +257,7 @@ export const AddSite = ({
                 placeholder="Number of Floors"
               />
             </Item>
-          ) : null}
+          ) : <Fragment></Fragment>}
 
           <Item regular style={globalStyles.mb11}>
             <DatePicker
@@ -315,40 +296,42 @@ export const AddSite = ({
                 onDateChange={date => setEndDate(date)}
               />
             </Item> */}
-          <Item regular style={globalStyles.mb10}>
-            <Picker
-              mode="dropdown"
-              selectedValue={dzongkhag}
-              onValueChange={val => setdzongkhag(val)}>
-              <Picker.Item
-                label={'Select Dzongkhag'}
-                value={undefined}
-                key={-1}
-              />
-              {all_dzongkhag &&
-                all_dzongkhag.map((val, idx) => {
-                  return (
-                    <Picker.Item label={val.name} value={val.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </Item>
+            <Item regular style={globalStyles.mb10}>
+              <Picker
+                mode="dropdown"
+                selectedValue={dzongkhag}
+                onValueChange={val => setdzongkhag(val)}>
+                <Picker.Item
+                  label={'Select Dzongkhag'}
+                  value={undefined}
+                  key={-1}
+                />
+                {all_dzongkhag &&
+                  all_dzongkhag.map((val, idx) => {
+                    return (
+                      <Picker.Item label={val.name} value={val.name} key={idx} />
+                    );
+                  })}
+              </Picker>
+            </Item>
 
-          {isBuilding === 1 ? (
+
+            {isBuilding === 1 ? (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={plot_no}
+                  onChangeText={val => setplot_no(val)}
+                  placeholder="Plot/Thram No."
+                />
+              </Item>
+            ) : null
+            }
             <Item regular style={globalStyles.mb10}>
               <Input
-                value={plot_no}
-                onChangeText={val => setplot_no(val)}
-                placeholder="Plot/Thram No."
+                value={location}
+                onChangeText={val => setlocation(val)}
+                placeholder="Location (Specific Location of Construction Site)"
               />
-            </Item>
-          ) : null}
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={location}
-              onChangeText={val => setlocation(val)}
-              placeholder="Location Details"
-            />
           </Item>
 
           <Item regular style={globalStyles.mb10}>
