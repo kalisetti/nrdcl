@@ -22,6 +22,7 @@ import globalStyles from '../../../../styles/globalStyle';
 import { FlatList } from 'react-native-gesture-handler';
 import { NavigationEvents } from 'react-navigation';
 import { default as commaNumber } from 'comma-number';
+import Moment from 'moment';
 
 export const ListOrder = ({
   userState,
@@ -76,6 +77,7 @@ export const ListOrder = ({
             ) : (
                 <Text style={{ color: 'blue' }}></Text>
               )}
+            <Text>Ordered Date: {Moment(item.creation).format('d MMM YYYY, hh:mma')}</Text>
           </View>
 
         </CardItem>
@@ -90,6 +92,7 @@ export const ListOrder = ({
         'docstatus',
         'site',
         'item_name',
+        'creation',
         'total_balance_amount',
       ]),
       filters: JSON.stringify([

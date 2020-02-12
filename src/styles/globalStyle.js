@@ -218,5 +218,8 @@ italicFont: {
   fontStyle: 'italic',
 },
 
+tapRegion: { 
+  paddingTop: 7,
+}
 
 });

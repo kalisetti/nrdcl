@@ -126,9 +126,9 @@ export const AddSite = ({
     } catch (error) {
       handleError(error);
     }
-  }; 
-  
-  const removeImage = () => { 
+  };
+
+  const removeImage = () => {
     setapproval_document(images.filter((_, ind) => ind > 0));
   };
 

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import Dialog from "react-native-dialog";
-
 import {
     Container,
     Content,
@@ -12,12 +11,17 @@ import {
     Button,
     Text,
     Input,
+    Icon,
+    Card,
+    CardItem,
+    DeckSwiper,
 } from 'native-base';
 import {
     callAxios,
     handleError,
     getImages,
     setLoading,
+    showToast
 } from '../../../../redux/actions/commonActions';
 import {
     submitMakePayment, submitCreditPayment
@@ -31,7 +35,9 @@ export const Payment = ({
     handleError,
     setLoading,
     submitMakePayment,
-    submitCreditPayment
+    submitCreditPayment,
+    getImages,
+    showToast
 }) => {
     //state info for forms
     const [order_no, setorder_no] = useState([undefined]);
@@ -42,6 +48,17 @@ export const Payment = ({
     const [otp, setOTP] = useState(false);
     const [creditAllowed, setCreditAllowed] = useState([undefined]);
     const [modeOfPayment, setModeOfPayment] = useState([undefined]);
+
+    const [approvalDoc, setApprovalDoc] = useState([]);
+    const [approvalDocmage, setApprovalDocmage] = useState([]);
+
+
+    useEffect(() => {
+        setApprovalDoc([]);
+        setTimeout(() => {
+            setApprovalDoc(approvalDocmage);
+        }, 600);
+    }, [approvalDocmage]);
 
     //For proper navigation/auth settings
     useEffect(() => {
@@ -56,7 +73,26 @@ export const Payment = ({
         }
     }, []);
 
+    //To get the approval document during pay later 
+    useEffect(() => {
+        setApprovalDoc([]);
+        setTimeout(() => {
+            setApprovalDoc(approvalDocmage);
+        }, 600);
+    }, [approvalDocmage]);
 
+    //Approval Document
+    const getApprovalDoc = async () => {
+        const image = await getImages('Front');
+        setApprovalDocmage(image);
+    };
+
+    //Remove attachment
+    const removeAttachment = () => {
+        setApprovalDocmage(approvalDoc.filter((_, ind) => ind > 0));
+    };
+
+    //Check payment option based on site type for display pay later option
     const checkPaymentOption = async id => {
         try {
             const response = await callAxios(`resource/Site Type/${id}`);
@@ -91,38 +127,49 @@ export const Payment = ({
 
     //Confirming the remitter bank and account number with getting OTP SMS
     const paymentRequest = async () => {
-        try {
-            setLoading(true);
-            const paymentData = {
-                'customer_order': navigation.getParam('orderNumber'),
-                'bank_code': remitter_bank,
-                'bank_account': remitter_acc_no,
-                'amount': 1
-            };
-            const res = await callAxios('method/erpnext.crm_api.init_payment',
-                'post',
-                paymentData,
-            );
-            if (res.status == 200) {
-                setLoading(false);
-                setshowDialog(true);
+        if (remitter_bank == null || remitter_bank == '') {
+            showToast('Remitter bank is mandatory.', 'danger');
+        } else if (remitter_acc_no == '' || remitter_acc_no == null) {
+            showToast('Remitter account number is mandatory.', 'danger');
+        } else {
+            try {
+                setLoading(true);
+                const paymentData = {
+                    'customer_order': navigation.getParam('orderNumber'),
+                    'bank_code': remitter_bank,
+                    'bank_account': remitter_acc_no,
+                    'amount': 1
+                };
+                const res = await callAxios('method/erpnext.crm_api.init_payment',
+                    'post',
+                    paymentData,
+                );
+                if (res.status == 200) {
+                    setLoading(false);
+                    setshowDialog(true);
+                }
+            } catch (error) {
+                handleError(error);
             }
-        } catch (error) {
-            handleError(error);
         }
+
     };
 
     //Crdite payment 
     const paymentLater = async () => {
-        const creditPaymentInfo = {
-            user: userState.login_id,
-            'customer_order': navigation.getParam('orderNumber'),
-            'mode_of_payment': modeOfPayment,
-            'paid_amount': navigation.getParam('totalPayableAmount'),
-            'docstatus': 1,
+        if (approvalDoc.length < 1) {
+            showToast('Approval document is mandatory.')
+        } else {
+            const creditPaymentInfo = {
+                user: userState.login_id,
+                'customer_order': navigation.getParam('orderNumber'),
+                'mode_of_payment': modeOfPayment,
+                'paid_amount': navigation.getParam('totalPayableAmount'),
+            };
+            submitCreditPayment(creditPaymentInfo, approvalDocmage);
+        }
 
-        };
-        submitCreditPayment(creditPaymentInfo);
+
     };
 
     //Payment confrimation
@@ -183,7 +230,43 @@ export const Payment = ({
                     onPress={paymentRequest}>
                     <Text>Pay Now</Text>
                 </Button>
-                {creditAllowed == 1 ? (
+                {creditAllowed == 1 && navigation.getParam('approval_status') === "Rejected" && navigation.getParam('approval_status') === "Draft" ? (
+                    <Button block info style={globalStyles.mb10} onPress={getApprovalDoc}>
+                        <Text>Upload Approval Documents</Text>
+                    </Button>) : (<Text></Text>)}
+
+                {approvalDoc.length === 0 ? null : (
+                    <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                        <Text style={{ alignSelf: 'center', color: 'red' }}>
+                            Swipe to review all images
+              </Text>
+                        <DeckSwiper
+                            dataSource={approvalDocmage}
+                            renderItem={image => (
+                                <Card style={{ elevation: 3 }}>
+                                    <CardItem cardBody>
+                                        <Image
+                                            source={{
+                                                uri: image.path,
+                                            }}
+                                            style={{ height: 250, width: '100%' }}
+                                        />
+                                    </CardItem>
+                                    <CardItem>
+                                        <Button transparent small onPress={val => removeAttachment(val)}>
+                                            <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                                        </Button>
+                                        <Text>
+                                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                                        </Text>
+                                    </CardItem>
+                                </Card>
+                            )}
+                        />
+                    </View>
+                )}
+
+                {creditAllowed == 1 && navigation.getParam('approval_status') === "Rejected" && navigation.getParam('approval_status') === "Draft" ? (
                     <Button
                         block
                         success
@@ -222,7 +305,8 @@ const mapDispatchToProps = {
     getImages,
     setLoading,
     submitMakePayment,
-    submitCreditPayment
+    submitCreditPayment,
+    showToast
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Payment);

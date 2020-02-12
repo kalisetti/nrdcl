@@ -43,7 +43,7 @@ export const OrderDetail = ({
         try {
             const response = await callAxios(`resource/Customer Order/${id}`);
             setOrder(response.data.data);
-
+            console.log(response.data.data)
             setLoading(false);
         } catch (error) {
             handleError(error);
@@ -54,7 +54,8 @@ export const OrderDetail = ({
             {
                 orderNumber: navigation.state.params.id,
                 site_type: order.site_type,
-                totalPayableAmount: order.total_balance_amount
+                totalPayableAmount: order.total_balance_amount,
+                docstatus: order.approval_status
             })
     };
     return commonState.isLoading ? (
@@ -169,7 +170,7 @@ export const OrderDetail = ({
                     iconLeft
                     style={globalStyle.mb10}
                     onPress={proceedPayment}>
-                    <Text>Proceed Payment</Text>
+                    <Text>Proceed for Payment</Text>
                 </Button>
             ) : (
                     <Text></Text>

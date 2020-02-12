@@ -10,7 +10,7 @@ import {
     View,
     Button,
     Textarea,
-    Span
+    Item,
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import globalStyle from '../../../../styles/globalStyle';
@@ -47,6 +47,7 @@ export const OrderDetail = ({
         try {
             const response = await callAxios(`resource/Delivery Confirmation/${id}`);
             setDeliver(response.data.data);
+
             setLoading(false);
         } catch (error) {
             handleError(error);
@@ -73,36 +74,47 @@ export const OrderDetail = ({
                     bordered
                     style={globalStyle.tableHeader}>
                     <Body>
-                        <Text style={globalStyle.label}>Please confirm us delivery</Text>
+                        <Text style={globalStyle.label}>Delivery Status</Text>
                     </Body>
                 </CardItem>
                 <CardItem>
                     <View>
-                        <Text>Delivery Note  : {deliver.delivery_note}</Text>
-                        <Text>Delivery Status  : {deliver.confirmation_status}</Text>
+                        <Text>Delivery Note No  : {deliver.delivery_note}</Text>
+                        <Text>Status  : {deliver.confirmation_status}</Text>
                         <Text>Branch  : {deliver.branch} </Text>
                         <Text>Vehicle No : {deliver.vehicle}</Text>
                         <Text>Driver Name  : {deliver.drivers_name}</Text>
                         <Text>Driver Mobile No  : {deliver.contact_no}</Text>
-                        <Text>Exit Time  :  {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mm:ss')}</Text>
-                        <Text>Received Time  : {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mm:ss')}</Text>
+                        <Text>Delivery Note Generated :  {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mma')}</Text>
+                        <Text>Receive Time  : {deliver.received_date_time == undefined ? '' :
+                            Moment(deliver.received_date_time).format('d MMM YYYY, hh:mma')}</Text>
+                        <Text />
+                        {deliver.confirmation_status === 'In Transit' ? (
+                            <Text style={{ color: 'gray', fontWeight: 'bold', fontSize: 16 }}>
+                                Note* Please contact above driver for detail.</Text>) : (
+                                <Text></Text>
+                            )}
                     </View>
-
                 </CardItem>
                 {deliver.confirmation_status === 'In Transit' ? (
-                <Textarea
-                    rowSpan={2}
-                    width="100%"
-                    bordered
-                    placeholder="Please enter remakrs if any"
-                    value={remarks}
-                    onChangeText={val => setremarks(val)}
-                    style={globalStyle.mb10}
-                /> ):(
-                    <Text></Text>
-                )}
-
-                 {deliver.confirmation_status === 'In Transit' ? (
+                    <Textarea
+                        rowSpan={2}
+                        width="100%"
+                        bordered
+                        placeholder="  Remarks"
+                        value={remarks}
+                        onChangeText={val => setremarks(val)}
+                        style={globalStyle.mb10}
+                    />
+                ) : (
+                        <Text></Text>
+                    )}
+                {deliver.confirmation_status === 'In Transit' ? (
+                    <Text style={{ color: 'gray' }}>  Please click bellow button to acknowledge the receipt.</Text>
+                ) : (
+                        <Text></Text>
+                    )}
+                {deliver.confirmation_status === 'In Transit' ? (
                     <Button
                         block
                         success
@@ -110,13 +122,11 @@ export const OrderDetail = ({
                         style={globalStyle.mb10}
                         onPress={confirmDelivery}
                     >
-                        <Text>Recived</Text>
+                        <Text>Acknowledge Receipt</Text>
                     </Button>
                 ) : (
                         <Text></Text>
                     )}
-
-
             </Card>
         </Content>
     </Container>

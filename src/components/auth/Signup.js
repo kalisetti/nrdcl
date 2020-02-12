@@ -16,6 +16,7 @@ import {
 } from 'native-base';
 
 import globalStyles from '../../styles/globalStyle';
+import { showToast } from '../../redux/actions/commonActions';
 
 import { startPin, startRegister } from '../../redux/actions/userActions';
 
@@ -25,6 +26,7 @@ export const Signup = ({
   navigation,
   startPin,
   startRegister,
+  showToast
 }) => {
   useEffect(() => {
     if (userState.logged_in) {
@@ -51,30 +53,30 @@ export const Signup = ({
     startRegister(fullname, loginid, mobileno, alternate_mobile_no, email, pin);
   };
 
-  const requestPIN = () => {
+  const requestPIN = async () => {
     // Full name mandatory validation
     if ((fullname.trim() == '') || (fullname == undefined)) {
-      setFullNameReqMsg('Full name is mandatory');
+      showToast('Full name is mandatory');
     }
 
     // Full name length validation
     else if (fullname.length < 3) {
-      setFullNameLenMsg('Full Name should have more than three characters');
+      showToast('Full Name should have more than three characters');
     }
 
     // CID mandatory validation
     else if ((loginid.trim() == '') || (loginid == undefined)) {
-      setCidReqMsg('CID is mandatory');
+      showToast('CID is mandatory');
     }
 
     //Mobile number primary mandatory validation
     else if ((mobileno.trim() == '') || (mobileno == undefined)) {
-      setMobilePriReqMsg('Mobile number is mandatory');
+      showToast('Mobile number is mandatory');
     }
 
     // //Mobile number primary length validation
     else if ((mobileno.trim().length < 8) || (mobileno.trim().length > 8)) {
-      setMobilePriReqMsg('Mobile number should have eight digits');
+      showToast('Mobile number should have eight digits');
     }
     // //Mobile number primary BMobile and Tcell validation
     //  else if ((mobileno.substring(0, 2)!=='17')  {
@@ -83,11 +85,15 @@ export const Signup = ({
     // Mobile number alternative length validation
     else if ((alternate_mobile_no.trim() !== '') && ((alternate_mobile_no.trim().length < 8)
       || (alternate_mobile_no.trim().length > 8))) {
-      setMobileAltLenMsg('Alternate mobile number should have eight digits');
+      showToast('Alternate mobile number should have eight digits');
     }
     else {
-      startPin(fullname, loginid, mobileno, alternate_mobile_no);
-      setshowDialog(true);
+      // const frontPageImage = await getImages('Front');
+      const res = await startPin(fullname, loginid, mobileno, alternate_mobile_no);
+      if (res.status == 200) {
+        setshowDialog(true);
+      };
+
     }
   };
 
@@ -234,4 +240,4 @@ const mapStateToProps = state => ({
   commonState: state.commonState,
 });
 
-export default connect(mapStateToProps, { startPin, startRegister })(Signup);
+export default connect(mapStateToProps, { startPin, startRegister, showToast })(Signup);

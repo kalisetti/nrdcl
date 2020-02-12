@@ -153,22 +153,22 @@ export const startPin = (
       full_name: fullname,
       login_id: loginid,
       mobile_no: mobileno,
-      alternate_mobile_no:alternate_mobile_no,
+      alternate_mobile_no: alternate_mobile_no,
       request_type,
     };
 
     try {
       //validate first
-
       await pinSchema.validate(params);
-
       dispatch(setLoading(true));
-      await callAxios(
+      const res = await callAxios(
         'method/frappe.core.doctype.user.user.send_pin',
         'post',
         params,
       );
       dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
+      // dispatch(setLoading(false));
+      return res;
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -201,14 +201,14 @@ export const startResetPin = (loginid, mobileno) => {
 };
 
 //crm_sign_up(full_name, login_id, mobile_no, email, pin)
-export const startRegister = (fullname, loginid, mobileno,alternate_mobile_no, email, pin) => {
+export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, email, pin) => {
   return async dispatch => {
     //validate user details
     const params = {
       full_name: fullname,
       login_id: loginid,
       mobile_no: mobileno,
-      alternate_mobile_no:alternate_mobile_no,
+      alternate_mobile_no: alternate_mobile_no,
       email,
       pin,
     };
@@ -250,10 +250,10 @@ export const startProfileSubmission = (userRequest, frontImage = [],
         await attachFile(doctype, docname, image);
       });
 
-      backImage.map(async image => {
-        await attachFile(doctype, docname, image);
-      }); 
-      
+      // backImage.map(async image => {
+      //   await attachFile(doctype, docname, image);
+      // }); 
+
       // const front = await attachFile(
       //   doctype,
       //   docname,
