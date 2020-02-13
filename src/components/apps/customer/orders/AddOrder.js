@@ -214,11 +214,11 @@ export const AddOrder = ({
           },
         );
         setItemDetail(all_its.data.message[0]);
-        if (all_its.data.message[0].has_common_pool == 1) {
-          setRegionModal(true);
-        } else {
-          setRegionModal(false);
-        }
+        // if (all_its.data.message[0].has_common_pool == 1) {
+        //   setRegionModal(true);
+        // } else {
+        //   setRegionModal(false);
+        // }
         setLoading(false);
       } catch (error) {
         handleError(error);
@@ -236,6 +236,7 @@ export const AddOrder = ({
         'method/erpnext.crm_utils.get_branch_location',
         'post',
         {
+          site,
           item,
         },
       );
@@ -261,6 +262,7 @@ export const AddOrder = ({
           'method/erpnext.crm_utils.get_branch_location',
           'post',
           {
+            site,
             branch,
             item,
           },
@@ -268,7 +270,6 @@ export const AddOrder = ({
         const locationList = res.data.message.filter(
           (data) => data.location != null
         );
-        // console.log(res.data.message)
         setAllLocation(locationList);
         if (locationList.length === 0) {
           setLocationItemRate(res.data.message[0].item_rate);
@@ -293,6 +294,7 @@ export const AddOrder = ({
             'method/erpnext.crm_utils.get_branch_location',
             'post',
             {
+              site,
               branch,
               item,
               location: branchWiseLocation
@@ -509,7 +511,7 @@ export const AddOrder = ({
                     getOtherBranchInfo(val),
                     setBranchWiseLocation(undefined)
                 }}>
-                <Picker.Item label={'Select Branch'} value={undefined} key={-1} />
+                <Picker.Item label={'Select Material Source'} value={undefined} key={-1} />
                 {all_branches &&
                   all_branches.map((pur, idx) => {
                     return (
@@ -561,11 +563,16 @@ export const AddOrder = ({
                         <Row key={idx} style={globalStyles.rowContainer}>
                           <Col size={2} style={globalStyles.colContainer}
                             onPress={() => {
-                              setBranch(item.branch), setRegionModal(false)
+                              setBranch(item.branch), setRegionModal(false),
+                              setBranchWiseLocation(item.location)
                             }} >
                             <Text>{item.branch}</Text>
                           </Col>
-                          <Col size={1.5} style={globalStyles.colContainer}>
+                          <Col size={1.5} style={globalStyles.colContainer}
+                          onPress={() => {
+                            setBranch(item.branch), setRegionModal(false),
+                            setBranchWiseLocation(item.location)
+                          }}>
                             <Text>{item.location}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
@@ -603,12 +610,12 @@ export const AddOrder = ({
                     ></Icon>
                     Will take approximately {itemDetail.lead_time} working days to deliver
                     at the rate of Nu.
-                  {locationItemRate}/{itemDetail.stock_uom}{'. '}
-                    {' '} Click {' '}
+                  {locationItemRate}/{itemDetail.stock_uom}{'. \n'}
+                    Click {' '}
                     <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
                       here
                        </Text>
-                    {' '} to see other branch information
+                    {' '} to see information on sand available from other areas.
                   </Text>
                 ) : (
                     <Text style={{ color: 'gray' }}>
@@ -617,11 +624,7 @@ export const AddOrder = ({
                         style={globalStyles.smallIcon}
                       ></Icon>
                       Will take approximately {itemDetail.lead_time} working days to deliver.
-                    {' '} Click {' '}
-                      <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
-                        here
-                       </Text>
-                      {' '} to see other branch information
+                    {' '} 
                     </Text>
                   )}
 

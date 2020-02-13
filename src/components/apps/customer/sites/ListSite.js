@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -18,8 +18,8 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
 
 export const ListSite = ({
   userState,
@@ -42,21 +42,21 @@ export const ListSite = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
           header
           bordered
           button
-          onPress={() => navigation.navigate('SiteDetail', {id: item.name})}
+          onPress={() => navigation.navigate('SiteDetail', { id: item.name })}
           style={globalStyles.tableHeader}>
           <Body>
             {item.enabled ? (
-              <Text style={{color: 'blue'}}>{item.name}</Text>
+              <Text style={{ color: 'blue' }}>{item.name}</Text>
             ) : (
-              <Text style={{color: 'red'}}>{item.name}</Text>
-            )}
+                <Text style={{ color: 'red' }}>{item.name}</Text>
+              )}
           </Body>
 
           <Right>
@@ -75,12 +75,7 @@ export const ListSite = ({
 
   const getActiveSites = async () => {
     const params = {
-      fields: JSON.stringify([
-        'name',
-        'location',
-        'construction_type',
-        'enabled',
-      ]),
+      fields: JSON.stringify(['name', 'location', 'construction_type', 'enabled']),
       filters: JSON.stringify([['user', '=', userState.login_id]]),
     };
 
@@ -90,6 +85,7 @@ export const ListSite = ({
         'GET',
         params,
       );
+      console.log(response.data.data)
       setsites(response.data.data);
       setLoading(false);
     } catch (error) {
@@ -100,26 +96,26 @@ export const ListSite = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.listContent}>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {sites.length > 0 ? (
-        <FlatList
-          data={sites}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
+      <Container style={globalStyles.listContent}>
+        <NavigationEvents
+          onWillFocus={_ => {
+            setReload(1);
+          }}
+          onWillBlur={_ => {
+            setReload(0);
+          }}
         />
-      ) : (
-        <Text style={globalStyles.emptyString}>No approved sites yet</Text>
-      )}
-    </Container>
-  );
+        {sites.length > 0 ? (
+          <FlatList
+            data={sites}
+            renderItem={renderItem}
+            keyExtractor={item => item.name}
+          />
+        ) : (
+            <Text style={globalStyles.emptyString}>No approved sites yet</Text>
+          )}
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

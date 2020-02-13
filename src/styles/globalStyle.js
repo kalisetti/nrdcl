@@ -1,4 +1,4 @@
-import {StyleSheet, Dimensions} from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 import Config from 'react-native-config';
 import { Right } from 'native-base';
 
@@ -28,12 +28,12 @@ export default StyleSheet.create({
   mb10: {
     borderRadius: 25,
     marginBottom: 10,
-    paddingLeft:5
+    paddingLeft: 5
   },
   mb11: {
     borderRadius: 4,
     marginBottom: 10,
-    paddingLeft:5
+    paddingLeft: 5
   },
 
   bottom: {
@@ -53,7 +53,7 @@ export default StyleSheet.create({
   iconTextFooter: {
     fontWeight: 'bold',
     color: Config.ICON_COLOR,
-    fontSize:9
+    fontSize: 9
   },
 
   mb50: {
@@ -84,7 +84,7 @@ export default StyleSheet.create({
   },
 
   tableHeader: {
-    backgroundColor: Config.TABLE_HEADER_COLOR,
+    backgroundColor: Config.APP_HEADER_COLOR,
   },
 
   homeIcon: {
@@ -100,7 +100,7 @@ export default StyleSheet.create({
   smallIcon: {
     color: Config.APP_HEADER_COLOR,
     fontSize: 20,
-    paddingRight:10
+    paddingRight: 10
   },
 
   homeIconText: {
@@ -108,16 +108,16 @@ export default StyleSheet.create({
     color: Config.APP_HEADER_COLOR,
   },
 
-  siteCol: {borderRightWidth: 0.2, borderColor: 'white'},
+  siteCol: { borderRightWidth: 0.2, borderColor: 'white' },
 
   siteItem: {
     fontSize: 13,
-    paddingLeft:5
+    paddingLeft: 5
   },
 
-  emptyString: {alignSelf: 'center', color: 'red', fontSize: 25},
+  emptyString: { alignSelf: 'center', color: 'red', fontSize: 25 },
 
-  center: {alignSelf: 'center'},
+  center: { alignSelf: 'center' },
 
   labelContainer: {
     marginBottom: 10,
@@ -128,8 +128,8 @@ export default StyleSheet.create({
     // color:'white'
     // fontStyle: 'italic',
   },
-  
-  lb:{
+
+  lb: {
     fontWeight: 'bold',
   },
 
@@ -140,7 +140,7 @@ export default StyleSheet.create({
   },
 
   materialContainer: {
-    marginBottom: 10, 
+    marginBottom: 10,
   },
 
   tableHeaderContainer: {
@@ -154,7 +154,7 @@ export default StyleSheet.create({
 
   colContainer: {
     borderRightWidth: 0.5,
-    paddingLeft:3
+    paddingLeft: 3
   },
 
   modal: {
@@ -178,13 +178,13 @@ export default StyleSheet.create({
   //   color: 'white',
   // },
 
-  itemButton: {width: '45%', justifyContent: 'center'},
-  button: {justifyContent: 'center'},
-  moneyFormat:{
-    marginRight:-50
+  itemButton: { width: '45%', justifyContent: 'center' },
+  button: { justifyContent: 'center' },
+  moneyFormat: {
+    marginRight: -50
   },
 
-  fieldSet:{
+  fieldSet: {
     margin: 10,
     paddingBottom: 10,
     paddingTop: 15,
@@ -192,34 +192,35 @@ export default StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     borderColor: 'grey'
-},
-legend:{
+  },
+  legend: {
     position: 'absolute',
     top: -10,
     left: 10,
-    color:'grey',
+    color: 'grey',
     fontWeight: 'bold',
     backgroundColor: '#FFFFFF'
-},
-dialogueInput: {
-  borderRadius: 4,
-  borderWidth: 0.5,
-  borderColor: 'grey',
-  padding:5
-},
+  },
+  dialogueInput: {
+    borderRadius: 4,
+    borderWidth: 0.5,
+    borderColor: 'grey',
+    padding: 5
+  },
 
-errorMsg: {
-  fontStyle: 'italic',
-  color:'red',
-  paddingLeft:10
-},
+  errorMsg: {
+    fontStyle: 'italic',
+    color: 'red',
+    paddingLeft: 10
+  },
 
-italicFont: {
-  fontStyle: 'italic',
-},
+  italicFont: {
+    fontStyle: 'italic',
+  },
 
-tapRegion: { 
-  paddingTop: 7,
-}
+  tapRegion: {
+    paddingTop: 7,
+    color: Config.APP_HEADER_COLOR,
+  }
 
 });

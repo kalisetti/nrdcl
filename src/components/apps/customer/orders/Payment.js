@@ -168,8 +168,6 @@ export const Payment = ({
             };
             submitCreditPayment(creditPaymentInfo, approvalDocmage);
         }
-
-
     };
 
     //Payment confrimation
@@ -180,7 +178,16 @@ export const Payment = ({
             'customer_order': navigation.getParam('orderNumber'),
             'otp': otp,
         };
-        submitMakePayment(data);
+        const res = await submitMakePayment(data);
+        console.log(res)
+        setLoading(false);
+        if (res.status == 200) {
+            navigation.navigate('SuccessMsg', {
+                transaction_id: res.transaction_id,
+                transaction_time: res.transaction_time,
+                amount: res.amount
+            })
+        }
     };
 
     return commonState.isLoading ? (
@@ -189,7 +196,6 @@ export const Payment = ({
         <Content style={globalStyles.content}>
             <Form>
                 <Item>
-
                     <Text style={globalStyles.label}>Your Order Number is :</Text>
                     <Input style={globalStyles.label} disabled
                         value={JSON.stringify(navigation.getParam('orderNumber'))}
@@ -284,6 +290,7 @@ export const Payment = ({
                         <Dialog.Input placeholder='Please enter your OTP'
                             wrapperStyle={globalStyles.dialogueInput}
                             onChangeText={val => setOTP(val)}
+                            keyboardType='number-pad'
                         ></Dialog.Input>
                         <Dialog.Button label="Cancel" color="red" onPress={() => setshowDialog(false)} />
                         <Dialog.Button label="Make Payment" onPress={makePayment} />

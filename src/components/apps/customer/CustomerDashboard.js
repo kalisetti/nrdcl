@@ -59,7 +59,7 @@ export const CustomerDashboard = ({ userState, navigation }) => {
                 type="MaterialIcons"
                 style={globalStyle.homeIcon}
                 onPress={() => navigation.navigate('OrderDashboard')}
-                // onPress={() => navigation.navigate('Payment')}
+              // onPress={() => navigation.navigate('Payment')}
               />
               <Text style={globalStyle.homeIconText}>Manage Orders</Text>
             </Button>

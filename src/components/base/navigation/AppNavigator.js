@@ -1,7 +1,9 @@
 import React, { Fragment } from 'react';
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-
+import {
+  Text,
+} from 'native-base';
 import Config from 'react-native-config';
 
 //Header functions
@@ -52,7 +54,9 @@ import Payment from '../../apps/customer/orders/Payment';
 import OrderDetail from '../../apps/customer/orders/OrderDetail';
 import DeliveryList from '../../apps/customer/Delivery/DeliveryList';
 import DeliveryDetail from '../../apps/customer/Delivery/DeliveryDetail';
-import DeliverySummary from '../../apps/customer/Delivery/DeliverySummary'
+import DeliverySummary from '../../apps/customer/Delivery/DeliverySummary';
+import SuccessMsg from '../../apps/customer/orders/SuccessMsg';
+
 
 //Transporter Screens
 import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
@@ -63,7 +67,9 @@ import TransportDetail from '../../apps/transporter/transport/TransportDetail';
 import TransportDriverUpdate from '../../apps/transporter/transport/TransportDriverUpdate';
 
 const AppNavigator = createStackNavigator(
+
   {
+
     UserDetail: {
       screen: UserDetail,
       navigationOptions: {
@@ -252,6 +258,12 @@ const AppNavigator = createStackNavigator(
         title: 'Settings',
       },
     },
+    SuccessMsg: {
+      screen: SuccessMsg,
+      navigationOptions: {
+        title: 'Transaction Details',
+      },
+    },
   },
   {
     initialRouteName: 'UserDetail',
@@ -261,12 +273,18 @@ const AppNavigator = createStackNavigator(
       headerStyle: {
         backgroundColor: Config.APP_HEADER_COLOR,
       },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerTintColor: '#fff',
+
       headerRight: (
         <Fragment>
           <Call />
           <Logout />
         </Fragment>
       ),
+
     },
   },
 );
@@ -286,6 +304,10 @@ const AuthNavigator = createStackNavigator(
       headerStyle: {
         backgroundColor: Config.APP_HEADER_COLOR,
       },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerTintColor: '#fff',
       headerRight: <Call />,
     },
   },
@@ -307,6 +329,10 @@ const InfoNavigator = createStackNavigator(
       headerStyle: {
         backgroundColor: Config.APP_HEADER_COLOR,
       },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerTintColor: '#fff',
       headerRight: (
         <Fragment>
           <Call />

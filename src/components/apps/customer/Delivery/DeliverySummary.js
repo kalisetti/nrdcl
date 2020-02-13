@@ -81,7 +81,7 @@ export const DeliverySummary = ({
                         <Col size={1} style={globalStyle.colContainer}>
                             <Text style={{fontSize:14}}>Qty(M3)</Text>
                         </Col>
-                        <Col size={1.5} style={globalStyle.colContainer}>
+                        <Col size={1.2} style={globalStyle.colContainer}>
                             <Text style={{fontSize:14}}>Status</Text>
                         </Col>
                     </Row>
@@ -96,7 +96,7 @@ export const DeliverySummary = ({
                             <Col size={1} style={globalStyle.colContainer}>
                                 <Text style={{fontSize:14}}>{deliver.qty}</Text>
                             </Col>
-                            <Col size={1.5} style={globalStyle.colContainer}>
+                            <Col size={1.2} style={globalStyle.colContainer}>
                                 <Text style={{fontSize:14}}>{deliver.confirmation_status}</Text>
                             </Col>
                         </Row>

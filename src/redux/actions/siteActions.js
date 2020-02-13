@@ -108,7 +108,7 @@ export const submitCreditPayment = (data, approvalDocmage = []) => {
         {},
         data
       );
-  
+
       const docname = res.data.data.name;
       const doctype = res.data.data.doctype;
       approvalDocmage.map(async image => {
@@ -129,7 +129,7 @@ export const submitCreditPayment = (data, approvalDocmage = []) => {
 //Payment confrimation from remitter 
 export const submitMakePayment = (data) => {
   return async dispatch => {
-    dispatch(setLoading(true));
+    // dispatch(setLoading(true));
     try {
       // await siteSchema.validate(site_info);
       const res = await callAxios(
@@ -137,13 +137,14 @@ export const submitMakePayment = (data) => {
         'post',
         data,
       );
-      if (res.status == 200) {
-        dispatch(setLoading(false));
-        dispatch(showToast('Your order was placed successfully.', 'success'));
-        NavigationService.navigate('OrderDashboard');
-      }
+      // if (res.status == 200) {
+      //   dispatch(setLoading(false));
+      //   dispatch(showToast('Your order was placed successfully.', 'success'));
+      //   NavigationService.navigate('OrderDashboard');
+      // }
+      return res;
     } catch (error) {
-      console.log(error)
+      // console.log("error log", error)
       dispatch(handleError(error));
     }
   };

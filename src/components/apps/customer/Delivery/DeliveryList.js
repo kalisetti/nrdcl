@@ -58,7 +58,7 @@ export const DeliveryList = ({
                         {item.docstatus === 0 ? (
                             <Text style={{ color: 'red' }}>{item.delivery_note}</Text>
                         ) : (
-                                <Text style={globalStyles.label}>{item.delivery_note}</Text>
+                                <Text style={{ color: 'white' }}>{item.delivery_note}</Text>
                             )}
                     </Body>
 

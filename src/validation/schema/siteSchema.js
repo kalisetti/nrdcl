@@ -33,7 +33,7 @@ export const siteSchema = yup.object().shape({
     .required('End Date is mandatory'),
   construction_start_date: yup.date()
     .typeError('Start Date is mandatory')
-    .required('Start Date is mandatory'), 
+    .required('Start Date is mandatory'),
   approval_no: yup
     .string()
     .trim()
@@ -42,10 +42,6 @@ export const siteSchema = yup.object().shape({
     .string()
     .trim()
     .required('Construction Type is mandatory'),
-  purpose: yup
-    .string()
-    .trim()
-    .required('Purpose is mandatory'),
 });
 
 //Object for Site Item
@@ -190,7 +186,7 @@ export const driverInfoSchema = yup.object().shape({
     .string()
     .trim()
     .required('Driver Name is mandatory'),
-    driver_contact_no: yup
+  driver_contact_no: yup
     .string()
     .trim()
     .required('Driver Contact No is mandatory'),
@@ -221,7 +217,7 @@ export const driverInfoSchemaSelf = yup.object().shape({
     .string()
     .trim()
     .required('Driver Name is mandatory'),
-    driver_mobile_no: yup
+  driver_mobile_no: yup
     .string()
     .trim()
     .required('Driver Contact No is mandatory'),
