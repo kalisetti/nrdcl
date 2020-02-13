@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {connect} from 'react-redux';
 import {StyleSheet} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
+import {NavigationEvents} from 'react-navigation';
 import {
   Container,
   Text,
@@ -28,6 +29,7 @@ const Login = ({
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [reload, setReload] = useState(0);
 
   useEffect(() => {
     if (userState.logged_in) {
@@ -35,7 +37,7 @@ const Login = ({
     } else {
       fetchUsername();
     }
-  }, []);
+  }, [reload]);
 
   //Fill preverious filled username by default
   const fetchUsername = async () => {
@@ -58,6 +60,14 @@ const Login = ({
     </Container>
   ) : (
     <Container>
+      <NavigationEvents
+        onWillFocus={_ => {
+          setReload(1);
+        }}
+        onWillBlur={_ => {
+          setReload(0);
+        }}
+      />
       <Content style={styles.content}>
         <Logo />
         <Form>
@@ -68,7 +78,7 @@ const Login = ({
               onChangeText={usr => setUsername(usr)}
               placeholder="CID Number"
               keyboardType={'numeric'}
-            /> 
+            />
           </Item>
 
           <Item regular style={globalStyles.mb10}>
@@ -115,8 +125,6 @@ const Login = ({
             Reset PIN
           </Text>
         </Form>
-
-        
       </Content>
     </Container>
   );
