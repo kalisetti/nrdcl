@@ -368,7 +368,6 @@ export const startVehicleDeregistration = vehicle => {
         'post',
         vehicle,
       );
-
       dispatch(setLoading(false));
       NavigationService.navigate('ListVehicle');
       dispatch(showToast('Successfully deregistered vehicle', 'success'));

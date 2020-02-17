@@ -86,7 +86,7 @@ export const ListVehicle = ({
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
         ['self_arranged', '=', 1],
-        // ['vehicle_status', '!=', 'Deregistered'],
+        ['approval_status', '!=', 'Deregistered'],
       ]),
     };
 

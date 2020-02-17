@@ -81,7 +81,10 @@ export const TransportDetail = ({
             }}
             onConfirmPressed={() => {
               toggleAlert();
-              startTransportDeregister({vehicle: vehicle.name});
+              startTransportDeregister({
+                user: userState.login_id,
+                vehicle: vehicle.vehicle_no,
+              });
             }}
           />
         </View>

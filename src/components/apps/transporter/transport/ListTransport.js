@@ -53,7 +53,7 @@ export const ListTransport = ({
             navigation.navigate('TransportDetail', { id: item.name });
           }}
           style={globalStyles.tableHeader}>
-            
+
           <Body>
             {item.approval_status === 'Pending' ? (
               <Text style={{ color: 'red' }}>{item.vehicle_no}</Text>
@@ -88,11 +88,11 @@ export const ListTransport = ({
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
-        ['common_pool', '=', 1]
-        // ['vehicle_status', '!=', 'Deregistered'],
+        ['common_pool', '=', 1],
+        ['approval_status', '!=', 'Deregistered'],
       ]),
     };
-    
+
     try {
       const response = await callAxios(
         'resource/Transport Request?order_by=creation%20desc,approval_status%20asc',
