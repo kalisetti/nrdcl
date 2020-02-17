@@ -148,7 +148,7 @@ export const AddOrder = ({
         ]),
       };
 
-      const all_st = await callAxios('resource/Site', 'get', params);
+      const all_st = await callAxios('resource/Site', 'get', params);      
       setall_sites(all_st.data.data);
       setLoading(false);
     } catch (error) {
@@ -267,12 +267,15 @@ export const AddOrder = ({
             item,
           },
         );
-        const locationList = res.data.message.filter(
-          (data) => data.location != null
-        );
-        setAllLocation(locationList);
-        if (locationList.length === 0) {
-          setLocationItemRate(res.data.message[0].item_rate);
+
+        if (res.data.message !== undefined) {
+          const locationList = res.data.message.filter(
+            (data) => data.location != null
+          );
+          setAllLocation(locationList);
+          if (locationList.length === 0) {
+            setLocationItemRate(res.data.message[0].item_rate);
+          }
         }
         setLoading(false);
       } catch (error) {
@@ -486,7 +489,7 @@ export const AddOrder = ({
               <Picker
                 mode="dropdown"
                 selectedValue={item}
-                onValueChange={val => setItem(val)} 
+                onValueChange={val => setItem(val)}
               >
                 <Picker.Item label={'Select Item'} value={undefined} key={-1} />
                 {all_items &&
@@ -564,15 +567,15 @@ export const AddOrder = ({
                           <Col size={2} style={globalStyles.colContainer}
                             onPress={() => {
                               setBranch(item.branch), setRegionModal(false),
-                              setBranchWiseLocation(item.location)
+                                setBranchWiseLocation(item.location)
                             }} >
                             <Text>{item.branch}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}
-                          onPress={() => {
-                            setBranch(item.branch), setRegionModal(false),
-                            setBranchWiseLocation(item.location)
-                          }}>
+                            onPress={() => {
+                              setBranch(item.branch), setRegionModal(false),
+                                setBranchWiseLocation(item.location)
+                            }}>
                             <Text>{item.location}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
@@ -624,7 +627,7 @@ export const AddOrder = ({
                         style={globalStyles.smallIcon}
                       ></Icon>
                       Will take approximately {itemDetail.lead_time} working days to deliver.
-                    {' '} 
+                    {' '}
                     </Text>
                   )}
 
