@@ -88,7 +88,7 @@ export const submitSalesOrder = (data, allLocation, totalPayableAmount, ) => {
               orderNumber: res.data.data.name,
               site_type: res.data.data.site_type,
               totalPayableAmount: totalPayableAmount,
-              approval_status: 'Pending'//This is passed to hide and show the paylater button and attachment at payment screen for special project.
+              approval_status: ''//This is passed to hide and show the paylater button and attachment at payment screen for special project.
             })
         }
       }
@@ -382,7 +382,6 @@ export const startVehicleDeregistration = vehicle => {
  */
 export const confirmRecived = (data) => {
   return async dispatch => {
-    // alert(delivery_note)
     dispatch(setLoading(true));
     try {
       const res = await callAxios(

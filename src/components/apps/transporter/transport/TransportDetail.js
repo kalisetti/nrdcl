@@ -106,7 +106,7 @@ export const TransportDetail = ({
                   navigation.navigate('UpdateDriver', {
                     id: vehicle.vehicle_no,
                     driver_name: vehicle.drivers_name,
-                    driver_contact_no: vehicle.contact_no,
+                    driver_mobile_no: vehicle.contact_no,
                   })
                 }>
                 <Icon

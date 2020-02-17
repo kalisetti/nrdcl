@@ -195,7 +195,7 @@ export const Payment = ({
                 <Item>
                     <Text style={globalStyles.label}>Your Order Number is :</Text>
                     <Input style={globalStyles.label} disabled
-                        value={JSON.stringify(navigation.getParam('orderNumber'))}
+                        value={navigation.getParam('orderNumber')}
                         onChangeText={val => setorder_no(val)}
                     />
                 </Item>
@@ -233,7 +233,7 @@ export const Payment = ({
                     onPress={paymentRequest}>
                     <Text>Pay Now</Text>
                 </Button>
-                {(creditAllowed == 1 && navigation.getParam('approval_status') === 'Pending') || ((creditAllowed == 1 && navigation.getParam('approval_status') === 'Rejected')) ? (
+                {(creditAllowed == 1 && navigation.getParam('approval_status') === '') || ((creditAllowed == 1 && navigation.getParam('approval_status') === 'Rejected')) ? (
                     <Button block info style={globalStyles.mb10} onPress={getApprovalDoc}>
                         <Text>Upload Approval Documents</Text>
                     </Button>) : (<Text></Text>)}
@@ -268,7 +268,7 @@ export const Payment = ({
                         />
                     </View>
                 )}
-                {(creditAllowed == 1 && navigation.getParam('approval_status') === 'Pending') || ((creditAllowed == 1 && navigation.getParam('approval_status') === 'Rejected')) ? (
+                {(creditAllowed == 1 && navigation.getParam('approval_status') === '') || ((creditAllowed == 1 && navigation.getParam('approval_status') === 'Rejected')) ? (
                     <Button
                         block
                         success

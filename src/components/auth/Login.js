@@ -109,7 +109,7 @@ const Login = ({
               onPress={() =>
                 navigation.navigate('PinRecover', { title: 'Recover Pin' })
               }
-              style={{ textDecorationLine: 'underline',color:'blue' }}>
+              style={{ textDecorationLine: 'underline',color:'#1E90FF' }}>
               Reset PIN
           </Text>
           </Form>

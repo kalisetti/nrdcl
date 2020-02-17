@@ -28,6 +28,7 @@ export const OrderDetail = ({
 }) => {
     const [order, setOrder] = useState({});
 
+
     useEffect(() => {
         if (!userState.logged_in) {
             navigation.navigate('Auth');
@@ -69,7 +70,7 @@ export const OrderDetail = ({
                     orderNumber: navigation.state.params.id,
                     site_type: order.site_type,
                     totalPayableAmount: order.total_balance_amount,
-                    approval_status: response.data.data[0].approval_status
+                    approval_status: response.data.data.length > 0 ? response.data.data[0].approval_status : '',//empty string means payments fails for credit allowed site. This is required while show and hide pay later button.
                 })
         } catch (error) {
             handleError(error);
