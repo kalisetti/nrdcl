@@ -435,7 +435,7 @@ export const SiteDetail = ({
                       <Text>{currentItem.balance_quantity}</Text>
                     </Col>
                   </Row>
-                  {/* <Row style={globalStyle.labelContainer}>
+                  <Row style={globalStyle.labelContainer}>
                   <Col size={2}>
                     <Text style={globalStyle.lb}>Material Source</Text>
                   </Col>
@@ -450,7 +450,7 @@ export const SiteDetail = ({
                   <Col size={3}>
                     <Text>{currentItem.transport_mode}</Text>
                   </Col>
-                </Row> */}
+                </Row>
                   <Row style={globalStyle.labelContainer}>
                     <Col size={4}>
                       <Text style={globalStyle.lb}>Remarks</Text>
