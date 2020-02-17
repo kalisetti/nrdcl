@@ -18,13 +18,13 @@ export default () => {
             <Icon name="list" style={globalStyle.icon} />
             <Text style={globalStyle.iconTextFooter}>About</Text>
           </Button>
-          <Button vertical onPress={() => NavigationService.navigate('Help')}>
+          {/* <Button vertical onPress={() => NavigationService.navigate('Help')}>
             <Icon name="information-circle-outline" style={globalStyle.icon} />
             <Text style={globalStyle.iconTextFooter}>Help</Text>
-          </Button>
+          </Button> */}
           <Button vertical onPress={() => NavigationService.navigate('ContactUs')}>
             <Icon name="call" style={globalStyle.icon} />
-            <Text style={globalStyle.iconTextFooter}>Contact</Text>
+            <Text style={globalStyle.iconTextFooter}>Contact Us</Text>
           </Button>
           <Button vertical onPress={() => NavigationService.navigate('Faq')}>
           <Icon name="help-circle-outline" style={globalStyle.icon} /> 

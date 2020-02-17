@@ -78,6 +78,12 @@ export const AddOrder = ({
   const [locationItemRate, setLocationItemRate] = useState(undefined);
 
   const [otherBranchInfo, setOtherBranchInfo] = useState([]);
+
+  var commonPoolLabel = 'Common Pool';
+  var selfOwnedLabel = 'Self Owned Transport';
+  var othersLabel = 'Others';
+
+
   //For proper navigation/auth settings
   useEffect(() => {
     if (!userState.logged_in) {
@@ -213,12 +219,7 @@ export const AddOrder = ({
             'branch': branch,
           },
         );
-        setItemDetail(all_its.data.message[0]);
-        // if (all_its.data.message[0].has_common_pool == 1) {
-        //   setRegionModal(true);
-        // } else {
-        //   setRegionModal(false);
-        // }
+        setItemDetail(all_its.data.message[0]); 
         setLoading(false);
       } catch (error) {
         handleError(error);
@@ -267,7 +268,6 @@ export const AddOrder = ({
             item,
           },
         );
-
         if (res.data.message !== undefined) {
           const locationList = res.data.message.filter(
             (data) => data.location != null
@@ -317,7 +317,7 @@ export const AddOrder = ({
   };
 
   const getPrivateVehicles = async () => {
-    if (transport_mode === 'Self Owned Transport') {
+    if (transport_mode === selfOwnedLabel) {
       try {
         const all_its = await callAxios(
           'method/erpnext.crm_utils.get_vehicles',
@@ -339,7 +339,7 @@ export const AddOrder = ({
   };
 
   const getVehicleCapacity = async () => {
-    if (transport_mode === 'Common Pool' || transport_mode === 'Others') {
+    if (transport_mode === commonPoolLabel || transport_mode === othersLabel) {
       try {
         const all_st = await callAxios('resource/Vehicle Capacity');
         setall_vehicle_capacities(all_st.data.data);
@@ -383,10 +383,10 @@ export const AddOrder = ({
   };
 
   const addItemToList = () => {
-    if ((transport_mode == 'Common Pool' || transport_mode === 'Others') && (vehicle_capacities == undefined)) {
+    if ((transport_mode == commonPoolLabel|| transport_mode === othersLabel) && (vehicle_capacities == undefined)) {
       setVehicleCapacityErrorMsg('Vehicle capacity is required.');
     }
-    else if ((transport_mode == 'Self Owned Transport') && (vehicle == undefined)) {
+    else if ((transport_mode == selfOwnedLabel) && (vehicle == undefined)) {
       setVehicleErrorMsg('Vehicle is required.');
     }
     else if (noof_truck_load == undefined || noof_truck_load.trim() == '') {
@@ -396,7 +396,7 @@ export const AddOrder = ({
       resetErrorMsg();
       const item = {
         vehicle,
-        vehicle_capacity: transport_mode == 'Self Owned Transport' ? vehicle_capacity : vehicle_capacities,
+        vehicle_capacity: transport_mode == selfOwnedLabel ? vehicle_capacity : vehicle_capacities,
         noof_truck_load,
       };
       addItem(item);
@@ -443,7 +443,7 @@ export const AddOrder = ({
 
       var totalItemRate = totalOrderQty * locationItemRate;
       settotalItemRate(totalItemRate.toFixed(2));
-      var totalTransportationRate = transport_mode == 'Common Pool' ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00;
+      var totalTransportationRate = transport_mode == commonPoolLabel ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00;
       settotalTransportationRate(totalTransportationRate.toFixed(2));
       var totalPayableAmount = totalTransportationRate + totalItemRate;
       settotalPayableAmount(totalPayableAmount.toFixed(2));
@@ -605,7 +605,7 @@ export const AddOrder = ({
 
             {(itemDetail !== undefined && branch !== undefined) ? (
               <Fragment>
-                {(allLocation.length == 0) ? (
+                {(allLocation.length === 0) ? (
                   <Text style={{ color: 'gray' }}>
                     <Icon name="info-circle"
                       type="FontAwesome"
@@ -681,8 +681,8 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Self Owned Transport'}
-                          value={'Self Owned Transport'}
+                          label={selfOwnedLabel}
+                          value={selfOwnedLabel}
                           key={0}
                         />
                       </Picker>
@@ -703,8 +703,8 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Common Pool'}
-                          value={'Common Pool'}
+                          label={commonPoolLabel}
+                          value={commonPoolLabel}
                           key={0}
                         />
                       </Picker>
@@ -726,8 +726,8 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Others'}
-                          value={'Others'}
+                          label={othersLabel}
+                          value={othersLabel}
                           key={0}
                         />
                       </Picker>
@@ -749,13 +749,13 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Self Owned Transport'}
-                          value={'Self Owned Transport'}
+                          label={selfOwnedLabel}
+                          value={selfOwnedLabel}
                           key={0}
                         />
                         <Item
-                          label={'Common Pool'}
-                          value={'Common Pool'}
+                          label={commonPoolLabel}
+                          value={commonPoolLabel}
                           key={1}
                         />
                       </Picker>
@@ -776,13 +776,13 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Common Pool'}
-                          value={'Common Pool'}
+                          label={commonPoolLabel}
+                          value={commonPoolLabel}
                           key={0}
                         />
                         <Item
-                          label={'Others'}
-                          value={'Others'}
+                          label={othersLabel}
+                          value={othersLabel}
                           key={1}
                         />
                       </Picker>
@@ -804,13 +804,13 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Self Owned Transport'}
-                          value={'Self Owned Transport'}
+                          label={selfOwnedLabel}
+                          value={selfOwnedLabel}
                           key={0}
                         />
                         <Item
-                          label={'Others'}
-                          value={'Others'}
+                          label={othersLabel}
+                          value={othersLabel}
                           key={1}
                         />
                       </Picker>
@@ -832,18 +832,18 @@ export const AddOrder = ({
                           key={-1}
                         />
                         <Item
-                          label={'Self Owned Transport'}
-                          value={'Self Owned Transport'}
+                          label={selfOwnedLabel}
+                          value={selfOwnedLabel}
                           key={0}
                         />
                         <Item
-                          label={'Common Pool'}
-                          value={'Common Pool'}
+                          label={commonPoolLabel}
+                          value={commonPoolLabel}
                           key={1}
                         />
                         <Item
-                          label={'Others'}
-                          value={'Others'}
+                          label={othersLabel}
+                          value={othersLabel}
                           key={2}
                         />
                       </Picker>
@@ -897,12 +897,12 @@ export const AddOrder = ({
                   </Col>
                 </Row>
                 <Row style={globalStyles.labelContainer}>
-                  {transport_mode === 'Common Pool' && (
+                  {transport_mode === commonPoolLabel && (
                     <Col size={4}>
                       <Text>Total Transportation Amt(Nu):</Text>
                     </Col>
                   )}
-                  {transport_mode === 'Common Pool' && (
+                  {transport_mode === commonPoolLabel && (
                     <Col size={2}>
                       <Text style={{ textAlign: 'right' }}>{commaNumber(totalTransportationRate)}</Text>
                     </Col>
@@ -952,7 +952,7 @@ export const AddOrder = ({
               Add Qty
           </Text>
 
-            {(transport_mode === 'Common Pool' || transport_mode === 'Others') && (
+            {(transport_mode === commonPoolLabel || transport_mode === othersLabel) && (
               <Item regular style={globalStyles.mb10}>
                 <Picker
                   mode="dropdown"
@@ -974,7 +974,7 @@ export const AddOrder = ({
               </Item>
             )}
 
-            {(transport_mode === 'Self Owned Transport') && (
+            {(transport_mode === selfOwnedLabel) && (
               <Item regular style={globalStyles.mb10}>
                 <Picker
                   mode="dropdown"
