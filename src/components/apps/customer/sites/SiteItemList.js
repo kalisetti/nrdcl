@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, Button, Icon, Grid, Row, Col,Item } from 'native-base';
+import { Text, Button, Icon, Grid, Row, Col, Item } from 'native-base';
 import globalStyles from '../../../../styles/globalStyle';
 
 const SiteItemList = ({ data, removeItem }) => {
@@ -20,9 +20,12 @@ const SiteItemList = ({ data, removeItem }) => {
             {/* {item.uom} */}
           </Text>
         </Col>
-        {/* <Col size={2} style={globalStyles.colContainer}>
+        <Col size={2} style={globalStyles.colContainer}>
           <Text style={globalStyles.siteItem}>{item.branch}</Text>
-        </Col> */}
+        </Col>
+        <Col size={2} style={globalStyles.colContainer}>
+          <Text style={globalStyles.siteItem}>{item.transport_mode}</Text>
+        </Col>
         <Col size={1.5}>
           <Button transparent small onPress={() => removeItem(index)}>
             <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
@@ -51,12 +54,15 @@ const SiteItemList = ({ data, removeItem }) => {
               <Col size={2} style={globalStyles.siteCol}>
                 <Text style={globalStyles.siteItem}>{'Quantity(m3)'}</Text>
               </Col>
-              {/* <Col size={2} style={globalStyles.siteCol}>
-            <Text style={globalStyles.siteItem}>{'Source'}</Text>
-          </Col> */}
+              <Col size={2} style={globalStyles.siteCol}>
+                <Text style={globalStyles.siteItem}>{'Source'}</Text>
+              </Col>
+              <Col size={2} style={globalStyles.siteCol}>
+                <Text style={globalStyles.siteItem}>{'TR Mode'}</Text>
+              </Col>
               <Col size={1.5}>
                 <Text style={globalStyles.siteItem}>{'Remove'} </Text>
-                </Col>
+              </Col>
             </Row>
           )}
 

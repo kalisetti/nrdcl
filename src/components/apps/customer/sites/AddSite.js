@@ -257,6 +257,16 @@ export const AddSite = ({
             ) : null
             }
 
+            {isBuilding === 1 ? (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={plot_no}
+                  onChangeText={val => setplot_no(val)}
+                  placeholder="Plot/Thram No."
+                />
+              </Item>
+            ) : null
+            }
 
             <Item regular style={globalStyles.mb11}>
               <DatePicker
@@ -314,19 +324,8 @@ export const AddSite = ({
               </Picker>
             </Item>
 
-
-            {isBuilding === 1 ? (
-              <Item regular style={globalStyles.mb10}>
-                <Input
-                  value={plot_no}
-                  onChangeText={val => setplot_no(val)}
-                  placeholder="Plot/Thram No."
-                />
-              </Item>
-            ) : null
-            }
             <Item regular style={globalStyles.mb10}>
-              <Input
+              <Textarea
                 value={location}
                 onChangeText={val => setlocation(val)}
                 placeholder="Location (Specific Location of Construction Site)"
