@@ -134,8 +134,8 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         buildToolsVersion rootProject.ext.buildToolsVersion
-        versionCode 2
-        versionName "0.0.2"
+        versionCode 11
+        versionName "1.1.10"
     }
     splits {
         abi {
@@ -186,6 +186,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-customized-image-picker')
+    // implementation project(':react-native-compress-image')
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "com.facebook.react:react-native:+"  // From node_modules
     implementation 'androidx.appcompat:appcompat:1.1.0-rc01'

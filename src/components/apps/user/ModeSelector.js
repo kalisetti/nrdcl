@@ -18,17 +18,18 @@ export const ModeSelector = ({ userState, navigation }) => {
 
   //Check customer aggreed tearms and condition before. If yes then navigate to customer deshboard
   const checkLocalStorageForCustomer = async () => {
-    try {
-      const value = await AsyncStorage.getItem('customerTermsAgreed');
-      // console.log(value);
-      if (value == null) {
-        navigation.navigate('CustomerTerms')
-      } else {
-        navigation.navigate('CustomerDashboard')
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
+    navigation.navigate('CustomerDashboard')
+    // try {
+    //   const value = await AsyncStorage.getItem('customerTermsAgreed');
+    //   // console.log(value);
+    //   if (value == null) {
+    //     navigation.navigate('CustomerTerms')
+    //   } else {
+       
+    //   }
+    // } catch (error) {
+    //   // Error retrieving data
+    // }
   };
 
   //Check transporter aggreed tearms and condition before. If yes then navigate to transporter deshboard

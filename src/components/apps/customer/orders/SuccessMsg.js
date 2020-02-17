@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Content, Text, Body, Card, CardItem, View } from 'native-base';
+import { Container, Content, Text, Body, Card, CardItem, View, Button, Icon } from 'native-base';
 import globalStyle from '../../../../styles/globalStyle';
+import Moment from 'moment';
 
 export const SuccessMsg = ({
     navigation,
@@ -20,14 +21,26 @@ export const SuccessMsg = ({
                     </CardItem>
                     <CardItem style={{ alignSelf: 'center' }}>
                         <View >
-                            <Text style={{ alignSelf: 'center' }}>Transaction successfully with </Text>
-                            <Text style={{ alignSelf: 'center' }}>Transaction No: {navigation.state.params.transaction_id}</Text>
-                            <Text style={{ alignSelf: 'center' }}>Amount: {navigation.state.params.amount} </Text>
+                            <Text style={{ alignSelf: 'center' }}>Transaction successfull with </Text>
+                            <Text style={{ alignSelf: 'center' }}>payment of Nu :{(navigation.state.params.amount).toFixed(2)} </Text>
+                            <Text style={{ alignSelf: 'center' }}>Tran Ref No:{navigation.state.params.transaction_id}</Text>
                             <Text style={{ alignSelf: 'center' }}>Date: {navigation.state.params.transaction_time} </Text>
                             <Text style={{ alignSelf: 'center' }}>Thank you</Text>
                         </View>
                     </CardItem>
+                    <Button
+                        block
+                        success
+                        iconLeft
+                        style={globalStyle.mb10}
+                        onPress={() => navigation.navigate('OrderDashboard')}>
+                        <Icon name="arrow-round-back" />
+                        <Text>Go Back</Text>
+
+                    </Button>
                 </Card>
+
+
             </Content>
 
         </Container>

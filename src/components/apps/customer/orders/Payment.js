@@ -129,7 +129,7 @@ export const Payment = ({
     const paymentRequest = async () => {
         if (remitter_bank == null || remitter_bank == '') {
             showToast('Remitter bank is mandatory.', 'danger');
-        } else if (remitter_acc_no == '' || remitter_acc_no == null) {
+        } else if (remitter_acc_no == '') {
             showToast('Remitter account number is mandatory.', 'danger');
         } else {
             try {
@@ -169,7 +169,6 @@ export const Payment = ({
             submitCreditPayment(creditPaymentInfo, approvalDocmage);
         }
     };
-
     //Payment confrimation
     const makePayment = async () => {
         setLoading(true);
@@ -179,13 +178,13 @@ export const Payment = ({
             'otp': otp,
         };
         const res = await submitMakePayment(data);
-        console.log(res)
         setLoading(false);
         if (res.status == 200) {
+            console.log(res.data.message)
             navigation.navigate('SuccessMsg', {
-                transaction_id: res.transaction_id,
-                transaction_time: res.transaction_time,
-                amount: res.amount
+                transaction_id: res.data.message.transaction_id,
+                transaction_time: res.data.message.transaction_time,
+                amount: res.data.message.amount
             })
         }
     };
