@@ -87,7 +87,8 @@ export const submitSalesOrder = (data, allLocation, totalPayableAmount, ) => {
             {
               orderNumber: res.data.data.name,
               site_type: res.data.data.site_type,
-              totalPayableAmount: totalPayableAmount
+              totalPayableAmount: totalPayableAmount,
+              approval_status: 'Pending'//This is passed to hide and show the paylater button and attachment at payment screen for special project.
             })
         }
       }
@@ -108,7 +109,6 @@ export const submitCreditPayment = (data, approvalDocmage = []) => {
         {},
         data
       );
-
       const docname = res.data.data.name;
       const doctype = res.data.data.doctype;
       approvalDocmage.map(async image => {

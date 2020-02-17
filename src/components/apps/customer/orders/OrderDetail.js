@@ -43,20 +43,39 @@ export const OrderDetail = ({
         try {
             const response = await callAxios(`resource/Customer Order/${id}`);
             setOrder(response.data.data);
-            console.log(response.data.data)
             setLoading(false);
         } catch (error) {
             handleError(error);
         }
     };
+
     const proceedPayment = async () => {
-        navigation.navigate('Payment',
-            {
-                orderNumber: navigation.state.params.id,
-                site_type: order.site_type,
-                totalPayableAmount: order.total_balance_amount,
-                docstatus: order.approval_status
-            })
+        const params = {
+            fields: JSON.stringify([
+                'name',
+                'approval_status',
+            ]),
+            filters: JSON.stringify([
+                ['user', '=', userState.login_id],
+                ['customer_order', '=', navigation.state.params.id],
+            ]),
+        };
+
+        try {
+            const response = await callAxios(`resource/Customer Payment`, 'GET', params);
+            setLoading(false);
+            navigation.navigate('Payment',
+                {
+                    orderNumber: navigation.state.params.id,
+                    site_type: order.site_type,
+                    totalPayableAmount: order.total_balance_amount,
+                    approval_status: response.data.data[0].approval_status
+                })
+        } catch (error) {
+            handleError(error);
+        }
+
+
     };
     return commonState.isLoading ? (
         <SpinnerScreen />
@@ -104,7 +123,7 @@ export const OrderDetail = ({
                 <Col size={3}>
                     <Text>{order.transport_mode}</Text>
                 </Col>
-            </Row> 
+            </Row>
             <Row style={globalStyle.labelContainer}>
                 <Col size={2}>
                     <Text style={globalStyle.label}>Total Order Qty:</Text>
@@ -113,7 +132,7 @@ export const OrderDetail = ({
                     <Text>{order.total_quantity} M3</Text>
                 </Col>
             </Row>
-            
+
             <Row style={[globalStyle.labelContainer]}>
                 <Text style={globalStyle.label}>Invoice Details</Text>
             </Row>

@@ -154,7 +154,6 @@ export const Payment = ({
         }
 
     };
-
     //Crdite payment 
     const paymentLater = async () => {
         if (approvalDoc.length < 1) {
@@ -180,7 +179,6 @@ export const Payment = ({
         const res = await submitMakePayment(data);
         setLoading(false);
         if (res.status == 200) {
-            console.log(res.data.message)
             navigation.navigate('SuccessMsg', {
                 transaction_id: res.data.message.transaction_id,
                 transaction_time: res.data.message.transaction_time,
@@ -235,7 +233,7 @@ export const Payment = ({
                     onPress={paymentRequest}>
                     <Text>Pay Now</Text>
                 </Button>
-                {creditAllowed == 1 && navigation.getParam('approval_status') === "Rejected" && navigation.getParam('approval_status') === "Draft" ? (
+                {(creditAllowed == 1 && navigation.getParam('approval_status') === 'Pending') || ((creditAllowed == 1 && navigation.getParam('approval_status') === 'Rejected')) ? (
                     <Button block info style={globalStyles.mb10} onPress={getApprovalDoc}>
                         <Text>Upload Approval Documents</Text>
                     </Button>) : (<Text></Text>)}
@@ -270,8 +268,7 @@ export const Payment = ({
                         />
                     </View>
                 )}
-
-                {creditAllowed == 1 && navigation.getParam('approval_status') === "Rejected" && navigation.getParam('approval_status') === "Draft" ? (
+                {(creditAllowed == 1 && navigation.getParam('approval_status') === 'Pending') || ((creditAllowed == 1 && navigation.getParam('approval_status') === 'Rejected')) ? (
                     <Button
                         block
                         success
