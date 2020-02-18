@@ -119,12 +119,14 @@ export const AddSite = ({
   }, [approval_document]);
 
   const getIsBuilding = async id => {
-    try {
-      const response = await callAxios(`resource/Construction Type/${id}`);
-      setIsBuilding(response.data.data.is_building);
-      setLoading(false);
-    } catch (error) {
-      handleError(error);
+    if (id !== undefined) {
+      try {
+        const response = await callAxios(`resource/Construction Type/${id}`);
+        setIsBuilding(response.data.data.is_building);
+        setLoading(false);
+      } catch (error) {
+        handleError(error);
+      }
     }
   };
 
