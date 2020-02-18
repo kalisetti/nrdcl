@@ -19,7 +19,7 @@ export const startTransportRegistration = (vehicle_info, bluebook = []) => {
     try {
       await transportSchema.validate(vehicle_info);
       if (bluebook.length <= 0) {
-        dispatch(showToast('Bluebook attachment is mandatory'))
+        dispatch(showToast('Bluebook and Driving Licence attachment is mandatory'))
       } else {
         let res = await callAxios(
           'resource/Transport Request/',
