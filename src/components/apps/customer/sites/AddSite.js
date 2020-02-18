@@ -127,6 +127,8 @@ export const AddSite = ({
       } catch (error) {
         handleError(error);
       }
+    } else {
+      setIsBuilding(0);
     }
   };
 
