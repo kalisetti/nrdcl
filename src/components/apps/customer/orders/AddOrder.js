@@ -241,9 +241,6 @@ export const AddOrder = ({
           item,
         },
       );
-      // const displayList = res.data.message.filter(
-      //   (data) => (data.display == 1)
-      // );
       setOtherBranchInfo(res.data.message);
       setLoading(false);
     } catch (error) {
@@ -269,14 +266,7 @@ export const AddOrder = ({
           },
         );
         if (res.data.message !== undefined) {
-          // const locationList = res.data.message.filter(
-          //   (data) => data.location != null
-          // );
-          // setAllLocation(locationList);
           setAllLocation(res.data.message);
-          // if (locationList.length === 0) {
-          // setLocationItemRate(res.data.message[0].item_rate);
-          // }
         }
         setLoading(false);
       } catch (error) {
@@ -874,7 +864,6 @@ export const AddOrder = ({
               )}
 
             {(items.length > 0 && branch !== undefined && transport_mode !== undefined) ? (
-              // <Text></Text>
               <Fragment>
                 <Row style={globalStyles.labelContainer}>
                 </Row>
