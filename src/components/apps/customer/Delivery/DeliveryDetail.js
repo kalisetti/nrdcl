@@ -31,6 +31,10 @@ export const OrderDetail = ({
 }) => {
     const [remarks, setremarks] = useState(null);
     const [deliver, setDeliver] = useState({});
+    const [showAlert, setShowAlert] = useState(false);
+    const toggleAlert = () => {
+        setShowAlert(!showAlert);
+      };
     useEffect(() => {
         if (!userState.logged_in) {
             navigation.navigate('Auth');
@@ -56,6 +60,7 @@ export const OrderDetail = ({
 
     // Confirm delivery from customer.
     const confirmDelivery = async () => {
+        toggleAlert();
         const data = {
             delivery_note: deliver.delivery_note,
             user: userState.login_id,
@@ -129,6 +134,26 @@ export const OrderDetail = ({
                     )}
             </Card>
         </Content>
+        {showAlert && (
+            <View style={{ width: '100%', height: '100%' }}>
+                <AwesomeAlert
+                    show={showAlert}
+                    showProgress={false}
+                    title="Acknowledge Receipt"
+                    message="Are you sure you want to acknowledge Receipt"
+                    closeOnTouchOutside={false}
+                    closeOnHardwareBackPress={false}
+                    showCancelButton={true}
+                    showConfirmButton={true}
+                    cancelText="No"
+                    confirmText="Yes"
+                    confirmButtonColor="#DD6B55"
+                    onCancelPressed={() => {
+                        toggleAlert();
+                    }}
+                    onConfirmPressed={confirmDelivery} />
+            </View>
+        )}
     </Container>
         );
 };
