@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import {
     Container,
     Text,
