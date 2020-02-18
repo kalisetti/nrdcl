@@ -127,7 +127,7 @@ export const Payment = ({
 
     //Confirming the remitter bank and account number with getting OTP SMS
     const paymentRequest = async () => {
-        if (remitter_bank == null || remitter_bank == '') {
+        if (remitter_bank == null || remitter_bank== '') {
             showToast('Remitter bank is mandatory.', 'danger');
         } else if (remitter_acc_no == '') {
             showToast('Remitter account number is mandatory.', 'danger');

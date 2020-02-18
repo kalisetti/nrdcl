@@ -22,7 +22,7 @@ export const SuccessMsg = ({
                     <CardItem style={{ alignSelf: 'center' }}>
                         <View >
                             <Text style={{ alignSelf: 'center' }}>Transaction successfull with </Text>
-                            <Text style={{ alignSelf: 'center' }}>payment of Nu :{(navigation.state.params.amount).toFixed(2)} </Text>
+                            <Text style={{ alignSelf: 'center' }}>payment of Nu:{(navigation.state.params.amount).toFixed(2)} </Text>
                             <Text style={{ alignSelf: 'center' }}>Tran Ref No:{navigation.state.params.transaction_id}</Text>
                             <Text style={{ alignSelf: 'center' }}>Date: {navigation.state.params.transaction_time} </Text>
                             <Text style={{ alignSelf: 'center' }}>Thank you</Text>

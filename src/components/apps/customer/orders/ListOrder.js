@@ -70,9 +70,12 @@ export const ListOrder = ({
           <View>
             <Text>Site: {item.site} </Text>
             <Text>Item: {item.item_name} </Text>
+            <Text>
+                Invoice Amount: Nu.{commaNumber(item.total_payable_amount)}/-
+              </Text>
             {item.total_balance_amount > 0 ? (
               <Text>
-                Payable Amount(Nu): {commaNumber(item.total_balance_amount)}/-
+                Outstanding Amount: Nu.{commaNumber(item.total_balance_amount)}/-
               </Text>
             ) : (
                 <Text style={{ color: 'blue' }}></Text>
@@ -94,6 +97,7 @@ export const ListOrder = ({
         'item_name',
         'creation',
         'total_balance_amount',
+        'total_payable_amount'
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],

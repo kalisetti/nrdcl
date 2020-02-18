@@ -879,21 +879,21 @@ export const AddOrder = ({
                 </Row>
                 <Row style={globalStyles.labelContainer}>
                   <Col size={3}>
-                    <Text >Total Item Amt(Nu):</Text>
+                    <Text >Total Item Amt:</Text>
                   </Col>
                   <Col size={2}>
-                    <Text style={{ textAlign: 'right' }}>{commaNumber(totalItemRate)}</Text>
+                    <Text style={{ textAlign: 'right' }}>Nu.{commaNumber(totalItemRate)}</Text>
                   </Col>
                 </Row>
                 <Row style={globalStyles.labelContainer}>
                   {transport_mode === commonPoolLabel && (
                     <Col size={4}>
-                      <Text>Total Transportation Amt(Nu):</Text>
+                      <Text>Total Transportation Amt:</Text>
                     </Col>
                   )}
                   {transport_mode === commonPoolLabel && (
                     <Col size={2}>
-                      <Text style={{ textAlign: 'right' }}>{commaNumber(totalTransportationRate)}</Text>
+                      <Text style={{ textAlign: 'right' }}>Nu.{commaNumber(totalTransportationRate)}</Text>
                     </Col>
                   )}
                 </Row>
@@ -901,10 +901,10 @@ export const AddOrder = ({
 
                 <Row style={globalStyles.labelContainer}>
                   <Col size={3}>
-                    <Text style={{ textAlign: 'left', fontWeight: 'bold', }}>Total Payable Amt(Nu):</Text>
+                    <Text style={{ textAlign: 'left', fontWeight: 'bold', }}>Total Payable Amt:</Text>
                   </Col>
                   <Col size={2}>
-                    <Text style={{ textAlign: 'right', fontWeight: 'bold', }}>{commaNumber(totalPayableAmount)}</Text>
+                    <Text style={{ textAlign: 'right', fontWeight: 'bold', }}>Nu.{commaNumber(totalPayableAmount)}</Text>
                   </Col>
                 </Row>
               </Fragment>
