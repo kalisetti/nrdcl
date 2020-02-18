@@ -571,7 +571,7 @@ export const AddOrder = ({
                             <Text>{item.location}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
-                            <Text> {item.lead_time} Days</Text>
+                            <Text> {item.lead_time} Day(s)</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
                             <Text>Nu.{item.item_rate} </Text>
