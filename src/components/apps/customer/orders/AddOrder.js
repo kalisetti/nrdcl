@@ -219,7 +219,9 @@ export const AddOrder = ({
             'branch': branch,
           },
         );
-        setItemDetail(all_its.data.message[0]);
+        if (all_its.data.message !== undefined) {
+          setItemDetail(all_its.data.message[0]);
+        }
         setLoading(false);
       } catch (error) {
         handleError(error);
@@ -604,7 +606,7 @@ export const AddOrder = ({
                     Will take approximately {itemDetail.lead_time} working days to deliver{'. \n'}
                     {' '}
                     <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
-                    Click here
+                      Click here
                     </Text> to see information on sand available from other areas.
                   </Text>
                 ) : (
@@ -626,7 +628,7 @@ export const AddOrder = ({
                       onValueChange={val => {
                         if (val !== undefined) {
                           setBranchWiseLocation(val),
-                          resetDataGrid(val)
+                            resetDataGrid(val)
                         }
                       }}>
                       <Picker.Item label={'Select Location'} value={undefined} key={-1} />
