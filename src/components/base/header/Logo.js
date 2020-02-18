@@ -8,13 +8,12 @@ export class Logo extends Component {
         source={require('../../../assets/images/nrdcl_logo.png')}
         style={{
           alignSelf: 'center',
-          width: 120,
-          height: 120,
+          width: 150,
+          height: 174,
           marginBottom: 20,
         }}
       />
     );
   }
 }
-
 export default Logo;

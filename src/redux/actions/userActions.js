@@ -213,6 +213,7 @@ export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, 
       pin,
     };
     try {
+     
       await userRegistrationSchema.validate(params);
       dispatch(setLoading(true));
       await callAxios(

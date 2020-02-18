@@ -70,6 +70,7 @@ export const callAxios = (
   if (method.toLowerCase() === 'get') {
     data = null;
   }
+  
   return axios({
     url: Config.API_URL + url,
     method: method,
@@ -229,14 +230,11 @@ export const attachFile = async (
 
 export const handleError = error => {
   if (error.response) {
-    console.log(error.response);
-    //console.log(error.response.status);
     if (error.response.data.NRDCL_ERROR) {
       return showToast(error.response.data.NRDCL_ERROR);
     }
     return showToast(error.message);
   } else {
-    console.log(error);
     return showToast(error.message);
   }
 };
