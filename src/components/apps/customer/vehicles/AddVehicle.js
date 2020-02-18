@@ -201,7 +201,7 @@ export const AddVehicle = ({
             </Item>
 
             <Button block info style={globalStyles.mb10} onPress={getBluebook}>
-              <Text>Attach Bluebook</Text>
+              <Text>Attach Bluebook and Driving Licence</Text>
             </Button>
             {images.length === 0 ? null : (
               <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
