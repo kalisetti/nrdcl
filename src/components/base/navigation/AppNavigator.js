@@ -86,7 +86,7 @@ const AppNavigator = createStackNavigator(
     },
     TransporterTerms: {
       screen: TransporterTerms,
-      navigationOptions: { title: 'Transporter Terms & Conditions' },
+      navigationOptions: { title: 'Terms & Conditions' },
     },
     CustomerDashboard: {
       screen: CustomerDashboard,
