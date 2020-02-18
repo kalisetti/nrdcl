@@ -154,7 +154,7 @@ export const AddOrder = ({
         ]),
       };
 
-      const all_st = await callAxios('resource/Site', 'get', params);      
+      const all_st = await callAxios('resource/Site', 'get', params);
       setall_sites(all_st.data.data);
       setLoading(false);
     } catch (error) {
@@ -219,7 +219,7 @@ export const AddOrder = ({
             'branch': branch,
           },
         );
-        setItemDetail(all_its.data.message[0]); 
+        setItemDetail(all_its.data.message[0]);
         setLoading(false);
       } catch (error) {
         handleError(error);
@@ -241,10 +241,10 @@ export const AddOrder = ({
           item,
         },
       );
-      const displayList = res.data.message.filter(
-        (data) => (data.display == 1)
-      );
-      setOtherBranchInfo(displayList);
+      // const displayList = res.data.message.filter(
+      //   (data) => (data.display == 1)
+      // );
+      setOtherBranchInfo(res.data.message);
       setLoading(false);
     } catch (error) {
       handleError(error);
@@ -269,13 +269,14 @@ export const AddOrder = ({
           },
         );
         if (res.data.message !== undefined) {
-          const locationList = res.data.message.filter(
-            (data) => data.location != null
-          );
-          setAllLocation(locationList);
-          if (locationList.length === 0) {
-            setLocationItemRate(res.data.message[0].item_rate);
-          }
+          // const locationList = res.data.message.filter(
+          //   (data) => data.location != null
+          // );
+          // setAllLocation(locationList);
+          setAllLocation(res.data.message);
+          // if (locationList.length === 0) {
+          // setLocationItemRate(res.data.message[0].item_rate);
+          // }
         }
         setLoading(false);
       } catch (error) {
@@ -303,8 +304,7 @@ export const AddOrder = ({
               location: branchWiseLocation
             },
           );
-
-          if (allLocation.length > 0) {
+          if (res.data.message !== undefined) {
             setLocationItemRate(res.data.message[0].item_rate);
           }
           setLoading(false);
@@ -312,7 +312,6 @@ export const AddOrder = ({
           handleError(error);
         }
       }
-
     }
   };
 
@@ -383,7 +382,7 @@ export const AddOrder = ({
   };
 
   const addItemToList = () => {
-    if ((transport_mode == commonPoolLabel|| transport_mode === othersLabel) && (vehicle_capacities == undefined)) {
+    if ((transport_mode == commonPoolLabel || transport_mode === othersLabel) && (vehicle_capacities == undefined)) {
       setVehicleCapacityErrorMsg('Vehicle capacity is required.');
     }
     else if ((transport_mode == selfOwnedLabel) && (vehicle == undefined)) {
@@ -416,7 +415,6 @@ export const AddOrder = ({
       vehicles: items,//for self owned
       pool_vehicles: items// for common pool
     };
-    // loop(order_details);
     submitSalesOrder(order_details, allLocation);
   };
 
@@ -510,9 +508,11 @@ export const AddOrder = ({
                 mode="dropdown"
                 selectedValue={branch}
                 onValueChange={val => {
-                  setBranch(val), selectTransportMode(),
+                  setBranch(val),
+                    selectTransportMode(),
                     getOtherBranchInfo(val),
-                    setBranchWiseLocation(undefined)
+                    setBranchWiseLocation(undefined),
+                    resetDataGrid(val)
                 }}>
                 <Picker.Item label={'Select Material Source'} value={undefined} key={-1} />
                 {all_branches &&
@@ -595,7 +595,7 @@ export const AddOrder = ({
                     justifyContent: 'space-between',
                     maxHeight: 'auto',
                   }}>
-                  <Text style={globalStyles.tapRegion}>Tap on the region to select</Text>
+                  <Text style={globalStyles.tapRegion}>Tap on the location to select</Text>
                   <Button danger onPress={() => { setRegionModal(false) }}>
                     <Text>Cancel</Text>
                   </Button>
@@ -605,20 +605,17 @@ export const AddOrder = ({
 
             {(itemDetail !== undefined && branch !== undefined) ? (
               <Fragment>
-                {(allLocation.length === 0) ? (
+                {(itemDetail.has_common_pool === 1) ? (
                   <Text style={{ color: 'gray' }}>
                     <Icon name="info-circle"
                       type="FontAwesome"
                       style={globalStyles.smallIcon}
                     ></Icon>
-                    Will take approximately {itemDetail.lead_time} working days to deliver
-                    at the rate of Nu.
-                  {locationItemRate}/{itemDetail.stock_uom}{'. \n'}
-                    Click {' '}
+                    Will take approximately {itemDetail.lead_time} working days to deliver{'. \n'}
+                    {' '}
                     <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
-                      here
-                       </Text>
-                    {' '} to see information on sand available from other areas.
+                    Click here
+                    </Text> to see information on sand available from other areas.
                   </Text>
                 ) : (
                     <Text style={{ color: 'gray' }}>
@@ -638,7 +635,8 @@ export const AddOrder = ({
                       selectedValue={branchWiseLocation}
                       onValueChange={val => {
                         if (val !== undefined) {
-                          setBranchWiseLocation(val)
+                          setBranchWiseLocation(val),
+                          resetDataGrid(val)
                         }
                       }}>
                       <Picker.Item label={'Select Location'} value={undefined} key={-1} />
@@ -654,13 +652,13 @@ export const AddOrder = ({
                     </Picker>
                   </Item>
                 )}
-                {(branchWiseLocation && allLocation.length > 0) && (
+                {branchWiseLocation && (
                   <Text style={{ color: 'gray' }}>
                     <Icon name="info-circle"
                       type="FontAwesome"
                       style={globalStyles.smallIcon}
                     ></Icon>
-                    Item Rate Nu. {locationItemRate}/m3
+                    Item Rate Nu. {locationItemRate}/{itemDetail.stock_uom}
                   </Text>
                 )}
 
