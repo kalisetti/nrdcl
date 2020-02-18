@@ -261,7 +261,7 @@ export const startVehicleRegistration = (
     try {
       await vehilceSchema.validate(vehicle_info);
       if (bluebook.length <= 0) {
-        dispatch(showToast('Bluebook Attachment is mandatory'))
+        dispatch(showToast('Bluebook and Driving Licence Attachment is mandatory'))
       } else if (vehicle_info.owner_cid == '') {
         dispatch(showToast('Spouse CID Number is mandatory'))
       } else if (vehicle_info.owner == "Spouse" && mc.length <= 0) {
