@@ -11,6 +11,7 @@ import {
     View,
     Button,
     Textarea,
+    Input,
     Item,
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
@@ -35,7 +36,7 @@ export const OrderDetail = ({
     const [showAlert, setShowAlert] = useState(false);
     const toggleAlert = () => {
         setShowAlert(!showAlert);
-      };
+    };
     useEffect(() => {
         if (!userState.logged_in) {
             navigation.navigate('Auth');
@@ -80,7 +81,7 @@ export const OrderDetail = ({
                     bordered
                     style={globalStyle.tableHeader}>
                     <Body>
-                        <Text style={globalStyle.label}>Delivery Status</Text>
+                        <Text style={globalStyle.label, { color: 'white' }}>Delivery Status</Text>
                     </Body>
                 </CardItem>
                 <CardItem>
@@ -100,33 +101,35 @@ export const OrderDetail = ({
                                 Note* Please contact above driver for detail.</Text>) : (
                                 <Text></Text>
                             )}
+
+                        {deliver.confirmation_status === 'In Transit' ? (
+                            <Item regular style={globalStyle.mb10}>
+                                <Input
+                                    value={remarks}
+                                    onChangeText={val => setremarks(val)}
+                                    placeholder="Remarks"
+                                />
+                            </Item>
+                        ) : (
+                                <Text></Text>
+                            )}
+
+                        {deliver.confirmation_status === 'In Transit' ? (
+                            <Text style={{ color: 'gray' }}>Please click bellow button to acknowledge the receipt.</Text>
+                        ) : (
+                                <Text></Text>
+                            )}
                     </View>
                 </CardItem>
-                {deliver.confirmation_status === 'In Transit' ? (
-                    <Textarea
-                        rowSpan={2}
-                        width="100%"
-                        bordered
-                        placeholder="  Remarks"
-                        value={remarks}
-                        onChangeText={val => setremarks(val)}
-                        style={globalStyle.mb10}
-                    />
-                ) : (
-                        <Text></Text>
-                    )}
-                {deliver.confirmation_status === 'In Transit' ? (
-                    <Text style={{ color: 'gray' }}>  Please click bellow button to acknowledge the receipt.</Text>
-                ) : (
-                        <Text></Text>
-                    )}
+
                 {deliver.confirmation_status === 'In Transit' ? (
                     <Button
                         block
                         success
                         iconLeft
                         style={globalStyle.mb10}
-                        onPress={confirmDelivery}
+                        onPress={() => toggleAlert()}
+
                     >
                         <Text>Acknowledge Receipt</Text>
                     </Button>
@@ -141,7 +144,7 @@ export const OrderDetail = ({
                     show={showAlert}
                     showProgress={false}
                     title="Acknowledge Receipt"
-                    message="Are you sure you want to acknowledge Receipt"
+                    message="Are you sure you want to acknowledge receipt ?"
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
                     showCancelButton={true}
