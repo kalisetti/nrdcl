@@ -115,11 +115,11 @@ const SiteItem = ({
     if (item_sub_group === null) {
       setErrorMsg('');
       setErrorMsg('Please Select Item');
-    } 
-    else if(branch===undefined||branch===null){
+    }
+    else if (branch === undefined || branch === null) {
       setErrorMsg("Select Source");
     }
-    else if(transport_mode==undefined||transport_mode===null){
+    else if (transport_mode == undefined || transport_mode === null) {
       setErrorMsg("Select Transportation Mode");
     }
     else if (transport_mode === commonPool && !agreeCommonPoolTerms) {
@@ -212,7 +212,7 @@ const SiteItem = ({
         </Item>
 
         {item_sub_group && (
-           <View style={globalStyles.dropdown}>
+          <View style={globalStyles.dropdown}>
             <Picker
               mode="dropdown"
               selectedValue={branch}
@@ -316,12 +316,12 @@ const SiteItem = ({
               )}
 
             {/* to select Others */}
-            {(self_owned !== 1) && (common_pool !== 1)   && (others == 1) &&
+            {(self_owned !== 1) && (common_pool !== 1) && (others == 1) &&
               (
                 <Picker
                   mode="dropdown"
                   selectedValue={transport_mode}
-                  onValueChange={val => { settransport_mode(val)}
+                  onValueChange={val => { settransport_mode(val) }
                   }>
                   <Item
                     label={'Select Transport Mode'}
@@ -388,7 +388,7 @@ const SiteItem = ({
               )}
 
             {/* to select self owned and Others */}
-            {(self_owned === 1)  && (common_pool !== 1)   && (others === 1) &&
+            {(self_owned === 1) && (common_pool !== 1) && (others === 1) &&
               (
                 <Picker
                   mode="dropdown"
@@ -414,7 +414,7 @@ const SiteItem = ({
               )}
 
             {/* to select all three */}
-            {(self_owned === 1)  && (common_pool === 1)  && (others === 1) &&
+            {(self_owned === 1) && (common_pool === 1) && (others === 1) &&
               (
                 <Picker
                   mode="dropdown"
@@ -460,10 +460,10 @@ const SiteItem = ({
               style={{
                 paddingLeft: 15
               }}>
-                <Text  onPress={() => checkUncheckCommonPoolTerms()}>
-                I agree Common Pool 
+              <Text onPress={() => checkUncheckCommonPoolTerms()}>
+                I agree Common Pool
                 </Text>
-                <Text style={{ color: 'blue' }}
+              <Text style={{ color: 'blue' }}
                 onPress={() => { setCommonPoolTermsModal(true) }}>
                 {' '}Terms and Conditions </Text>
             </Text>
@@ -484,9 +484,9 @@ const SiteItem = ({
               style={{
                 paddingLeft: 15
               }}>
-                <Text onPress={() => checkUncheckSelfOwnedTerms()}>I agree Self Owned Transport{' '}
-                </Text>                
-                <Text style={{ color: 'blue' }}
+              <Text onPress={() => checkUncheckSelfOwnedTerms()}>I agree Self Owned Transport{' '}
+              </Text>
+              <Text style={{ color: 'blue' }}
                 onPress={() => { setSelfOwnedTermsModal(true) }}>
                 Terms and Conditions </Text>
             </Text>
@@ -620,10 +620,11 @@ const SiteItem = ({
 
             4. I understand that in the event of non-availability of my vehicle(s),
             I can avail the common pool transportation service of NRDCL, in which case
-            I agree to abide by the terms and conditions of its use. Click here to view
-                  the terms and conditions for <Text style={{ color: 'blue' }}
+            I agree to abide by the terms and conditions of its use.{' '}
+             <Text style={{ color: 'blue',fontStyle: 'italic' }}
               onPress={() => { setCommonPoolTermsModal(true) }}>
-              common pool transportation. </Text>  {'\n\n'}
+              Click here to view the terms and conditions
+                for common pool transportation. </Text>  {'\n\n'}
 
             5. I understand that NRDCL shall not be held responsible for carrying
             overload or any mishap that may occur during journey, and that I shall
