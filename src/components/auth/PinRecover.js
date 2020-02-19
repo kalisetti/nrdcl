@@ -14,6 +14,7 @@ import {
 
 import globalStyles from '../../styles/globalStyle';
 import {startResetPin} from '../../redux/actions/userActions';
+import { setLoading } from '../../redux/actions/commonActions';
 
 export const PinRecover = ({userState, navigation, startResetPin}) => {
   useEffect(() => {
@@ -26,6 +27,7 @@ export const PinRecover = ({userState, navigation, startResetPin}) => {
   const [mobileno, setMobileno] = useState('');
 
   const requestPin = () => {
+    setLoading(true)
     startResetPin(loginid, mobileno);
   };
 

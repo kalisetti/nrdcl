@@ -186,14 +186,19 @@ export const startResetPin = (loginid, mobileno) => {
     try {
       //validate first
       await pinResetSchema.validate(params);
-
       dispatch(setLoading(true));
-      await callAxios(
+      const res=await callAxios(
         'method/frappe.core.doctype.user.user.crm_reset_password',
         'post',
         params,
       );
-      dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
+      if(res.status==200){
+        dispatch(setLoading(false));
+        dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
+        NavigationService.navigate('Login')
+
+      }
+     
     } catch (error) {
       dispatch(handleError(error));
     }
