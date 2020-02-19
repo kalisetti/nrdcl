@@ -503,7 +503,7 @@ export const AddOrder = ({
                   setBranch(val),
                     selectTransportMode(),
                     getOtherBranchInfo(val),
-                    // setBranchWiseLocation(undefined),
+                    setBranchWiseLocation(undefined),
                     resetDataGrid(val)
                 }}>
                 <Picker.Item label={'Select Material Source'} value={undefined} key={-1} />
