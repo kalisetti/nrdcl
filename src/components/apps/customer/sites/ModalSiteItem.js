@@ -131,10 +131,10 @@ const SiteItem = ({
       setErrorMsg('');
       setErrorMsg('Expected Quantity is required');
     }
-    else if (expected_quantity < 8) {
-      setErrorMsg('');
-      setErrorMsg('Minimum Expected Quantity must be greater than 8 m3');
-    }
+    // else if (expected_quantity < 8) {
+    //   setErrorMsg('');
+    //   setErrorMsg('Minimum Expected Quantity must be greater than 8 m3');
+    // }
     else {
       setErrorMsg('');
       const item = {
