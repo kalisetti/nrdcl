@@ -459,7 +459,11 @@ const SiteItem = ({
             <Text
               style={{
                 paddingLeft: 15
-              }}>I agree Common Pool {' '}<Text style={{ color: 'blue' }}
+              }}>
+                <Text  onPress={() => checkUncheckCommonPoolTerms()}>
+                I agree Common Pool 
+                </Text>
+                <Text style={{ color: 'blue' }}
                 onPress={() => { setCommonPoolTermsModal(true) }}>
                 Terms and Conditions </Text>
             </Text>
@@ -479,7 +483,10 @@ const SiteItem = ({
             <Text
               style={{
                 paddingLeft: 15
-              }}>I agree Self Owned Transport{' '}<Text style={{ color: 'blue' }}
+              }}>
+                <Text onPress={() => checkUncheckSelfOwnedTerms()}>I agree Self Owned Transport{' '}
+                </Text>                
+                <Text style={{ color: 'blue' }}
                 onPress={() => { setSelfOwnedTermsModal(true) }}>
                 Terms and Conditions </Text>
             </Text>
