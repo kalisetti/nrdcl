@@ -221,6 +221,13 @@ export default StyleSheet.create({
   tapRegion: {
     paddingTop: 7,
     color: Config.APP_HEADER_COLOR,
-  }
+  },
 
+  dropdown: {
+    marginBottom: 10, 
+    borderColor: 'lightgray',
+    borderWidth:1,
+    borderRadius: 25, 
+    paddingLeft:6
+  }
 });

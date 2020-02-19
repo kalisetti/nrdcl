@@ -224,7 +224,7 @@ export const AddSite = ({
       <Container>
         <Content style={globalStyles.content}>
           <Form>
-            <Item rounded style={globalStyles.mb10}>
+          <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={construction_type}
@@ -241,7 +241,7 @@ export const AddSite = ({
                     );
                   })}
               </Picker>
-            </Item>
+            </View>
             <Item regular style={globalStyles.mb10}>
               <Input
                 value={approval_no}
@@ -309,7 +309,7 @@ export const AddSite = ({
                 onDateChange={date => setEndDate(date)}
               />
             </Item> */}
-            <Item regular style={globalStyles.mb10}>
+             <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={dzongkhag}
@@ -326,7 +326,7 @@ export const AddSite = ({
                     );
                   })}
               </Picker>
-            </Item>
+            </View>
 
             <Item regular style={globalStyles.mb10}>
               <Textarea

@@ -186,7 +186,7 @@ const SiteItem = ({
           }}>
           {data ? 'Update Item' : 'Add Item'}
         </Text>
-        <Item regular style={globalStyles.mb10}>
+        <View style={globalStyles.dropdown}>
           <Picker
             mode="dropdown"
             label={'Select Item'}
@@ -200,7 +200,7 @@ const SiteItem = ({
                 );
               })}
           </Picker>
-        </Item>
+        </View>
 
         <Item regular style={globalStyles.mb10}>
           <Input
@@ -212,7 +212,7 @@ const SiteItem = ({
         </Item>
 
         {item_sub_group && (
-          <Item regular style={globalStyles.mb10}>
+           <View style={globalStyles.dropdown}>
             <Picker
               mode="dropdown"
               selectedValue={branch}
@@ -229,7 +229,7 @@ const SiteItem = ({
                   );
                 })}
             </Picker>
-          </Item>
+          </View>
         )}
 
         {branch && (
@@ -273,7 +273,7 @@ const SiteItem = ({
           //       </Picker>
           //     )}
           // </Item>
-          <Item regular style={globalStyles.mb10}>
+          <View style={globalStyles.dropdown}>
             {/* to select self owned */}
             {(self_owned === 1) && (common_pool !== 1) && (others !== 1) &&
               (
@@ -443,7 +443,7 @@ const SiteItem = ({
                   />
                 </Picker>
               )}
-          </Item>
+          </View>
         )}
 
         {transport_mode === commonPool && (

@@ -253,7 +253,7 @@ export const AddOrder = ({
   /**
    * to get location based on branch selection 
    */
-  const getBranchWiseLocation = async () => { 
+  const getBranchWiseLocation = async () => {
     if (branch === undefined || site === undefined || item === undefined) {
       setLoading(false);
     } else {
@@ -271,7 +271,7 @@ export const AddOrder = ({
           setAllLocation(res.data.message);
         }
         setLoading(false);
-      } catch (error) { 
+      } catch (error) {
         handleError(error);
       }
     }
@@ -456,7 +456,7 @@ export const AddOrder = ({
         />
         <Content style={globalStyles.content}>
           <Form>
-            <Item regular style={globalStyles.mb10}>
+            <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={site}
@@ -474,8 +474,8 @@ export const AddOrder = ({
                     );
                   })}
               </Picker>
-            </Item>
-            <Item regular style={globalStyles.mb10}>
+            </View>
+            <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={item}
@@ -493,9 +493,9 @@ export const AddOrder = ({
                     );
                   })}
               </Picker>
-            </Item>
+            </View>
 
-            <Item regular style={globalStyles.mb10}>
+            <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={branch}
@@ -518,7 +518,7 @@ export const AddOrder = ({
                     );
                   })}
               </Picker>
-            </Item>
+            </View>
 
             <Modal
               animationType="fade"
@@ -556,16 +556,16 @@ export const AddOrder = ({
                       </Row>
                       {otherBranchInfo.map((item, idx) => (
                         <Row key={idx} style={globalStyles.rowContainer}
-                        onPress={() => {
-                          setBranch(item.branch), setRegionModal(false),
-                            setBranchWiseLocation(item.location)
-                        }} 
+                          onPress={() => {
+                            setBranch(item.branch), setRegionModal(false),
+                              setBranchWiseLocation(item.location)
+                          }}
                         >
                           <Col size={2} style={globalStyles.colContainer} >
                             <Text>{item.branch}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
-                            <Text style={{color:'blue', textDecorationLine: 'underline',}}>{item.location}</Text>
+                            <Text style={{ color: 'blue', textDecorationLine: 'underline', }}>{item.location}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
                             <Text> {item.lead_time} Day(s)</Text>
@@ -618,7 +618,7 @@ export const AddOrder = ({
                   )}
 
                 {(allLocation.length > 0) && (
-                  <Item regular style={globalStyles.mb10}>
+                  <View style={globalStyles.dropdown}>
                     <Picker
                       mode="dropdown"
                       selectedValue={branchWiseLocation}
@@ -639,7 +639,7 @@ export const AddOrder = ({
                         );
                       })}
                     </Picker>
-                  </Item>
+                  </View>
                 )}
                 {branchWiseLocation && (
                   <Text style={{ color: 'gray' }}>
@@ -651,7 +651,7 @@ export const AddOrder = ({
                   </Text>
                 )}
 
-                <Item regular style={globalStyles.mb10}>
+                <View style={globalStyles.dropdown}>
                   {/* to select self owned */}
                   {(itemDetail.allow_self_owned_transport === 1)
                     && (itemDetail.has_common_pool !== 1)
@@ -835,7 +835,7 @@ export const AddOrder = ({
                         />
                       </Picker>
                     )}
-                </Item>
+                </View>
 
                 {transport_mode && (
                   <Fragment>
@@ -939,7 +939,7 @@ export const AddOrder = ({
           </Text>
 
             {(transport_mode === commonPoolLabel || transport_mode === othersLabel) && (
-              <Item regular style={globalStyles.mb10}>
+              <View style={globalStyles.dropdown}>
                 <Picker
                   mode="dropdown"
                   selectedValue={vehicle_capacities}
@@ -957,11 +957,11 @@ export const AddOrder = ({
                       );
                     })}
                 </Picker>
-              </Item>
+              </View>
             )}
 
             {(transport_mode === selfOwnedLabel) && (
-              <Item regular style={globalStyles.mb10}>
+              <View style={globalStyles.dropdown}>
                 <Picker
                   mode="dropdown"
                   selectedValue={vehicle}
@@ -979,7 +979,7 @@ export const AddOrder = ({
                       );
                     })}
                 </Picker>
-              </Item>
+              </View>
             )}
             {(vehicle || vehicle_capacities) && (
               <Fragment>

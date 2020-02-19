@@ -39,7 +39,7 @@ export const AddTransport = ({
   const [vehicle_no, setVehicle_no] = useState('');
   const [vehicle_capacity, setVehicle_capacity] = useState(undefined);
   const [drivers_name, setdrivers_name] = useState(undefined);
-  const [contact_no, setcontact_no] = useState(undefined); 
+  const [contact_no, setcontact_no] = useState(undefined);
   const [registration_document, setregistration_document] = useState([]);
   const [images, setImages] = useState([]);
 
@@ -72,7 +72,7 @@ export const AddTransport = ({
     setregistration_document(bluebooks);
   };
 
-  const removeImage = () => { 
+  const removeImage = () => {
     setregistration_document(images.filter((_, ind) => ind > 0));
   };
 
@@ -113,7 +113,7 @@ export const AddTransport = ({
               />
             </Item>
 
-            <Item regular style={globalStyles.mb10}>
+            <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={vehicle_capacity}
@@ -130,7 +130,7 @@ export const AddTransport = ({
                     );
                   })}
               </Picker>
-            </Item>
+            </View>
 
             <Item regular style={globalStyles.mb10}>
               <Input

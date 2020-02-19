@@ -148,8 +148,9 @@ export const AddVehicle = ({
               />
             </Item>
 
-            <Item regular style={globalStyles.mb10}>
+            <View style={globalStyles.dropdown}>
               <Picker
+              style={{ borderWidth:1, borderColor: 'blue'}}
                 mode="dropdown"
                 selectedValue={vehicle_owner}
                 onValueChange={val => setvehicle_owner(val)}>
@@ -162,9 +163,9 @@ export const AddVehicle = ({
                 <Picker.Item label={'Spouse'} value={'Spouse'} key={2} />
                 {/* <Picker.Item label={'Others(Not applicable to Sha)'} value={'Other'} key={2} /> */}
               </Picker>
-            </Item>
+            </View>
 
-            <Item regular style={globalStyles.mb10}>
+            <View style={globalStyles.dropdown}>
               <Picker
                 mode="dropdown"
                 selectedValue={vehicle_capacity}
@@ -181,7 +182,7 @@ export const AddVehicle = ({
                     );
                   })}
               </Picker>
-            </Item>
+            </View>
 
             <Item regular style={globalStyles.mb10}>
               <Input
