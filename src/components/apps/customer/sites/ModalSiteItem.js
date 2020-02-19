@@ -465,7 +465,7 @@ const SiteItem = ({
                 </Text>
                 <Text style={{ color: 'blue' }}
                 onPress={() => { setCommonPoolTermsModal(true) }}>
-                Terms and Conditions </Text>
+                {' '}Terms and Conditions </Text>
             </Text>
           </CardItem>
         )}
