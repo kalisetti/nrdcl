@@ -253,8 +253,8 @@ export const AddOrder = ({
   /**
    * to get location based on branch selection 
    */
-  const getBranchWiseLocation = async () => {
-    if (branch === undefined) {
+  const getBranchWiseLocation = async () => { 
+    if (branch === undefined || site === undefined || item === undefined) {
       setLoading(false);
     } else {
       try {
@@ -271,7 +271,7 @@ export const AddOrder = ({
           setAllLocation(res.data.message);
         }
         setLoading(false);
-      } catch (error) {
+      } catch (error) { 
         handleError(error);
       }
     }
@@ -281,7 +281,7 @@ export const AddOrder = ({
    * to get item Rate based on location selection 
    */
   const getItemRateByLocation = async () => {
-    if (branch == undefined) {
+    if (branch === undefined || site === undefined || item === undefined) {
       setLoading(false);
     } else {
       if (branchWiseLocation) {
@@ -503,7 +503,7 @@ export const AddOrder = ({
                   setBranch(val),
                     selectTransportMode(),
                     getOtherBranchInfo(val),
-                    setBranchWiseLocation(undefined),
+                    // setBranchWiseLocation(undefined),
                     resetDataGrid(val)
                 }}>
                 <Picker.Item label={'Select Material Source'} value={undefined} key={-1} />
