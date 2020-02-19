@@ -200,7 +200,7 @@ export const Payment = ({
                     />
                 </Item>
                 <Text></Text>
-                <Item regular style={globalStyles.mb10}>
+                <View style={globalStyles.dropdown}>
                     <Picker
                         mode="dropdown"
                         selectedValue={remitter_bank}
@@ -217,7 +217,7 @@ export const Payment = ({
                                 );
                             })}
                     </Picker>
-                </Item>
+                </View>
                 <Item regular style={globalStyles.mb10}>
                     <Input
                         keyboardType='number-pad'
