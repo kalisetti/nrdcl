@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -13,10 +13,10 @@ import {
 } from 'native-base';
 
 import globalStyles from '../../styles/globalStyle';
-import {startResetPin} from '../../redux/actions/userActions';
+import { startResetPin } from '../../redux/actions/userActions';
 import { setLoading } from '../../redux/actions/commonActions';
 
-export const PinRecover = ({userState, navigation, startResetPin}) => {
+export const PinRecover = ({ userState, navigation, startResetPin }) => {
   useEffect(() => {
     if (userState.logged_in) {
       navigation.navigate('App');
@@ -88,4 +88,4 @@ const mapStateToProps = state => ({
   userState: state.userState,
 });
 
-export default connect(mapStateToProps, {startResetPin})(PinRecover);
+export default connect(mapStateToProps, { startResetPin })(PinRecover);
