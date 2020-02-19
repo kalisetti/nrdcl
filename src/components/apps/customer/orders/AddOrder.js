@@ -1,9 +1,9 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import { connect } from 'react-redux';
-import { Modal } from 'react-native';
-import { NavigationEvents } from 'react-navigation';
+import React, {useEffect, useState, Fragment} from 'react';
+import {connect} from 'react-redux';
+import {Modal} from 'react-native';
+import {NavigationEvents} from 'react-navigation';
 import Config from 'react-native-config';
-import { default as commaNumber } from 'comma-number';
+import {default as commaNumber} from 'comma-number';
 
 import {
   Container,
@@ -18,16 +18,16 @@ import {
   Row,
   Col,
   Grid,
-  Icon
+  Icon,
 } from 'native-base';
 import {
   callAxios,
   handleError,
   getImages,
   setLoading,
-  showToast
+  showToast,
 } from '../../../../redux/actions/commonActions';
-import { submitSalesOrder } from '../../../../redux/actions/siteActions';
+import {submitSalesOrder} from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import OrderQty from './OrderQty';
@@ -39,7 +39,7 @@ export const AddOrder = ({
   submitSalesOrder,
   handleError,
   setLoading,
-  showToast
+  showToast,
 }) => {
   //state info for forms
   let [, setState] = useState();
@@ -66,7 +66,9 @@ export const AddOrder = ({
   const [all_vehicle_capacities, setall_vehicle_capacities] = useState([]);
   const [totalOrderQty, settotalOrderQty] = useState(undefined);
   const [totalItemRate, settotalItemRate] = useState(undefined);
-  const [totalTransportationRate, settotalTransportationRate] = useState(undefined);
+  const [totalTransportationRate, settotalTransportationRate] = useState(
+    undefined,
+  );
   const [totalPayableAmount, settotalPayableAmount] = useState(undefined);
   //modal
   const [showModal, setShowModal] = useState(false);
@@ -82,7 +84,6 @@ export const AddOrder = ({
   var commonPoolLabel = 'Common Pool';
   var selfOwnedLabel = 'Self Owned Transport';
   var othersLabel = 'Others';
-
 
   //For proper navigation/auth settings
   useEffect(() => {
@@ -133,7 +134,6 @@ export const AddOrder = ({
     calculateInvoice();
   }, [items]);
 
-
   const setVehDetails = veh => {
     setcapacity(veh.vehicle_capacity);
     setvehicle(veh.vehicle);
@@ -141,7 +141,7 @@ export const AddOrder = ({
 
   const getSites = async () => {
     try {
-      const params = {
+      /*const params = {
         fields: JSON.stringify([
           'name',
           'purpose',
@@ -152,9 +152,14 @@ export const AddOrder = ({
           ['user', '=', userState.login_id],
           ['enabled', '=', 1],
         ]),
-      };
+      };*/
 
-      const all_st = await callAxios('resource/Site', 'get', params);
+      const all_st = await callAxios(
+        'resource/Site?fields=["name","purpose","construction_type","location"]&filters=[["user", "=", ' +
+          userState.login_id +
+          '], ["enabled", "=", 1]]',
+        'GET',
+      );
       setall_sites(all_st.data.data);
       setLoading(false);
     } catch (error) {
@@ -171,7 +176,7 @@ export const AddOrder = ({
           'method/erpnext.crm_utils.get_site_items',
           'post',
           {
-            filters: JSON.stringify({ site: site }),
+            filters: JSON.stringify({site: site}),
           },
         );
 
@@ -214,9 +219,9 @@ export const AddOrder = ({
           'method/erpnext.crm_utils.get_branch_rate',
           'post',
           {
-            'site': site,
-            'item': item,
-            'branch': branch,
+            site: site,
+            item: item,
+            branch: branch,
           },
         );
         if (all_its.data.message !== undefined) {
@@ -228,7 +233,6 @@ export const AddOrder = ({
       }
     }
   };
-
 
   /**
    * to get other branch info
@@ -251,7 +255,7 @@ export const AddOrder = ({
   };
 
   /**
-   * to get location based on branch selection 
+   * to get location based on branch selection
    */
   const getBranchWiseLocation = async () => {
     if (branch === undefined || site === undefined || item === undefined) {
@@ -278,7 +282,7 @@ export const AddOrder = ({
   };
 
   /**
-   * to get item Rate based on location selection 
+   * to get item Rate based on location selection
    */
   const getItemRateByLocation = async () => {
     if (branch === undefined || site === undefined || item === undefined) {
@@ -293,7 +297,7 @@ export const AddOrder = ({
               site,
               branch,
               item,
-              location: branchWiseLocation
+              location: branchWiseLocation,
             },
           );
           if (res.data.message !== undefined) {
@@ -344,12 +348,11 @@ export const AddOrder = ({
     }
   };
 
-
   const resetModal = () => {
     setvehicle(undefined);
     setcapacity(undefined);
     settruckload(undefined);
-    setVehicle_capacities(undefined)
+    setVehicle_capacities(undefined);
   };
 
   const checkLocation = () => {
@@ -374,20 +377,23 @@ export const AddOrder = ({
   };
 
   const addItemToList = () => {
-    if ((transport_mode == commonPoolLabel || transport_mode === othersLabel) && (vehicle_capacities == undefined)) {
+    if (
+      (transport_mode == commonPoolLabel || transport_mode === othersLabel) &&
+      vehicle_capacities == undefined
+    ) {
       setVehicleCapacityErrorMsg('Vehicle capacity is required.');
-    }
-    else if ((transport_mode == selfOwnedLabel) && (vehicle == undefined)) {
+    } else if (transport_mode == selfOwnedLabel && vehicle == undefined) {
       setVehicleErrorMsg('Vehicle is required.');
-    }
-    else if (noof_truck_load == undefined || noof_truck_load.trim() == '') {
+    } else if (noof_truck_load == undefined || noof_truck_load.trim() == '') {
       setTruckLoadErrorMsg('No of truck load is required.');
-    }
-    else {
+    } else {
       resetErrorMsg();
       const item = {
         vehicle,
-        vehicle_capacity: transport_mode == selfOwnedLabel ? vehicle_capacity : vehicle_capacities,
+        vehicle_capacity:
+          transport_mode == selfOwnedLabel
+            ? vehicle_capacity
+            : vehicle_capacities,
         noof_truck_load,
       };
       addItem(item);
@@ -404,8 +410,8 @@ export const AddOrder = ({
       branch,
       transport_mode,
       location: branchWiseLocation,
-      vehicles: items,//for self owned
-      pool_vehicles: items// for common pool
+      vehicles: items, //for self owned
+      pool_vehicles: items, // for common pool
     };
     submitSalesOrder(order_details, allLocation);
   };
@@ -416,8 +422,8 @@ export const AddOrder = ({
     }
   };
   /**
-   * 
-   * @param {to select transportation mode by defualt if there is only one value} val 
+   *
+   * @param {to select transportation mode by defualt if there is only one value} val
    */
   const selectTransportMode = () => {
     setTransportMode(undefined);
@@ -425,15 +431,18 @@ export const AddOrder = ({
 
   const calculateInvoice = async () => {
     if (items.length > 0) {
-      var totalOrderQty = items.reduce(function (prev, cur) {
-        return prev + (cur.noof_truck_load * cur.vehicle_capacity);
+      var totalOrderQty = items.reduce(function(prev, cur) {
+        return prev + cur.noof_truck_load * cur.vehicle_capacity;
       }, 0);
 
       settotalOrderQty(totalOrderQty);
 
       var totalItemRate = totalOrderQty * locationItemRate;
       settotalItemRate(totalItemRate.toFixed(2));
-      var totalTransportationRate = transport_mode == commonPoolLabel ? (totalOrderQty * itemDetail.tr_rate * itemDetail.distance) : 0.00;
+      var totalTransportationRate =
+        transport_mode == commonPoolLabel
+          ? totalOrderQty * itemDetail.tr_rate * itemDetail.distance
+          : 0.0;
       settotalTransportationRate(totalTransportationRate.toFixed(2));
       var totalPayableAmount = totalTransportationRate + totalItemRate;
       settotalPayableAmount(totalPayableAmount.toFixed(2));
@@ -445,191 +454,215 @@ export const AddOrder = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-      <Container>
-        <NavigationEvents
-          onWillFocus={_ => {
-            setState({});
-          }}
-          onWillBlur={_ => {
-            setState(undefined);
-          }}
-        />
-        <Content style={globalStyles.content}>
-          <Form>
-            <View style={globalStyles.dropdown}>
-              <Picker
-                mode="dropdown"
-                selectedValue={site}
-                onValueChange={val => setSite(val)}
-              >
-                <Picker.Item label={'Select Site'} value={undefined} key={-1} />
-                {all_sites &&
-                  all_sites.map((pur, idx) => {
-                    return (
-                      <Picker.Item
-                        label={`${pur.name} \n(${pur.construction_type} at ${pur.location})`}
-                        value={pur.name}
-                        key={idx}
-                      />
-                    );
-                  })}
-              </Picker>
-            </View>
-            <View style={globalStyles.dropdown}>
-              <Picker
-                mode="dropdown"
-                selectedValue={item}
-                onValueChange={val => setItem(val)}
-              >
-                <Picker.Item label={'Select Item'} value={undefined} key={-1} />
-                {all_items &&
-                  all_items.map((pur, idx) => {
-                    return (
-                      <Picker.Item
-                        label={`${pur[0]} \n(${pur[1]})`}
-                        value={pur[0]}
-                        key={idx}
-                      />
-                    );
-                  })}
-              </Picker>
-            </View>
+    <Container>
+      <NavigationEvents
+        onWillFocus={_ => {
+          setState({});
+        }}
+        onWillBlur={_ => {
+          setState(undefined);
+        }}
+      />
+      <Content style={globalStyles.content}>
+        <Form>
+          <View style={globalStyles.dropdown}>
+            <Picker
+              mode="dropdown"
+              selectedValue={site}
+              onValueChange={val => setSite(val)}>
+              <Picker.Item label={'Select Site'} value={undefined} key={-1} />
+              {all_sites &&
+                all_sites.map((pur, idx) => {
+                  return (
+                    <Picker.Item
+                      label={`${pur.name} \n(${pur.construction_type} at ${pur.location})`}
+                      value={pur.name}
+                      key={idx}
+                    />
+                  );
+                })}
+            </Picker>
+          </View>
+          <View style={globalStyles.dropdown}>
+            <Picker
+              mode="dropdown"
+              selectedValue={item}
+              onValueChange={val => setItem(val)}>
+              <Picker.Item label={'Select Item'} value={undefined} key={-1} />
+              {all_items &&
+                all_items.map((pur, idx) => {
+                  return (
+                    <Picker.Item
+                      label={`${pur[0]} \n(${pur[1]})`}
+                      value={pur[0]}
+                      key={idx}
+                    />
+                  );
+                })}
+            </Picker>
+          </View>
 
-            <View style={globalStyles.dropdown}>
-              <Picker
-                mode="dropdown"
-                selectedValue={branch}
-                onValueChange={val => {
-                  setBranch(val),
-                    selectTransportMode(),
-                    getOtherBranchInfo(val),
-                    setBranchWiseLocation(undefined),
-                    resetDataGrid(val)
+          <View style={globalStyles.dropdown}>
+            <Picker
+              mode="dropdown"
+              selectedValue={branch}
+              onValueChange={val => {
+                setBranch(val),
+                  selectTransportMode(),
+                  getOtherBranchInfo(val),
+                  setBranchWiseLocation(undefined),
+                  resetDataGrid(val);
+              }}>
+              <Picker.Item
+                label={'Select Material Source'}
+                value={undefined}
+                key={-1}
+              />
+              {all_branches &&
+                all_branches.map((pur, idx) => {
+                  return (
+                    <Picker.Item
+                      label={pur.branch}
+                      value={pur.branch}
+                      key={idx}
+                    />
+                  );
+                })}
+            </Picker>
+          </View>
+
+          <Modal
+            animationType="fade"
+            transparent={false}
+            visible={regionModal}
+            onRequestClose={() => setRegionModal(false)}>
+            <Content style={globalStyles.content}>
+              <Text
+                style={{
+                  fontSize: 25,
+                  fontWeight: 'bold',
+                  alignSelf: 'center',
+                  marginBottom: 10,
+                  color: Config.APP_HEADER_COLOR,
                 }}>
-                <Picker.Item label={'Select Material Source'} value={undefined} key={-1} />
-                {all_branches &&
-                  all_branches.map((pur, idx) => {
-                    return (
-                      <Picker.Item
-                        label={pur.branch}
-                        value={pur.branch}
+                Other Region Information
+              </Text>
+              {branch && (
+                <Row style={[globalStyles.tableContainer]}>
+                  <Grid>
+                    <Row style={globalStyles.tableHeaderContainer}>
+                      <Col size={2} style={globalStyles.colContainer}>
+                        <Text>Region</Text>
+                      </Col>
+                      <Col size={1.5} style={globalStyles.colContainer}>
+                        <Text>Location</Text>
+                      </Col>
+                      <Col size={1.5} style={globalStyles.colContainer}>
+                        <Text>Lead Time</Text>
+                      </Col>
+                      <Col size={1.5} style={globalStyles.colContainer}>
+                        <Text>Item Rate/m3</Text>
+                      </Col>
+                    </Row>
+                    {otherBranchInfo.map((item, idx) => (
+                      <Row
                         key={idx}
-                      />
-                    );
-                  })}
-              </Picker>
-            </View>
-
-            <Modal
-              animationType="fade"
-              transparent={false}
-              visible={regionModal}
-              onRequestClose={() => setRegionModal(false)}
-            >
-              <Content style={globalStyles.content}>
-                <Text
-                  style={{
-                    fontSize: 25,
-                    fontWeight: 'bold',
-                    alignSelf: 'center',
-                    marginBottom: 10,
-                    color: Config.APP_HEADER_COLOR,
-                  }}>
-                  Other Region Information
-                 </Text>
-                {branch && (
-                  <Row style={[globalStyles.tableContainer]}>
-                    <Grid>
-                      <Row style={globalStyles.tableHeaderContainer}>
+                        style={globalStyles.rowContainer}
+                        onPress={() => {
+                          setBranch(item.branch),
+                            setRegionModal(false),
+                            setBranchWiseLocation(item.location);
+                        }}>
                         <Col size={2} style={globalStyles.colContainer}>
-                          <Text>Region</Text>
+                          <Text>{item.branch}</Text>
                         </Col>
                         <Col size={1.5} style={globalStyles.colContainer}>
-                          <Text>Location</Text>
+                          <Text
+                            style={{
+                              color: 'blue',
+                              textDecorationLine: 'underline',
+                            }}>
+                            {item.location}
+                          </Text>
                         </Col>
                         <Col size={1.5} style={globalStyles.colContainer}>
-                          <Text>Lead Time</Text>
+                          <Text> {item.lead_time} Day(s)</Text>
                         </Col>
                         <Col size={1.5} style={globalStyles.colContainer}>
-                          <Text>Item Rate/m3</Text>
+                          <Text>Nu.{item.item_rate} </Text>
                         </Col>
                       </Row>
-                      {otherBranchInfo.map((item, idx) => (
-                        <Row key={idx} style={globalStyles.rowContainer}
-                          onPress={() => {
-                            setBranch(item.branch), setRegionModal(false),
-                              setBranchWiseLocation(item.location)
-                          }}
-                        >
-                          <Col size={2} style={globalStyles.colContainer} >
-                            <Text>{item.branch}</Text>
-                          </Col>
-                          <Col size={1.5} style={globalStyles.colContainer}>
-                            <Text style={{ color: 'blue', textDecorationLine: 'underline', }}>{item.location}</Text>
-                          </Col>
-                          <Col size={1.5} style={globalStyles.colContainer}>
-                            <Text> {item.lead_time} Day(s)</Text>
-                          </Col>
-                          <Col size={1.5} style={globalStyles.colContainer}>
-                            <Text>Nu.{item.item_rate} </Text>
-                          </Col>
-                        </Row>
-                      ))}
-                    </Grid>
-                  </Row>
-                )}
-                <Container
-                  style={{
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    maxHeight: 'auto',
+                    ))}
+                  </Grid>
+                </Row>
+              )}
+              <Container
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  maxHeight: 'auto',
+                }}>
+                <Text style={globalStyles.tapRegion}>
+                  Tap on the location to select
+                </Text>
+                <Button
+                  danger
+                  onPress={() => {
+                    setRegionModal(false);
                   }}>
-                  <Text style={globalStyles.tapRegion}>Tap on the location to select</Text>
-                  <Button danger onPress={() => { setRegionModal(false) }}>
-                    <Text>Cancel</Text>
-                  </Button>
-                </Container>
-              </Content>
-            </Modal>
+                  <Text>Cancel</Text>
+                </Button>
+              </Container>
+            </Content>
+          </Modal>
 
-            {(itemDetail !== undefined && branch !== undefined) ? (
-              <Fragment>
-                {(itemDetail.has_common_pool === 1) ? (
-                  <Text style={{ color: 'gray' }}>
-                    <Icon name="info-circle"
-                      type="FontAwesome"
-                      style={globalStyles.smallIcon}
-                    ></Icon>
-                    Will take approximately {itemDetail.lead_time} working days to deliver{'. \n'}
-                    {' '}
-                    <Text style={{ color: 'blue' }} onPress={() => { setRegionModal(true) }}>
-                      Click here
-                    </Text> to see information on sand available from other areas.
-                  </Text>
-                ) : (
-                    <Text style={{ color: 'gray' }}>
-                      <Icon name="info-circle"
-                        type="FontAwesome"
-                        style={globalStyles.smallIcon}
-                      ></Icon>
-                      Will take approximately {itemDetail.lead_time} working days to deliver.
-                    {' '}
-                    </Text>
-                  )}
+          {itemDetail !== undefined && branch !== undefined ? (
+            <Fragment>
+              {itemDetail.has_common_pool === 1 ? (
+                <Text style={{color: 'gray'}}>
+                  <Icon
+                    name="info-circle"
+                    type="FontAwesome"
+                    style={globalStyles.smallIcon}></Icon>
+                  Will take approximately {itemDetail.lead_time} working days to
+                  deliver{'. \n'}{' '}
+                  <Text
+                    style={{color: 'blue'}}
+                    onPress={() => {
+                      setRegionModal(true);
+                    }}>
+                    Click here
+                  </Text>{' '}
+                  to see information on sand available from other areas.
+                </Text>
+              ) : (
+                <Text style={{color: 'gray'}}>
+                  <Icon
+                    name="info-circle"
+                    type="FontAwesome"
+                    style={globalStyles.smallIcon}></Icon>
+                  Will take approximately {itemDetail.lead_time} working days to
+                  deliver.{' '}
+                </Text>
+              )}
 
-                {(allLocation.length > 0) && (
-                  <View style={globalStyles.dropdown}>
-                    <Picker
-                      mode="dropdown"
-                      selectedValue={branchWiseLocation}
-                      onValueChange={val => {
-                        if (val !== undefined) {
-                          setBranchWiseLocation(val),
-                            resetDataGrid(val)
-                        }
-                      }}>
-                      <Picker.Item label={'Select Location'} value={undefined} key={-1} />
-                      {allLocation && allLocation.map((pur, idx) => {
+              {allLocation.length > 0 && (
+                <View style={globalStyles.dropdown}>
+                  <Picker
+                    mode="dropdown"
+                    selectedValue={branchWiseLocation}
+                    onValueChange={val => {
+                      if (val !== undefined) {
+                        setBranchWiseLocation(val), resetDataGrid(val);
+                      }
+                    }}>
+                    <Picker.Item
+                      label={'Select Location'}
+                      value={undefined}
+                      key={-1}
+                    />
+                    {allLocation &&
+                      allLocation.map((pur, idx) => {
                         return (
                           <Picker.Item
                             label={pur.location}
@@ -638,392 +671,409 @@ export const AddOrder = ({
                           />
                         );
                       })}
-                    </Picker>
-                  </View>
-                )}
-                {branchWiseLocation && (
-                  <Text style={{ color: 'gray' }}>
-                    <Icon name="info-circle"
-                      type="FontAwesome"
-                      style={globalStyles.smallIcon}
-                    ></Icon>
-                    Item Rate Nu. {locationItemRate}/{itemDetail.stock_uom}
-                  </Text>
-                )}
-
-                <View style={globalStyles.dropdown}>
-                  {/* to select self owned */}
-                  {(itemDetail.allow_self_owned_transport === 1)
-                    && (itemDetail.has_common_pool !== 1)
-                    && (itemDetail.allow_other_transport !== 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={selfOwnedLabel}
-                          value={selfOwnedLabel}
-                          key={0}
-                        />
-                      </Picker>
-                    )}
-                  {/* to select common pool */}
-                  {(itemDetail.allow_self_owned_transport !== 1)
-                    && (itemDetail.has_common_pool === 1)
-                    && (itemDetail.allow_other_transport !== 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={commonPoolLabel}
-                          value={commonPoolLabel}
-                          key={0}
-                        />
-                      </Picker>
-                    )}
-
-                  {/* to select Others */}
-                  {(itemDetail.allow_self_owned_transport !== 1)
-                    && (itemDetail.has_common_pool !== 1)
-                    && (itemDetail.allow_other_transport == 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={othersLabel}
-                          value={othersLabel}
-                          key={0}
-                        />
-                      </Picker>
-                    )}
-
-                  {/* to select common pool and self owned */}
-                  {(itemDetail.allow_self_owned_transport === 1)
-                    && (itemDetail.has_common_pool === 1)
-                    && (itemDetail.allow_other_transport !== 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={selfOwnedLabel}
-                          value={selfOwnedLabel}
-                          key={0}
-                        />
-                        <Item
-                          label={commonPoolLabel}
-                          value={commonPoolLabel}
-                          key={1}
-                        />
-                      </Picker>
-                    )}
-                  {/* to select common pool and Other */}
-                  {(itemDetail.allow_self_owned_transport !== 1)
-                    && (itemDetail.has_common_pool === 1)
-                    && (itemDetail.allow_other_transport === 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={commonPoolLabel}
-                          value={commonPoolLabel}
-                          key={0}
-                        />
-                        <Item
-                          label={othersLabel}
-                          value={othersLabel}
-                          key={1}
-                        />
-                      </Picker>
-                    )}
-
-                  {/* to select self owned and Others */}
-                  {(itemDetail.allow_self_owned_transport === 1)
-                    && (itemDetail.has_common_pool !== 1)
-                    && (itemDetail.allow_other_transport === 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={selfOwnedLabel}
-                          value={selfOwnedLabel}
-                          key={0}
-                        />
-                        <Item
-                          label={othersLabel}
-                          value={othersLabel}
-                          key={1}
-                        />
-                      </Picker>
-                    )}
-
-                  {/* to select all three */}
-                  {(itemDetail.allow_self_owned_transport === 1)
-                    && (itemDetail.has_common_pool === 1)
-                    && (itemDetail.allow_other_transport === 1) &&
-                    (
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={transport_mode}
-                        onValueChange={val => { setTransportMode(val), resetDataGrid(val) }
-                        }>
-                        <Item
-                          label={'Select Transport Mode'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        <Item
-                          label={selfOwnedLabel}
-                          value={selfOwnedLabel}
-                          key={0}
-                        />
-                        <Item
-                          label={commonPoolLabel}
-                          value={commonPoolLabel}
-                          key={1}
-                        />
-                        <Item
-                          label={othersLabel}
-                          value={othersLabel}
-                          key={2}
-                        />
-                      </Picker>
-                    )}
+                  </Picker>
                 </View>
-
-                {transport_mode && (
-                  <Fragment>
-                    <Button
-                      info
-                      onPress={() => { setShowModal(true), resetErrorMsg(), resetModal(), checkLocation() }}
-                      style={globalStyles.mb10}>
-                      {items.length > 0 ? (
-                        <Text>Add More Qty</Text>
-                      ) : (
-                          <Text>Add Qty</Text>
-                        )}
-                    </Button>
-
-                    <OrderQty
-                      data={items}
-                      removeItem={removeItem}
-                      transport_mode={transport_mode}
-                    />
-                  </Fragment>
-                )}
-              </Fragment>
-            ) : (
-                <Text></Text>
+              )}
+              {branchWiseLocation && (
+                <Text style={{color: 'gray'}}>
+                  <Icon
+                    name="info-circle"
+                    type="FontAwesome"
+                    style={globalStyles.smallIcon}></Icon>
+                  Item Rate Nu. {locationItemRate}/{itemDetail.stock_uom}
+                </Text>
               )}
 
-            {(items.length > 0 && branch !== undefined && transport_mode !== undefined) ? (
-              <Fragment>
-                <Row style={globalStyles.labelContainer}>
-                </Row>
-                <Row style={globalStyles.labelContainer}>
-                  <Col size={3}>
-                    <Text>Total Order Qty:</Text>
-                  </Col>
-                  <Col size={2}>
-                    <Text style={{ textAlign: 'right' }}>{totalOrderQty} m3</Text>
-                  </Col>
-                </Row>
-                <Row style={globalStyles.labelContainer}>
-                  <Col size={3}>
-                    <Text >Total Item Amt:</Text>
-                  </Col>
-                  <Col size={2}>
-                    <Text style={{ textAlign: 'right' }}>Nu.{commaNumber(totalItemRate)}</Text>
-                  </Col>
-                </Row>
-                <Row style={globalStyles.labelContainer}>
-                  {transport_mode === commonPoolLabel && (
-                    <Col size={4}>
-                      <Text>Total Transportation Amt:</Text>
-                    </Col>
+              <View style={globalStyles.dropdown}>
+                {/* to select self owned */}
+                {itemDetail.allow_self_owned_transport === 1 &&
+                  itemDetail.has_common_pool !== 1 &&
+                  itemDetail.allow_other_transport !== 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item
+                        label={selfOwnedLabel}
+                        value={selfOwnedLabel}
+                        key={0}
+                      />
+                    </Picker>
                   )}
-                  {transport_mode === commonPoolLabel && (
-                    <Col size={2}>
-                      <Text style={{ textAlign: 'right' }}>Nu.{commaNumber(totalTransportationRate)}</Text>
-                    </Col>
+                {/* to select common pool */}
+                {itemDetail.allow_self_owned_transport !== 1 &&
+                  itemDetail.has_common_pool === 1 &&
+                  itemDetail.allow_other_transport !== 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item
+                        label={commonPoolLabel}
+                        value={commonPoolLabel}
+                        key={0}
+                      />
+                    </Picker>
                   )}
-                </Row>
-                <Item></Item>
 
-                <Row style={globalStyles.labelContainer}>
-                  <Col size={3}>
-                    <Text style={{ textAlign: 'left', fontWeight: 'bold', }}>Total Payable Amt:</Text>
-                  </Col>
-                  <Col size={2}>
-                    <Text style={{ textAlign: 'right', fontWeight: 'bold', }}>Nu.{commaNumber(totalPayableAmount)}</Text>
-                  </Col>
-                </Row>
-              </Fragment>
-            ) : (
-                <Text></Text>
+                {/* to select Others */}
+                {itemDetail.allow_self_owned_transport !== 1 &&
+                  itemDetail.has_common_pool !== 1 &&
+                  itemDetail.allow_other_transport == 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item label={othersLabel} value={othersLabel} key={0} />
+                    </Picker>
+                  )}
+
+                {/* to select common pool and self owned */}
+                {itemDetail.allow_self_owned_transport === 1 &&
+                  itemDetail.has_common_pool === 1 &&
+                  itemDetail.allow_other_transport !== 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item
+                        label={selfOwnedLabel}
+                        value={selfOwnedLabel}
+                        key={0}
+                      />
+                      <Item
+                        label={commonPoolLabel}
+                        value={commonPoolLabel}
+                        key={1}
+                      />
+                    </Picker>
+                  )}
+                {/* to select common pool and Other */}
+                {itemDetail.allow_self_owned_transport !== 1 &&
+                  itemDetail.has_common_pool === 1 &&
+                  itemDetail.allow_other_transport === 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item
+                        label={commonPoolLabel}
+                        value={commonPoolLabel}
+                        key={0}
+                      />
+                      <Item label={othersLabel} value={othersLabel} key={1} />
+                    </Picker>
+                  )}
+
+                {/* to select self owned and Others */}
+                {itemDetail.allow_self_owned_transport === 1 &&
+                  itemDetail.has_common_pool !== 1 &&
+                  itemDetail.allow_other_transport === 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item
+                        label={selfOwnedLabel}
+                        value={selfOwnedLabel}
+                        key={0}
+                      />
+                      <Item label={othersLabel} value={othersLabel} key={1} />
+                    </Picker>
+                  )}
+
+                {/* to select all three */}
+                {itemDetail.allow_self_owned_transport === 1 &&
+                  itemDetail.has_common_pool === 1 &&
+                  itemDetail.allow_other_transport === 1 && (
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={transport_mode}
+                      onValueChange={val => {
+                        setTransportMode(val), resetDataGrid(val);
+                      }}>
+                      <Item
+                        label={'Select Transport Mode'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      <Item
+                        label={selfOwnedLabel}
+                        value={selfOwnedLabel}
+                        key={0}
+                      />
+                      <Item
+                        label={commonPoolLabel}
+                        value={commonPoolLabel}
+                        key={1}
+                      />
+                      <Item label={othersLabel} value={othersLabel} key={2} />
+                    </Picker>
+                  )}
+              </View>
+
+              {transport_mode && (
+                <Fragment>
+                  <Button
+                    info
+                    onPress={() => {
+                      setShowModal(true),
+                        resetErrorMsg(),
+                        resetModal(),
+                        checkLocation();
+                    }}
+                    style={globalStyles.mb10}>
+                    {items.length > 0 ? (
+                      <Text>Add More Qty</Text>
+                    ) : (
+                      <Text>Add Qty</Text>
+                    )}
+                  </Button>
+
+                  <OrderQty
+                    data={items}
+                    removeItem={removeItem}
+                    transport_mode={transport_mode}
+                  />
+                </Fragment>
               )}
-
+            </Fragment>
+          ) : (
             <Text></Text>
-            <Button
-              block
-              success
-              iconLeft
-              style={globalStyles.mb10}
-              onPress={submitOrder}>
-              <Text>Place Order</Text>
-            </Button>
-          </Form>
-        </Content>
+          )}
 
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={showModal}
-          onRequestClose={() => setShowModal(false)}>
-          <Content style={globalStyles.content}>
-            <Text
-              style={{
-                fontSize: 25,
-                fontWeight: 'bold',
-                alignSelf: 'center',
-                marginBottom: 10,
-                color: Config.APP_HEADER_COLOR,
-              }}>
-              Add Qty
+          {items.length > 0 &&
+          branch !== undefined &&
+          transport_mode !== undefined ? (
+            <Fragment>
+              <Row style={globalStyles.labelContainer}></Row>
+              <Row style={globalStyles.labelContainer}>
+                <Col size={3}>
+                  <Text>Total Order Qty:</Text>
+                </Col>
+                <Col size={2}>
+                  <Text style={{textAlign: 'right'}}>{totalOrderQty} m3</Text>
+                </Col>
+              </Row>
+              <Row style={globalStyles.labelContainer}>
+                <Col size={3}>
+                  <Text>Total Item Amt:</Text>
+                </Col>
+                <Col size={2}>
+                  <Text style={{textAlign: 'right'}}>
+                    Nu.{commaNumber(totalItemRate)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row style={globalStyles.labelContainer}>
+                {transport_mode === commonPoolLabel && (
+                  <Col size={4}>
+                    <Text>Total Transportation Amt:</Text>
+                  </Col>
+                )}
+                {transport_mode === commonPoolLabel && (
+                  <Col size={2}>
+                    <Text style={{textAlign: 'right'}}>
+                      Nu.{commaNumber(totalTransportationRate)}
+                    </Text>
+                  </Col>
+                )}
+              </Row>
+              <Item></Item>
+
+              <Row style={globalStyles.labelContainer}>
+                <Col size={3}>
+                  <Text style={{textAlign: 'left', fontWeight: 'bold'}}>
+                    Total Payable Amt:
+                  </Text>
+                </Col>
+                <Col size={2}>
+                  <Text style={{textAlign: 'right', fontWeight: 'bold'}}>
+                    Nu.{commaNumber(totalPayableAmount)}
+                  </Text>
+                </Col>
+              </Row>
+            </Fragment>
+          ) : (
+            <Text></Text>
+          )}
+
+          <Text></Text>
+          <Button
+            block
+            success
+            iconLeft
+            style={globalStyles.mb10}
+            onPress={submitOrder}>
+            <Text>Place Order</Text>
+          </Button>
+        </Form>
+      </Content>
+
+      <Modal
+        animationType="slide"
+        transparent={false}
+        visible={showModal}
+        onRequestClose={() => setShowModal(false)}>
+        <Content style={globalStyles.content}>
+          <Text
+            style={{
+              fontSize: 25,
+              fontWeight: 'bold',
+              alignSelf: 'center',
+              marginBottom: 10,
+              color: Config.APP_HEADER_COLOR,
+            }}>
+            Add Qty
           </Text>
 
-            {(transport_mode === commonPoolLabel || transport_mode === othersLabel) && (
-              <View style={globalStyles.dropdown}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={vehicle_capacities}
-                  onValueChange={val => { setVehicle_capacities(val), resetErrorMsg() }
-                  }>
-                  <Picker.Item
-                    label={'Select Vehicle Capacity'}
-                    value={undefined}
-                    key={-1}
-                  />
-                  {all_vehicle_capacities &&
-                    all_vehicle_capacities.map((pur, idx) => {
-                      return (
-                        <Picker.Item label={pur.name} value={pur.name} key={idx} />
-                      );
-                    })}
-                </Picker>
-              </View>
-            )}
+          {(transport_mode === commonPoolLabel ||
+            transport_mode === othersLabel) && (
+            <View style={globalStyles.dropdown}>
+              <Picker
+                mode="dropdown"
+                selectedValue={vehicle_capacities}
+                onValueChange={val => {
+                  setVehicle_capacities(val), resetErrorMsg();
+                }}>
+                <Picker.Item
+                  label={'Select Vehicle Capacity'}
+                  value={undefined}
+                  key={-1}
+                />
+                {all_vehicle_capacities &&
+                  all_vehicle_capacities.map((pur, idx) => {
+                    return (
+                      <Picker.Item
+                        label={pur.name}
+                        value={pur.name}
+                        key={idx}
+                      />
+                    );
+                  })}
+              </Picker>
+            </View>
+          )}
 
-            {(transport_mode === selfOwnedLabel) && (
-              <View style={globalStyles.dropdown}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={vehicle}
-                  onValueChange={val => { setVehDetails(val), setVehicleErrorMsg('') }}
-                >
-                  <Picker.Item
-                    label={'Select Vehicle'}
-                    value={undefined}
-                    key={-1}
-                  />
-                  {allprivatevehicles &&
-                    allprivatevehicles.map((val, idx) => {
-                      return (
-                        <Picker.Item label={val.vehicle} value={val} key={idx} />
-                      );
-                    })}
-                </Picker>
-              </View>
-            )}
-            {(vehicle || vehicle_capacities) && (
-              <Fragment>
-                {vehicle && (
-                  <Item regular style={globalStyles.mb10}>
-                    <Input disabled value={vehicle_capacity} placeholder="Capacity" />
-                  </Item>
-                )}
-
+          {transport_mode === selfOwnedLabel && (
+            <View style={globalStyles.dropdown}>
+              <Picker
+                mode="dropdown"
+                selectedValue={vehicle}
+                onValueChange={val => {
+                  setVehDetails(val), setVehicleErrorMsg('');
+                }}>
+                <Picker.Item
+                  label={'Select Vehicle'}
+                  value={undefined}
+                  key={-1}
+                />
+                {allprivatevehicles &&
+                  allprivatevehicles.map((val, idx) => {
+                    return (
+                      <Picker.Item label={val.vehicle} value={val} key={idx} />
+                    );
+                  })}
+              </Picker>
+            </View>
+          )}
+          {(vehicle || vehicle_capacities) && (
+            <Fragment>
+              {vehicle && (
                 <Item regular style={globalStyles.mb10}>
                   <Input
-                    value={noof_truck_load}
-                    onChangeText={val => { settruckload(val), setTruckLoadErrorMsg('') }}
-                    placeholder="No of Truck Load"
-                    keyboardType={'numeric'}
+                    disabled
+                    value={vehicle_capacity}
+                    placeholder="Capacity"
                   />
                 </Item>
-              </Fragment>
-            )}
-            <Container
-              style={{
-                flexDirection: 'row',
-                justifyContent: 'space-between',
-                maxHeight: 50,
-              }}>
-              <Button success onPress={addItemToList}>
-                <Text>Add Qty</Text>
-              </Button>
-              <Button danger onPress={() => { setShowModal(false), setvehicle(undefined) }}>
-                <Text>Cancel</Text>
-              </Button>
-            </Container>
+              )}
 
-            <Container>
-              <View>
-                <Text style={globalStyles.errorMsg}>
-                  {vehicleCapacityErrorMsg}{vehicleErrorMsg}{truckLoadErrorMsg}
-                </Text>
-              </View>
-            </Container>
-          </Content>
-        </Modal>
-      </Container>
-    );
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={noof_truck_load}
+                  onChangeText={val => {
+                    settruckload(val), setTruckLoadErrorMsg('');
+                  }}
+                  placeholder="No of Truck Load"
+                  keyboardType={'numeric'}
+                />
+              </Item>
+            </Fragment>
+          )}
+          <Container
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              maxHeight: 50,
+            }}>
+            <Button success onPress={addItemToList}>
+              <Text>Add Qty</Text>
+            </Button>
+            <Button
+              danger
+              onPress={() => {
+                setShowModal(false), setvehicle(undefined);
+              }}>
+              <Text>Cancel</Text>
+            </Button>
+          </Container>
+
+          <Container>
+            <View>
+              <Text style={globalStyles.errorMsg}>
+                {vehicleCapacityErrorMsg}
+                {vehicleErrorMsg}
+                {truckLoadErrorMsg}
+              </Text>
+            </View>
+          </Container>
+        </Content>
+      </Modal>
+    </Container>
+  );
 };
 
 const mapStateToProps = state => ({
@@ -1036,7 +1086,7 @@ const mapDispatchToProps = {
   handleError,
   getImages,
   setLoading,
-  showToast
+  showToast,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddOrder);
