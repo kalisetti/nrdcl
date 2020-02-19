@@ -555,20 +555,17 @@ export const AddOrder = ({
                         </Col>
                       </Row>
                       {otherBranchInfo.map((item, idx) => (
-                        <Row key={idx} style={globalStyles.rowContainer}>
-                          <Col size={2} style={globalStyles.colContainer}
-                            onPress={() => {
-                              setBranch(item.branch), setRegionModal(false),
-                                setBranchWiseLocation(item.location)
-                            }} >
+                        <Row key={idx} style={globalStyles.rowContainer}
+                        onPress={() => {
+                          setBranch(item.branch), setRegionModal(false),
+                            setBranchWiseLocation(item.location)
+                        }} 
+                        >
+                          <Col size={2} style={globalStyles.colContainer} >
                             <Text>{item.branch}</Text>
                           </Col>
-                          <Col size={1.5} style={globalStyles.colContainer}
-                            onPress={() => {
-                              setBranch(item.branch), setRegionModal(false),
-                                setBranchWiseLocation(item.location)
-                            }}>
-                            <Text>{item.location}</Text>
+                          <Col size={1.5} style={globalStyles.colContainer}>
+                            <Text style={{color:'blue', textDecorationLine: 'underline',}}>{item.location}</Text>
                           </Col>
                           <Col size={1.5} style={globalStyles.colContainer}>
                             <Text> {item.lead_time} Day(s)</Text>
