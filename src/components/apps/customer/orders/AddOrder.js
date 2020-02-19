@@ -407,7 +407,7 @@ export const AddOrder = ({
       vehicles: items,//for self owned
       pool_vehicles: items// for common pool
     };
-    submitSalesOrder(order_details, allLocation);
+    submitSalesOrder(order_details, allLocation, totalPayableAmount);
   };
 
   const resetDataGrid = val => {

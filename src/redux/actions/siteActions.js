@@ -69,7 +69,7 @@ export const startSiteRegistration = (site_info, images, isBuilding) => {
 };
 
 //Submitting the sales order and nagivate to payment screen.
-export const submitSalesOrder = (data, allLocation, totalPayableAmount, ) => {
+export const submitSalesOrder = (data, allLocation, totalPayableAmount) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {

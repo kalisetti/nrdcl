@@ -15,6 +15,9 @@ import {
     Card,
     CardItem,
     DeckSwiper,
+    Fragment,
+    Row,
+    Col
 } from 'native-base';
 import {
     callAxios,
@@ -28,6 +31,7 @@ import {
 } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
+import { default as commaNumber } from 'comma-number';
 export const Payment = ({
     userState,
     commonState,
@@ -127,7 +131,7 @@ export const Payment = ({
 
     //Confirming the remitter bank and account number with getting OTP SMS
     const paymentRequest = async () => {
-        if (remitter_bank == null || remitter_bank== '') {
+        if (remitter_bank == null || remitter_bank == '') {
             showToast('Remitter bank is mandatory.', 'danger');
         } else if (remitter_acc_no == '') {
             showToast('Remitter account number is mandatory.', 'danger');
@@ -138,7 +142,7 @@ export const Payment = ({
                     'customer_order': navigation.getParam('orderNumber'),
                     'bank_code': remitter_bank,
                     'bank_account': remitter_acc_no,
-                    'amount': 1
+                    'amount': navigation.getParam('totalPayableAmount')
                 };
                 const res = await callAxios('method/erpnext.crm_api.init_payment',
                     'post',
@@ -192,14 +196,22 @@ export const Payment = ({
     ) : (<Container>
         <Content style={globalStyles.content}>
             <Form>
-                <Item>
-                    <Text style={globalStyles.label}>Your Order Number is :</Text>
-                    <Input style={globalStyles.label} disabled
-                        value={navigation.getParam('orderNumber')}
-                        onChangeText={val => setorder_no(val)}
-                    />
-                </Item>
-                <Text></Text>
+                <Row style={globalStyles.labelContainer}>
+                    <Col size={2}>
+                        <Text style={{ textAlign: 'right' }}>Your Order Number is : </Text>
+                    </Col>
+                    <Col size={2}>
+                        <Text style={globalStyles.label}>{navigation.getParam('orderNumber')}</Text>
+                    </Col>
+                </Row>
+                <Row style={globalStyles.labelContainer}>
+                    <Col size={2}>
+                        <Text style={{ textAlign: 'right' }}>Amount Payable : </Text>
+                    </Col>
+                    <Col size={2}>
+                        <Text style={globalStyles.label}>Nu.{commaNumber(navigation.getParam('totalPayableAmount'))}/-</Text>
+                    </Col>
+                </Row>
                 <View style={globalStyles.dropdown}>
                     <Picker
                         mode="dropdown"
