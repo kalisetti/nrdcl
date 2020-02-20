@@ -167,7 +167,6 @@ export const startPin = (
         params,
       );
       dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
-      // dispatch(setLoading(false));
       return res;
     } catch (error) {
       dispatch(handleError(error));
@@ -192,13 +191,7 @@ export const startResetPin = (loginid, mobileno) => {
         'post',
         params,
       );
-      if(res.status==200){
-        dispatch(setLoading(false));
-        dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
-        NavigationService.navigate('Login')
-
-      }
-     
+      return res;
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -226,7 +219,6 @@ export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, 
         'post',
         params,
       );
-      // dispatch(showToast(`User Registered`, 'success'));
       NavigationService.navigate('Login');;
       //Start Login
       dispatch(startLogin(loginid, pin));
