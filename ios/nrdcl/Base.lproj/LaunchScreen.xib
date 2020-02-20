@@ -27,7 +27,8 @@
                 </label>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="launchIcon" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="mRf-Kf-EX6">
                     <rect key="frame" x="0.0" y="85" width="480" height="109"/>
-                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxX="YES" heightSizable="YES" flexibleMaxY="YES"/>
+                    <rect key="contentStretch" x="1" y="1" width="1" height="1"/>
                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="medium"/>
                 </imageView>
             </subviews>
