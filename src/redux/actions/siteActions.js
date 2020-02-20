@@ -16,8 +16,8 @@ import {
   vehilceSchema,
   driverInfoSchemaSelf,
 } from '../../validation/schema/siteSchema';
+import {paymentOTPSchema} from '../../validation/schema/customerSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
-
 
 /**
  *
@@ -37,11 +37,10 @@ export const startSiteRegistration = (site_info, images, isBuilding) => {
       });
       await siteSchema.validate(site_info);
       if (isBuilding == 1 && site_info.number_of_floors == null) {
-        dispatch(showToast('Number of floors is madatory'))
+        dispatch(showToast('Number of floors is madatory'));
       } else if (isBuilding == 1 && site_info.plot_no == null) {
         dispatch(showToast('Plot/Thram No is mandatory'));
-      }
-      else if (images.length <= 0) {
+      } else if (images.length <= 0) {
         dispatch(showToast('Please Attach Construction Approval Documents'));
       } else {
         let res = await callAxios(
@@ -59,9 +58,13 @@ export const startSiteRegistration = (site_info, images, isBuilding) => {
 
         NavigationService.navigate('SiteDashboard');
         dispatch(setLoading(false));
-        dispatch(showToast('Site Registration request sent, please wait for approval.', 'success'));
+        dispatch(
+          showToast(
+            'Site Registration request sent, please wait for approval.',
+            'success',
+          ),
+        );
       }
-
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -83,13 +86,12 @@ export const submitSalesOrder = (data, allLocation, totalPayableAmount) => {
           data,
         );
         if (res.status == 200) {
-          NavigationService.navigate('Payment',
-            {
-              orderNumber: res.data.data.name,
-              site_type: res.data.data.site_type,
-              totalPayableAmount: totalPayableAmount,
-              approval_status: ''//This is passed to hide and show the paylater button and attachment at payment screen for special project.
-            })
+          NavigationService.navigate('Payment', {
+            orderNumber: res.data.data.name,
+            site_type: res.data.data.site_type,
+            totalPayableAmount: totalPayableAmount,
+            approval_status: '', //This is passed to hide and show the paylater button and attachment at payment screen for special project.
+          });
         }
       }
     } catch (error) {
@@ -98,7 +100,7 @@ export const submitSalesOrder = (data, allLocation, totalPayableAmount) => {
   };
 };
 
-//Credit payment 
+//Credit payment
 export const submitCreditPayment = (data, approvalDocmage = []) => {
   return async dispatch => {
     dispatch(setLoading(true));
@@ -107,7 +109,7 @@ export const submitCreditPayment = (data, approvalDocmage = []) => {
         'resource/Customer Payment/',
         'POST',
         {},
-        data
+        data,
       );
       const docname = res.data.data.name;
       const doctype = res.data.data.doctype;
@@ -117,7 +119,12 @@ export const submitCreditPayment = (data, approvalDocmage = []) => {
 
       if (res.status == 200) {
         dispatch(setLoading(false));
-        dispatch(showToast('Your request for the credit payment was submitted successfully, please wait for approval.', 'success'));
+        dispatch(
+          showToast(
+            'Your request for the credit payment was submitted successfully, please wait for approval.',
+            'success',
+          ),
+        );
         NavigationService.navigate('OrderDashboard');
       }
     } catch (error) {
@@ -126,12 +133,12 @@ export const submitCreditPayment = (data, approvalDocmage = []) => {
   };
 };
 
-//Payment confrimation from remitter 
-export const submitMakePayment = (data) => {
+//Payment confrimation from remitter
+export const submitMakePayment = data => {
   return async dispatch => {
     // dispatch(setLoading(true));
     try {
-      // await siteSchema.validate(site_info);
+      await paymentOTPSchema.validate(data);
       const res = await callAxios(
         'method/erpnext.crm_api.make_payment',
         'post',
@@ -144,7 +151,6 @@ export const submitMakePayment = (data) => {
       // }
       return res;
     } catch (error) {
-      // console.log("error log", error)
       dispatch(handleError(error));
     }
   };
@@ -238,7 +244,12 @@ export const startQtyExtension = (site_info, images) => {
 
       NavigationService.navigate('SiteDashboard');
       dispatch(setLoading(false));
-      dispatch(showToast('Your request has been sent, please wait for approval', 'success'));
+      dispatch(
+        showToast(
+          'Your request has been sent, please wait for approval',
+          'success',
+        ),
+      );
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -261,11 +272,13 @@ export const startVehicleRegistration = (
     try {
       await vehilceSchema.validate(vehicle_info);
       if (bluebook.length <= 0) {
-        dispatch(showToast('Bluebook and Driving Licence Attachment is mandatory'))
+        dispatch(
+          showToast('Bluebook and Driving Licence Attachment is mandatory'),
+        );
       } else if (vehicle_info.owner_cid == '') {
-        dispatch(showToast('Spouse CID Number is mandatory'))
-      } else if (vehicle_info.owner == "Spouse" && mc.length <= 0) {
-        dispatch(showToast('Marriage certificate Attachment is mandatory'))
+        dispatch(showToast('Spouse CID Number is mandatory'));
+      } else if (vehicle_info.owner == 'Spouse' && mc.length <= 0) {
+        dispatch(showToast('Marriage certificate Attachment is mandatory'));
       } else {
         let res = await callAxios(
           'resource/Transport Request/',
@@ -284,7 +297,12 @@ export const startVehicleRegistration = (
           await attachFile(doctype, docname, image);
         });
         dispatch(setLoading(false));
-        dispatch(showToast('Vehicle Registration request sent, Please wait for approval.', 'success'));
+        dispatch(
+          showToast(
+            'Vehicle Registration request sent, Please wait for approval.',
+            'success',
+          ),
+        );
         NavigationService.navigate('VehicleDashboard');
       }
     } catch (error) {
@@ -306,7 +324,12 @@ export const startUpdateDriverDetail = driver_info => {
 
       NavigationService.navigate('ListTransport');
       dispatch(setLoading(false));
-      dispatch(showToast('Update Info request sent, Please wait for approval', 'success'));
+      dispatch(
+        showToast(
+          'Update Info request sent, Please wait for approval',
+          'success',
+        ),
+      );
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -325,7 +348,12 @@ export const startUpdateDriverDetailSelf = driver_info => {
 
       NavigationService.navigate('ListVehicle');
       dispatch(setLoading(false));
-      dispatch(showToast('Update Info request sent, Please wait for approval', 'success'));
+      dispatch(
+        showToast(
+          'Update Info request sent, Please wait for approval',
+          'success',
+        ),
+      );
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -378,18 +406,17 @@ export const startVehicleDeregistration = vehicle => {
 };
 
 /**
- * 
+ *
  */
-export const confirmRecived = (data) => {
+export const confirmRecived = data => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
       const res = await callAxios(
         'method/erpnext.crm_api.delivery_confirmation',
         'post',
-        data
+        data,
       );
-      console.log(res)
       dispatch(setLoading(false));
       NavigationService.navigate('DeliveryList');
       dispatch(showToast('Infomartation successfuly updated', 'success'));

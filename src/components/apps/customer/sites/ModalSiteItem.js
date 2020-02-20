@@ -69,7 +69,6 @@ const SiteItem = ({
   }, [branch]);
 
   const getAllBranch = async sub_group => {
-    console.log('ALLBRANCH');
     try {
       const all_branches = await callAxios(
         'method/erpnext.crm_utils.get_branch_source',
@@ -114,7 +113,6 @@ const SiteItem = ({
 
   const addItemToList = () => {
     if (item_sub_group === undefined) {
-      setErrorMsg('');
       setErrorMsg('Please Select Item');
     } else if (branch === undefined || branch === null) {
       setErrorMsg('Select Source');

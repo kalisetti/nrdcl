@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { connect } from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {connect} from 'react-redux';
 import {
   Container,
   Text,
@@ -18,8 +18,8 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import { FlatList } from 'react-native-gesture-handler';
-import { NavigationEvents } from 'react-navigation';
+import {FlatList} from 'react-native-gesture-handler';
+import {NavigationEvents} from 'react-navigation';
 
 export const ListTransport = ({
   userState,
@@ -42,7 +42,7 @@ export const ListTransport = ({
     }
   }, [reload]);
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({item}) => {
     return (
       <Card>
         <CardItem
@@ -50,16 +50,15 @@ export const ListTransport = ({
           bordered
           button
           onPress={() => {
-            navigation.navigate('TransportDetail', { id: item.name });
+            navigation.navigate('TransportDetail', {id: item.name});
           }}
           style={globalStyles.tableHeader}>
-
           <Body>
             {item.approval_status === 'Pending' ? (
-              <Text style={{ color: 'red' }}>{item.vehicle_no}</Text>
+              <Text style={{color: 'red'}}>{item.vehicle_no}</Text>
             ) : (
-                <Text style={{ color: 'blue' }}>{item.vehicle_no}</Text>
-              )}
+              <Text style={{color: 'blue'}}>{item.vehicle_no}</Text>
+            )}
           </Body>
 
           <Right>
@@ -84,7 +83,7 @@ export const ListTransport = ({
         'vehicle_no',
         'drivers_name',
         'contact_no',
-        'approval_status'
+        'approval_status',
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
@@ -95,9 +94,7 @@ export const ListTransport = ({
 
     try {
       const response = await callAxios(
-        'resource/Transport Request?order_by=creation%20desc,approval_status%20asc',
-        'GET',
-        params,
+        `resource/Transport Request?order_by=creation desc,approval_status asc&fields=["name", "vehicle_capacity","vehicle_no","drivers_name","contact_no","approval_status"]&filters=[["user","=",${userState.login_id}], ["common_pool", "=", 1],["approval_status", "!=", "Deregistered"]]`,
       );
       setVehicle(response.data.data);
       setLoading(false);
@@ -109,26 +106,28 @@ export const ListTransport = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-      <Container style={globalStyles.listContent}>
-        <NavigationEvents
-          onWillFocus={_ => {
-            setReload(1);
-          }}
-          onWillBlur={_ => {
-            setReload(0);
-          }}
+    <Container style={globalStyles.listContent}>
+      <NavigationEvents
+        onWillFocus={_ => {
+          setReload(1);
+        }}
+        onWillBlur={_ => {
+          setReload(0);
+        }}
+      />
+      {vehicle.length > 0 ? (
+        <FlatList
+          data={vehicle}
+          renderItem={renderItem}
+          keyExtractor={item => item.name}
         />
-        {vehicle.length > 0 ? (
-          <FlatList
-            data={vehicle}
-            renderItem={renderItem}
-            keyExtractor={item => item.name}
-          />
-        ) : (
-            <Text style={globalStyles.emptyString}>No common pool transports yet under your name.</Text>
-          )}
-      </Container>
-    );
+      ) : (
+        <Text style={globalStyles.emptyString}>
+          No common pool transports yet under your name.
+        </Text>
+      )}
+    </Container>
+  );
 };
 
 const mapStateToProps = state => ({

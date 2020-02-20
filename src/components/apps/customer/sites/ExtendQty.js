@@ -50,10 +50,12 @@ export const ExtendQty = ({
   }, []);
 
   useEffect(() => {
-    setDocuments([]);
-    setTimeout(() => {
-      setDocuments(images);
-    }, 600);
+    if (images) {
+      setDocuments([]);
+      setTimeout(() => {
+        setDocuments(images);
+      }, 600);
+    }
   }, [images]);
 
   const setQty = num => {
@@ -110,7 +112,7 @@ export const ExtendQty = ({
             <Input
               value={additional_quantity}
               onChangeText={val => setQty(val)}
-              keyboardType='numeric'
+              keyboardType="numeric"
             />
           </Item>
 
@@ -130,7 +132,7 @@ export const ExtendQty = ({
             onPress={getSupportingDocuments}>
             <Text>Attach Supporting Documents</Text>
           </Button> */}
-          
+
           {extension_approval_document.length === 0 ? null : (
             <View style={{height: 300, width: '100%', marginBottom: 20}}>
               <Text style={{alignSelf: 'center', color: 'red'}}>

@@ -114,10 +114,12 @@ export const AddSite = ({
   }, []);
 
   useEffect(() => {
-    setImages([]);
-    setTimeout(() => {
-      setImages(approval_document);
-    }, 600);
+    if (approval_document) {
+      setImages([]);
+      setTimeout(() => {
+        setImages(approval_document);
+      }, 600);
+    }
   }, [approval_document]);
 
   const getIsBuilding = async id => {
@@ -331,6 +333,7 @@ export const AddSite = ({
           <Item regular style={globalStyles.mb10}>
             <Textarea
               value={location}
+              rowSpan={3}
               onChangeText={val => setlocation(val)}
               placeholder="Location (Specific Location of Construction Site)"
             />

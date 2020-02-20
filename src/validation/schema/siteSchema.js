@@ -1,15 +1,12 @@
 import * as yup from 'yup';
 
-
-
 export const siteSchema = yup.object().shape({
   user: yup
     .string()
     .trim()
     .required('User is mandatory'),
 
-  items: yup.array()
-    .required('Expected materials is mandatory'),
+  items: yup.array().required('Expected materials is mandatory'),
   remarks: yup
     .string()
     .trim()
@@ -28,10 +25,12 @@ export const siteSchema = yup.object().shape({
     .string()
     .trim()
     .required('Dzongkhag is mandatory'),
-  construction_end_date: yup.date()
+  construction_end_date: yup
+    .date()
     .typeError('End Date is mandatory')
     .required('End Date is mandatory'),
-  construction_start_date: yup.date()
+  construction_start_date: yup
+    .date()
     .typeError('Start Date is mandatory')
     .required('Start Date is mandatory'),
   approval_no: yup
@@ -233,9 +232,7 @@ export const orderSchema = yup.object().shape({
     .trim()
     .required('User is mandatory'),
 
-
-  items: yup.array()
-    .required('Expected materials are mandatory'),
+  items: yup.array().required('Expected materials are mandatory'),
 
   remarks: yup
     .string()
@@ -255,10 +252,12 @@ export const orderSchema = yup.object().shape({
     .string()
     .trim()
     .required('Dzongkhag is mandatory'),
-  construction_end_date: yup.date()
+  construction_end_date: yup
+    .date()
     .typeError('End Date is mandatory')
     .required('End Date is mandatory'),
-  construction_start_date: yup.date()
+  construction_start_date: yup
+    .date()
     .typeError('Start Date is mandatory')
     .required('Start Date is mandatory'),
   number_of_floors: yup

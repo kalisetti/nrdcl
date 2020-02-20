@@ -35,7 +35,6 @@ const Test = ({showToast}) => {
   });
 
   const setLatLong = cood => {
-    console.log('LAT: ', cood.latitude);
     setCoordinate(cood);
     setRegion({
       latitude: cood.latitude,
@@ -69,11 +68,8 @@ const Test = ({showToast}) => {
 
     ImagePicker.showImagePicker(options, res => {
       if (res.didCancel) {
-        console.log('Cancelled');
       } else if (res.error) {
-        console.log('ERROR', res.error);
       } else {
-        console.log('object');
         setUserImage(res);
       }
     });
@@ -82,7 +78,6 @@ const Test = ({showToast}) => {
   const getGPS = async () => {
     const gps = await getGPSLocation();
     if (gps) {
-      console.log(gps.latitude);
       setLatLong({latitude: gps.latitude, longitude: gps.longitude});
     }
   };

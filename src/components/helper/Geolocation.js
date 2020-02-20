@@ -33,17 +33,14 @@ export const getGPSLocation = async () => {
       });
 
       if (!permGranted) {
-        console.log('Permission not granted');
         throw Error('No Permission');
       }
     }
 
     const position = await Geolocation.getLatestLocation({timeout: 60000});
 
-    console.log(position);
     return position;
   } catch (error) {
-    console.log('ERROR', error);
     return false;
   }
 };

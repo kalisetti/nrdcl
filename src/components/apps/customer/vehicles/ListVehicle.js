@@ -53,10 +53,10 @@ export const ListVehicle = ({
           style={globalStyles.tableHeader}>
           <Body>
             {item.approval_status === 'Pending' ? (
-              <Text style={{ color: 'red' }}>{item.vehicle_no}</Text>
+              <Text style={{color: 'red'}}>{item.vehicle_no}</Text>
             ) : (
-                <Text style={{ color: 'blue' }}>{item.vehicle_no}</Text>
-              )}
+              <Text style={{color: 'blue'}}>{item.vehicle_no}</Text>
+            )}
           </Body>
 
           <Right>
@@ -81,7 +81,7 @@ export const ListVehicle = ({
         'vehicle_no',
         'drivers_name',
         'contact_no',
-        'approval_status'
+        'approval_status',
       ]),
       filters: JSON.stringify([
         ['user', '=', userState.login_id],
@@ -92,9 +92,7 @@ export const ListVehicle = ({
 
     try {
       const response = await callAxios(
-        'resource/Transport Request?order_by=creation%20desc,approval_status%20asc',
-        'GET',
-        params,
+        `resource/Transport Request?order_by=creation desc,approval_status asc&fields=["name", "vehicle_capacity","vehicle_no","drivers_name","contact_no","approval_status"]&filters=[["user","=",${userState.login_id}], ["self_arranged", "=", 1],["approval_status", "!=", "Deregistered"]]`,
       );
       setVehicle(response.data.data);
       setLoading(false);

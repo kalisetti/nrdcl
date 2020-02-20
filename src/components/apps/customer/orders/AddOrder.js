@@ -155,9 +155,7 @@ export const AddOrder = ({
       };*/
 
       const all_st = await callAxios(
-        'resource/Site?fields=["name","purpose","construction_type","location"]&filters=[["user", "=", ' +
-          userState.login_id +
-          '], ["enabled", "=", 1]]',
+        `resource/Site?fields=["name","purpose","construction_type","location"]&filters=[["user", "=",${userState.login_id}], ["enabled", "=", 1]]`,
         'GET',
       );
       setall_sites(all_st.data.data);

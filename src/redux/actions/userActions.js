@@ -1,8 +1,8 @@
-import { Platform } from 'react-native';
+import {Platform} from 'react-native';
 import CookieManager from 'react-native-cookies';
 import setCookie from 'set-cookie-parser';
 import Config from 'react-native-config';
-import { LOGIN, LOGOUT, SET_MODE, SET_PROFILE_SUBMITTED } from './actionTypes';
+import {LOGIN, LOGOUT, SET_MODE, SET_PROFILE_SUBMITTED} from './actionTypes';
 import {
   showToast,
   setLoading,
@@ -31,7 +31,7 @@ export const login = userData => {
 export const startLogin = (login_id, pin) => {
   return async dispatch => {
     try {
-      await loginSchema.validate({ login_id, pin });
+      await loginSchema.validate({login_id, pin});
 
       const formData = new FormData();
       formData.append('usr', login_id);
@@ -44,7 +44,7 @@ export const startLogin = (login_id, pin) => {
       });
 
       if (!response.ok) {
-        throw { message: 'Invalid Login' };
+        throw {message: 'Invalid Login'};
       }
 
       var combinedCookieHeader = response.headers.get('Set-Cookie');
@@ -186,7 +186,7 @@ export const startResetPin = (loginid, mobileno) => {
       //validate first
       await pinResetSchema.validate(params);
       dispatch(setLoading(true));
-      const res=await callAxios(
+      const res = await callAxios(
         'method/frappe.core.doctype.user.user.crm_reset_password',
         'post',
         params,
@@ -199,7 +199,14 @@ export const startResetPin = (loginid, mobileno) => {
 };
 
 //crm_sign_up(full_name, login_id, mobile_no, email, pin)
-export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, email, pin) => {
+export const startRegister = (
+  fullname,
+  loginid,
+  mobileno,
+  alternate_mobile_no,
+  email,
+  pin,
+) => {
   return async dispatch => {
     //validate user details
     const params = {
@@ -211,7 +218,6 @@ export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, 
       pin,
     };
     try {
-     
       await userRegistrationSchema.validate(params);
       dispatch(setLoading(true));
       await callAxios(
@@ -219,7 +225,7 @@ export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, 
         'post',
         params,
       );
-      NavigationService.navigate('Login');;
+      NavigationService.navigate('Login');
       //Start Login
       dispatch(startLogin(loginid, pin));
     } catch (error) {
@@ -228,8 +234,11 @@ export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, 
   };
 };
 
-export const startProfileSubmission = (userRequest, frontImage = [],
-  backImage = []) => {
+export const startProfileSubmission = (
+  userRequest,
+  frontImage = [],
+  backImage = [],
+) => {
   return async dispatch => {
     dispatch(setLoading(true));
 
@@ -250,7 +259,7 @@ export const startProfileSubmission = (userRequest, frontImage = [],
 
       // backImage.map(async image => {
       //   await attachFile(doctype, docname, image);
-      // }); 
+      // });
 
       // const front = await attachFile(
       //   doctype,

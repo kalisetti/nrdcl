@@ -24,13 +24,10 @@ export const chooseImageFile = () => {
 
   ImagePicker.showImagePicker(options, res => {
     if (res.didCancel) {
-      console.log('Cancelled');
       return false;
     } else if (res.error) {
-      console.log('ERROR', res.error);
       return false;
     } else {
-      console.log('object');
       return res;
     }
   });
