@@ -167,7 +167,6 @@ export const startPin = (
         params,
       );
       dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
-      // dispatch(setLoading(false));
       return res;
     } catch (error) {
       dispatch(handleError(error));
@@ -186,14 +185,13 @@ export const startResetPin = (loginid, mobileno) => {
     try {
       //validate first
       await pinResetSchema.validate(params);
-
       dispatch(setLoading(true));
-      await callAxios(
+      const res=await callAxios(
         'method/frappe.core.doctype.user.user.crm_reset_password',
         'post',
         params,
       );
-      dispatch(showToast(`PIN sent to ${mobileno}`, 'success'));
+      return res;
     } catch (error) {
       dispatch(handleError(error));
     }
@@ -221,7 +219,6 @@ export const startRegister = (fullname, loginid, mobileno, alternate_mobile_no, 
         'post',
         params,
       );
-      // dispatch(showToast(`User Registered`, 'success'));
       NavigationService.navigate('Login');;
       //Start Login
       dispatch(startLogin(loginid, pin));

@@ -109,14 +109,15 @@ export const DeliveryList = ({
         <SpinnerScreen />
     ) : (
             <Container style={globalStyles.listContent}>
-                <Button
-                    block
-                    success
-                    iconLeft
-                    style={globalStyles.mb10}
-                    onPress={() => navigation.navigate('DeliverySummary')}>
-                    <Text>Delivery Summary</Text>
-                </Button>
+                {deliveryList.length > 0 ? (
+                    <Button
+                        block
+                        success
+                        iconLeft
+                        style={globalStyles.mb10}
+                        onPress={() => navigation.navigate('DeliverySummary')}>
+                        <Text>Delivery Summary</Text>
+                    </Button>) : <Text></Text>}
                 <NavigationEvents
                     onWillFocus={_ => {
                         setReload(1);

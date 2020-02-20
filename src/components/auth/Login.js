@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import { NavigationEvents } from 'react-navigation';
+import Dialog from "react-native-dialog";
 import {
   Container,
   Text,
@@ -13,10 +14,11 @@ import {
   Button,
   Content,
   Spinner,
+  View
 } from 'native-base';
 
-import { startLogin } from '../../redux/actions/userActions';
-import { setLoading } from '../../redux/actions/commonActions';
+import { startLogin, startResetPin } from '../../redux/actions/userActions';
+import { setLoading, showToast } from '../../redux/actions/commonActions';
 import globalStyles from '../../styles/globalStyle';
 import Logo from '../base/header/Logo';
 
@@ -26,10 +28,17 @@ const Login = ({
   commonState,
   setLoading,
   startLogin,
+  startResetPin,
+  showToast
 }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [reload, setReload] = useState(0);
+
+  //Reset Pin attributes
+  const [showDialog, setshowDialog] = useState(false);
+  const [loginid, setLoginid] = useState('');
+  const [mobileno, setMobileno] = useState('');
 
   useEffect(() => {
     if (userState.logged_in) {
@@ -52,6 +61,21 @@ const Login = ({
   const performLogin = () => {
     setLoading(true);
     startLogin(username, password);
+  };
+
+
+  //Reset PIN function
+  const showRequestPINDialog = async () => {
+    setshowDialog(true);
+  }
+
+  const requestPin = async () => {
+    setLoading(true);
+    const res = await startResetPin(loginid, mobileno);
+    if (res.status == 200) {
+      showToast(`New PIN sent to ${mobileno}`, 'success');
+      setshowDialog(false)
+    }
   };
 
   return commonState.isLoading ? (
@@ -106,10 +130,8 @@ const Login = ({
           <Form style={styles.reset}>
             <Text>Forgot your PIN? </Text>
             <Text
-              onPress={() =>
-                navigation.navigate('PinRecover', { title: 'Recover Pin' })
-              }
-              style={{ textDecorationLine: 'underline',color:'#1E90FF' }}>
+              onPress={() => showRequestPINDialog()}
+              style={{ textDecorationLine: 'underline', color: '#1E90FF' }}>
               Reset PIN
           </Text>
           </Form>
@@ -126,6 +148,23 @@ const Login = ({
               <Icon name="person-add" />
             </Button>
           </Form>
+          <View>
+            <Dialog.Container visible={showDialog}>
+              <Dialog.Title>Reset PIN</Dialog.Title>
+              <Dialog.Input placeholder='CID Number'
+                wrapperStyle={globalStyles.dialogueInput}
+                onChangeText={cid => setLoginid(cid)}
+                keyboardType={'number-pad'}
+              ></Dialog.Input>
+              <Dialog.Input placeholder='Mobile Number'
+                wrapperStyle={globalStyles.dialogueInput}
+                onChangeText={mobile_no => setMobileno(mobile_no)}
+                keyboardType={'number-pad'}
+              ></Dialog.Input>
+              <Dialog.Button label="Cancel" color="red" onPress={() => setshowDialog(false)} />
+              <Dialog.Button label="Send my new PIN" onPress={requestPin} />
+            </Dialog.Container>
+          </View>
         </Content>
       </Container>
     );
@@ -160,4 +199,6 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   startLogin,
   setLoading,
+  startResetPin,
+  showToast
 })(Login);

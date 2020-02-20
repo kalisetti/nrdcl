@@ -97,7 +97,7 @@ export const OrderDetail = ({
                             Moment(deliver.received_date_time).format('d MMM YYYY, hh:mma')}</Text>
                         <Text />
                         {deliver.confirmation_status === 'In Transit' ? (
-                            <Text style={{ color: 'gray', fontWeight: 'bold', fontSize: 16 }}>
+                            <Text style={{ color: 'gray', fontSize: 16 }}>
                                 Note* Please contact above driver for detail.</Text>) : (
                                 <Text></Text>
                             )}
