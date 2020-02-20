@@ -188,6 +188,7 @@ export const Payment = ({
         transaction_time: res.data.message.transaction_time,
         amount: res.data.message.amount,
       });
+      setshowDialog(false);
       setLoading(false);
     }
   };
