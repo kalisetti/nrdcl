@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {Modal} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Modal } from 'react-native';
 import {
   Container,
   Input,
@@ -13,7 +13,7 @@ import {
   CardItem,
   CheckBox,
 } from 'native-base';
-import {callAxios, handleError} from '../../../../redux/actions/commonActions';
+import { callAxios, handleError } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 import Config from 'react-native-config';
 const SiteItem = ({
@@ -124,8 +124,6 @@ const SiteItem = ({
       setErrorMsg('Need to agree self owned terms and conditions');
     } else if (expected_quantity === undefined) {
       setErrorMsg('Expected Quantity is required');
-    } else if (expected_quantity < 8) {
-      setErrorMsg('Minimum Expected Quantity must be greater than 8 m3');
     } else {
       setErrorMsg('');
       const item = {
@@ -407,7 +405,7 @@ const SiteItem = ({
                 I agree Common Pool
               </Text>
               <Text
-                style={{color: 'blue'}}
+                style={{ color: 'blue' }}
                 onPress={() => {
                   setCommonPoolTermsModal(true);
                 }}>
@@ -437,7 +435,7 @@ const SiteItem = ({
                 I agree Self Owned Transport{' '}
               </Text>
               <Text
-                style={{color: 'blue'}}
+                style={{ color: 'blue' }}
                 onPress={() => {
                   setSelfOwnedTermsModal(true);
                 }}>
@@ -577,7 +575,7 @@ const SiteItem = ({
             NRDCL, in which case I agree to abide by the terms and conditions of
             its use.{' '}
             <Text
-              style={{color: 'blue', fontStyle: 'italic'}}
+              style={{ color: 'blue', fontStyle: 'italic' }}
               onPress={() => {
                 setCommonPoolTermsModal(true);
               }}>

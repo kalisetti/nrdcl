@@ -134,9 +134,16 @@ export const AddOrder = ({
     calculateInvoice();
   }, [items]);
 
-  const setVehDetails = veh => {
-    setcapacity(veh.vehicle_capacity);
-    setvehicle(veh.vehicle);
+  const setVehDetails = veh => { 
+    setvehicle(veh);
+    setVehQty(veh);
+  };
+
+  const setVehQty = item => {
+    const actual_item = allprivatevehicles.find(val => val.vehicle === item);
+    if (actual_item) {
+      setcapacity(actual_item.vehicle_capacity);
+    }
   };
 
   const getSites = async () => {
@@ -1001,7 +1008,7 @@ export const AddOrder = ({
                 mode="dropdown"
                 selectedValue={vehicle}
                 onValueChange={val => {
-                  setVehDetails(val), setVehicleErrorMsg('');
+                  setVehDetails(val), setVehicleErrorMsg(''); 
                 }}>
                 <Picker.Item
                   label={'Select Vehicle'}
@@ -1011,7 +1018,7 @@ export const AddOrder = ({
                 {allprivatevehicles &&
                   allprivatevehicles.map((val, idx) => {
                     return (
-                      <Picker.Item label={val.vehicle} value={val} key={idx} />
+                      <Picker.Item label={val.vehicle} value={val.vehicle} key={idx} />
                     );
                   })}
               </Picker>

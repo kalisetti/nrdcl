@@ -170,7 +170,7 @@ export const OrderDetail = ({
             </Row>
             <Row style={globalStyle.rowContainer}>
               <Col size={2} style={globalStyle.colContainer}>
-                <Text style={{fontWeight: 'bold'}}>Total Balace Amount</Text>
+                <Text style={{fontWeight: 'bold'}}>Total Balance Amount</Text>
               </Col>
               <Col size={1} style={globalStyle.colContainer}>
                 <Text style={{textAlign: 'right', fontWeight: 'bold'}}>

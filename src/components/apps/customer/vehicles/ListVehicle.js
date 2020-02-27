@@ -120,7 +120,7 @@ export const ListVehicle = ({
           keyExtractor={item => item.name}
         />
       ) : (
-        <Text style={globalStyles.emptyString}>No approved vehilces yet</Text>
+        <Text style={globalStyles.emptyString}>No approved vehicle yet</Text>
       )}
     </Container>
   );
