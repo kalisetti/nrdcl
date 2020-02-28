@@ -210,7 +210,7 @@ export const SiteDetail = ({
           <Content style={globalStyle.content}>
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Site Status</Text>
+                <Text style={globalStyle.lb}>Site Status:</Text>
               </Col>
               <Col size={3}>
                 {site.enabled ? (
@@ -223,7 +223,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Site ID</Text>
+                <Text style={globalStyle.lb}>Site ID:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.name}</Text>
@@ -232,7 +232,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Site Type</Text>
+                <Text style={globalStyle.lb}>Site Type:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.site_type}</Text>
@@ -240,7 +240,7 @@ export const SiteDetail = ({
             </Row>
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Construction Type</Text>
+                <Text style={globalStyle.lb}>Construction Type:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.construction_type}</Text>
@@ -249,7 +249,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Start Date</Text>
+                <Text style={globalStyle.lb}>Start Date:</Text>
               </Col>
               <Col size={3}>
                 <Text>
@@ -262,7 +262,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>End Date</Text>
+                <Text style={globalStyle.lb}>End Date:</Text>
               </Col>
               <Col size={3}>
                 <Text>
@@ -275,7 +275,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Number of Floors</Text>
+                <Text style={globalStyle.lb}>Number of Floors:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.number_of_floors}</Text>
@@ -284,7 +284,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Approval No.</Text>
+                <Text style={globalStyle.lb}>Approval Number:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.approval_no}</Text>
@@ -293,7 +293,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Dzongkhag</Text>
+                <Text style={globalStyle.lb}>Dzongkhag:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.dzongkhag}</Text>
@@ -302,7 +302,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Plot/Thram No.</Text>
+                <Text style={globalStyle.lb}>Plot/Thram Number:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.plot_no}</Text>
@@ -311,7 +311,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Location</Text>
+                <Text style={globalStyle.lb}>Location:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.location}</Text>
@@ -320,7 +320,7 @@ export const SiteDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.lb}>Remarks</Text>
+                <Text style={globalStyle.lb}>Remarks:</Text>
               </Col>
               <Col size={3}>
                 <Text>{site.remarks}</Text>
@@ -437,7 +437,7 @@ export const SiteDetail = ({
                   </Row>
                   <Row style={globalStyle.labelContainer}>
                   <Col size={2}>
-                    <Text style={globalStyle.lb}>Material Source</Text>
+                    <Text style={globalStyle.lb}>Material Source:</Text>
                   </Col>
                   <Col size={3}>
                     <Text>{currentItem.branch}</Text>
@@ -445,7 +445,7 @@ export const SiteDetail = ({
                 </Row>
                 <Row style={globalStyle.labelContainer}>
                   <Col size={2}>
-                    <Text style={globalStyle.lb}>Transport Mode</Text>
+                    <Text style={globalStyle.lb}>Transport Mode:</Text>
                   </Col>
                   <Col size={3}>
                     <Text>{currentItem.transport_mode}</Text>
@@ -453,7 +453,7 @@ export const SiteDetail = ({
                 </Row>
                   <Row style={globalStyle.labelContainer}>
                     <Col size={4}>
-                      <Text style={globalStyle.lb}>Remarks</Text>
+                      <Text style={globalStyle.lb}>Remarks;</Text>
                     </Col>
                     <Col size={2}>
                       <Text>{currentItem.remarks}</Text>

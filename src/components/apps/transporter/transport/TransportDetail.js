@@ -140,7 +140,7 @@ export const TransportDetail = ({
         <Content style={globalStyle.content}>
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Vehicle Status</Text>
+              <Text style={globalStyle.label}>Vehicle Status:</Text>
             </Col>
             <Col size={3}>
               {vehicle.approval_status === 'Suspended'  || vehicle.approval_status === 'Pending' ? (
@@ -154,7 +154,7 @@ export const TransportDetail = ({
           </Row>
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Vehicle Number</Text>
+              <Text style={globalStyle.label}>Vehicle Number:</Text>
             </Col>
             <Col size={3}>
               <Text>{vehicle.vehicle_no}</Text>
@@ -162,7 +162,7 @@ export const TransportDetail = ({
           </Row>
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Vehicle Capacity</Text>
+              <Text style={globalStyle.label}>Vehicle Capacity:</Text>
             </Col>
             <Col size={3}>
               <Text>{vehicle.vehicle_capacity} m3</Text>
@@ -170,7 +170,7 @@ export const TransportDetail = ({
           </Row>
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Driver's Name</Text>
+              <Text style={globalStyle.label}>Driver's Name:</Text>
             </Col>
             <Col size={3}>
               <Text>{vehicle.drivers_name}</Text>
@@ -178,7 +178,7 @@ export const TransportDetail = ({
           </Row>
           <Row style={globalStyle.labelContainer}>
             <Col size={2}>
-              <Text style={globalStyle.label}>Driver's Contact No</Text>
+              <Text style={globalStyle.label}>Driver's Mobile No:</Text>
             </Col>
             <Col size={3}>
               <Text>{vehicle.contact_no}</Text>

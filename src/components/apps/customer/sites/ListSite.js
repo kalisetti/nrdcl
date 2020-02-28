@@ -64,10 +64,10 @@ export const ListSite = ({
           </Right>
         </CardItem>
         <CardItem>
-          <Text>Type of Construction : {item.construction_type}</Text>
+          <Text>Type of Construction: {item.construction_type}</Text>
         </CardItem>
         <CardItem>
-          <Text>Specific Location :{item.location}</Text>
+          <Text>Specific Location:{item.location}</Text>
         </CardItem>
       </Card>
     );

@@ -201,7 +201,7 @@ export const Payment = ({
         <Form>
           <Row style={globalStyles.labelContainer}>
             <Col size={2}>
-              <Text style={{textAlign: 'right'}}>Your Order Number is : </Text>
+              <Text style={{textAlign: 'right'}}>Your Order Number is: </Text>
             </Col>
             <Col size={2}>
               <Text style={globalStyles.label}>
@@ -211,7 +211,7 @@ export const Payment = ({
           </Row>
           <Row style={globalStyles.labelContainer}>
             <Col size={2}>
-              <Text style={{textAlign: 'right'}}>Amount Payable : </Text>
+              <Text style={{textAlign: 'right'}}>Amount Payable: </Text>
             </Col>
             <Col size={2}>
               <Text style={globalStyles.label}>

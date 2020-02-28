@@ -75,7 +75,7 @@ export const OrderDetail = ({
       <Content style={globalStyle.content}>
         <Row style={globalStyle.labelContainer}>
           <Col size={2}>
-            <Text style={globalStyle.label}>Order Number :</Text>
+            <Text style={globalStyle.label}>Order Number:</Text>
           </Col>
           <Col size={3}>
             <Text>{navigation.state.params.id}</Text>
@@ -83,7 +83,7 @@ export const OrderDetail = ({
         </Row>
         <Row style={globalStyle.labelContainer}>
           <Col size={2}>
-            <Text style={globalStyle.label}>Site :</Text>
+            <Text style={globalStyle.label}>Site:</Text>
           </Col>
           <Col size={3}>
             <Text>{order.site}</Text>
@@ -92,7 +92,7 @@ export const OrderDetail = ({
 
         <Row style={globalStyle.labelContainer}>
           <Col size={2}>
-            <Text style={globalStyle.label}>Item :</Text>
+            <Text style={globalStyle.label}>Item:</Text>
           </Col>
           <Col size={3}>
             <Text>{order.item_name}</Text>
@@ -101,7 +101,7 @@ export const OrderDetail = ({
 
         <Row style={globalStyle.labelContainer}>
           <Col size={2}>
-            <Text style={globalStyle.label}>Branch :</Text>
+            <Text style={globalStyle.label}>Branch:</Text>
           </Col>
           <Col size={3}>
             <Text>{order.branch}</Text>
@@ -110,7 +110,7 @@ export const OrderDetail = ({
 
         <Row style={globalStyle.labelContainer}>
           <Col size={2}>
-            <Text style={globalStyle.label}>Transport Mode :</Text>
+            <Text style={globalStyle.label}>Transport Mode:</Text>
           </Col>
           <Col size={3}>
             <Text>{order.transport_mode}</Text>
