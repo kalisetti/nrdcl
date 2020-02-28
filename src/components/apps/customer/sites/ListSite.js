@@ -53,7 +53,7 @@ export const ListSite = ({
           style={globalStyles.tableHeader}>
           <Body>
             {item.enabled ? (
-              <Text style={{color: 'blue'}}>{item.name}</Text>
+              <Text style={{color: 'white'}}>{item.name}</Text>
             ) : (
               <Text style={{color: 'red'}}>{item.name}</Text>
             )}

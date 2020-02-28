@@ -65,6 +65,8 @@ import AddTransport from '../../apps/transporter/transport/AddTransport';
 import ListTransport from '../../apps/transporter/transport/ListTransport';
 import TransportDetail from '../../apps/transporter/transport/TransportDetail';
 import TransportDriverUpdate from '../../apps/transporter/transport/TransportDriverUpdate';
+import QueueDashboard from '../../apps/transporter/QueueDashboard';
+import AddToQueue from '../../apps/transporter/Queue/AddToQueue';
 
 const AppNavigator = createStackNavigator(
 
@@ -264,7 +266,23 @@ const AppNavigator = createStackNavigator(
         title: 'Transaction Details',
       },
     },
+
+    QueueDashboard: {
+      screen: QueueDashboard,
+      navigationOptions: {
+        title: 'Queue Dashboard',
+      },
+    },
+
+    AddToQueue: {
+      screen: AddToQueue,
+      navigationOptions: {
+        title: 'Apply for Queue',
+      },
+    },
   },
+
+  
   {
     initialRouteName: 'UserDetail',
     defaultNavigationOptions: {

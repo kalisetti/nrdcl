@@ -57,7 +57,7 @@ export const ListOrder = ({
             {item.docstatus === 0 ? (
               <Text style={{color: 'red'}}>{item.name}</Text>
             ) : (
-              <Text style={{color: 'blue'}}>{item.name}</Text>
+              <Text style={{color: 'white'}}>{item.name}</Text>
             )}
           </Body>
 

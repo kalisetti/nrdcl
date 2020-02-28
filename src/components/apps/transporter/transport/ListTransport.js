@@ -57,7 +57,7 @@ export const ListTransport = ({
             {item.approval_status === 'Pending' ? (
               <Text style={{color: 'red'}}>{item.vehicle_no}</Text>
             ) : (
-              <Text style={{color: 'blue'}}>{item.vehicle_no}</Text>
+              <Text style={{color: 'white'}}>{item.vehicle_no}</Text>
             )}
           </Body>
 
