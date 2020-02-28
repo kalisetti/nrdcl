@@ -451,7 +451,7 @@ const SiteItem = ({
             onChangeText={val => {
               setexpected_quantity(val), setErrorMsg('');
             }}
-            placeholder="Expected Quantity"
+            placeholder="Expected Quantity M3"
             keyboardType="numeric"
           />
         </Item>
