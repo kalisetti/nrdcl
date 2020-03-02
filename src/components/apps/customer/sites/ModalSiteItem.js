@@ -124,6 +124,9 @@ const SiteItem = ({
       setErrorMsg('Need to agree self owned terms and conditions');
     } else if (expected_quantity === undefined) {
       setErrorMsg('Expected Quantity is required');
+    }  else if (expected_quantity <  1) {
+      setexpected_quantity('');
+      setErrorMsg('Expected Quantity cannot be zero');
     } else {
       setErrorMsg('');
       const item = {
@@ -154,6 +157,12 @@ const SiteItem = ({
       setAgreeSelfOnwedTerms(false);
     } else {
       setAgreeSelfOnwedTerms(true);
+    }
+  };
+  const checkNumeric = val => {
+    var isNum = isNaN(val);
+    if (isNum) {
+      setexpected_quantity('');
     }
   };
 
@@ -449,7 +458,7 @@ const SiteItem = ({
           <Input
             value={expected_quantity}
             onChangeText={val => {
-              setexpected_quantity(val), setErrorMsg('');
+              setexpected_quantity(val), checkNumeric(val), setErrorMsg('');
             }}
             placeholder="Expected Quantity M3"
             keyboardType="numeric"
