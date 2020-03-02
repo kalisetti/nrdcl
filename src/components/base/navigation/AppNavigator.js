@@ -67,6 +67,7 @@ import TransportDetail from '../../apps/transporter/transport/TransportDetail';
 import TransportDriverUpdate from '../../apps/transporter/transport/TransportDriverUpdate';
 import QueueDashboard from '../../apps/transporter/QueueDashboard';
 import AddToQueue from '../../apps/transporter/Queue/AddToQueue';
+import QueueStatus from '../../apps/transporter/Queue/QueueStatus';
 
 const AppNavigator = createStackNavigator(
 
@@ -278,6 +279,13 @@ const AppNavigator = createStackNavigator(
       screen: AddToQueue,
       navigationOptions: {
         title: 'Apply for Queue',
+      },
+    },
+
+    QueueStatus: {
+      screen: QueueStatus,
+      navigationOptions: {
+        title: 'Queue Status',
       },
     },
   },

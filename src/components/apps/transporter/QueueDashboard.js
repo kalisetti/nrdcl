@@ -29,7 +29,7 @@ export const TransportDashboard = ({userState, navigation}) => {
               vertical
               transparent
               style={{alignSelf: 'center'}}
-              onPress={() => navigation.navigate('ListTransport')}>
+              onPress={() => navigation.navigate('QueueStatus')}>
               <Icon
                 name="sort"
                 type="MaterialCommunityIcons"

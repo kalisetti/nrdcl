@@ -123,10 +123,10 @@ const SiteItem = ({
     } else if (transport_mode === selfOwned && !agreeSelfOnwedTerms) {
       setErrorMsg('Need to agree self owned terms and conditions');
     } else if (expected_quantity === undefined) {
-      setErrorMsg('Expected Quantity is required');
+      setErrorMsg('Total requirement in M3 is required');
     }  else if (expected_quantity <  1) {
       setexpected_quantity('');
-      setErrorMsg('Expected Quantity cannot be zero');
+      setErrorMsg('Total requirement in M3 cannot be zero');
     } else {
       setErrorMsg('');
       const item = {
@@ -460,7 +460,7 @@ const SiteItem = ({
             onChangeText={val => {
               setexpected_quantity(val), checkNumeric(val), setErrorMsg('');
             }}
-            placeholder="Expected Quantity M3"
+            placeholder="Total requirement in M3"
             keyboardType="numeric"
           />
         </Item>

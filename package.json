@@ -23,6 +23,7 @@
     "react": "16.9.0",
     "react-native": "0.61.4",
     "react-native-awesome-alerts": "^1.3.0",
+    "react-native-bootstrap-styles": "0.0.9",
     "react-native-config": "^0.12.0",
     "react-native-cookies": "^3.3.0",
     "react-native-customized-image-picker": "^0.1.11",

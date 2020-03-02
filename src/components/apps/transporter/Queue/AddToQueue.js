@@ -105,6 +105,7 @@ export const AddTransport = ({
       <Container>
         <Content style={globalStyles.content}>
           <Form>
+              
             <Button block success style={globalStyles.mb10}>
               <Text>Apply for Approval</Text>
             </Button>
