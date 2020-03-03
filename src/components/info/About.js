@@ -28,7 +28,7 @@ export const About = () => {
 
             NRDCL is a fully-owned Druk Holding and Investments (DHI) company. 
             The company is governed by the Articles of Incorporation under the Companies 
-            Act of the  Kingdom of Bhutan 2016. 
+            Act of the Kingdom of Bhutan 2016. 
             </Text>
         </CardItem>
     </Content>
