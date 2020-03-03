@@ -124,12 +124,12 @@ export const QueueStatus = ({
                                     alignItems: 'center',
                                     marginLeft: 140
                                 }}
-                                onPress={()=>alert('Hello')}
+                                onPress={() => alert('Hello')}
                                 underlayColor='#ccc'>
                                 <Text style={{ fontSize: 25, fontWeight: "bold", color: "white" }}>10</Text>
                             </TouchableHighlight>
                             <Text style={[s.text, s.textCenter, s.h4, s.textSecondary, s.myXs1, s.myMd3]}>
-                                People ahead of you
+                                Truck ahead of you
                             </Text>
                             <TouchableHighlight
                                 style={{
@@ -145,7 +145,7 @@ export const QueueStatus = ({
                                 <Text style={{ fontSize: 40, fontWeight: "bold", color: "white" }}>11</Text>
                             </TouchableHighlight>
                             <Text style={[s.text, s.textCenter, s.h4, s.textSecondary, s.myXs1, s.myMd3]}>
-                                Your Position
+                                Your position
                             </Text>
 
                             <TouchableHighlight
@@ -162,7 +162,7 @@ export const QueueStatus = ({
                                 <Text style={{ fontSize: 25, fontWeight: "bold", color: "white" }}>10</Text>
                             </TouchableHighlight>
                             <Text style={[s.text, s.textCenter, s.h4, s.textSecondary, s.myXs1, s.myMd3]}>
-                                People behind you
+                                Truck behind you
                             </Text>
                         </View>
 
