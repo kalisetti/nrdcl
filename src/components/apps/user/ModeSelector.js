@@ -74,7 +74,7 @@ export const ModeSelector = ({userState, navigation}) => {
               type="MaterialCommunityIcons"
               style={globalStyle.modeIcon}
             />
-            <Text style={globalStyle.homeIconText}>Transporter</Text>
+            <Text style={globalStyle.homeIconText}>Pool Transporter</Text>
           </Button>
         </Col>
       </Row>

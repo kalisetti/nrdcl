@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import {
   callAxios,
 } from '../../../../redux/actions/commonActions';
+import { submitApplyForQueue } from '../../../../redux/actions/siteActions';
+
 
 import {
   Container,
@@ -13,7 +15,8 @@ import {
   List,
   ListItem,
   Body,
-  Right
+  Right,
+  Alert
 } from 'native-base';
 import {
   handleError,
@@ -22,12 +25,14 @@ import {
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
+import NavigationService from '../../../base/navigation/NavigationService';
 
 export const AddToQueue = ({
   userState,
   commonState,
   navigation,
   setLoading,
+  submitApplyForQueue
 }) => {
   //state info for forms
   const [vehicleDetail, setVehicleDetail] = useState(undefined);
@@ -54,13 +59,41 @@ export const AddToQueue = ({
         'get',
         params
       );
-      console.log(res.data.message);
       setTransporterVehicleList(res.data.message);
       setLoading(false);
     } catch (error) {
       handleError(error);
     }
   };
+
+  const applyForQueue = async (vechicle_no) => {
+    const queueDetail = {
+      user: userState.login_id,
+      vehicle: vechicle_no
+    }
+    const res = await submitApplyForQueue(queueDetail)
+    // Alert.alert(
+    //   'Alert Title',
+    //   'My Alert Msg',
+    //   [
+    //     { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+    //     {
+    //       text: 'Cancel',
+    //       onPress: () => console.log('Cancel Pressed'),
+    //       style: 'cancel',
+    //     },
+    //     { text: 'OK', onPress: () => console.log('OK Pressed') },
+    //   ],
+    //   { cancelable: false },
+    // );
+  };
+  var BUTTONS = [
+    { text: "Option 0", icon: "american-football", iconColor: "#2c8ef4" },
+    { text: "Option 1", icon: "analytics", iconColor: "#f42ced" },
+    { text: "Option 2", icon: "aperture", iconColor: "#ea943b" },
+    { text: "Delete", icon: "trash", iconColor: "#fa213b" },
+    { text: "Cancel", icon: "close", iconColor: "#25de5b" }
+  ];
 
 
   return commonState.isLoading ? (
@@ -73,13 +106,28 @@ export const AddToQueue = ({
               <ListItem avatar>
                 <Body>
                   <Text>{vehicleDetail.name}</Text>
-                  <Text note>Capacity:{vehicleDetail.vehicle_capacity}- {vehicleDetail.vehicle_status}</Text>
+                  <Text note>Capacity:{vehicleDetail.vehicle_capacity}</Text>
                 </Body>
                 <Right>
-                  <Button iconLeft success small >
+                {vehicleDetail.vehicle_status === "Available"&&(
+                  <Button iconLeft success small style={{width: 130}}
+                    onPress={() => applyForQueue(vehicleDetail.name)}>
+                    <Icon name='navigate' />
+                    <Text>{vehicleDetail.vehicle_status}</Text>
+                  </Button>)}
+
+                  {vehicleDetail.vehicle_status === "Queued"&&(
+                  <Button iconLeft warning small style={{width: 130}}
+                    onPress={() => NavigationService.navigate('QueueStatus')}>
+                    <Icon name='eye'/>
+                    <Text>{vehicleDetail.vehicle_status}</Text>
+                  </Button>)}
+                  {vehicleDetail.vehicle_status === "Intransit"&&(
+                  <Button iconLeft success small style={{width: 130}}
+                    onPress={() => applyForQueue(vehicleDetail.name)}>
                     <Icon name='navigate'/>
-                    <Text>Apply Queue</Text>
-                  </Button>
+                    <Text>{vehicleDetail.vehicle_status}</Text>
+                  </Button>)}
                 </Right>
               </ListItem>
             </List>
@@ -98,6 +146,7 @@ const mapDispatchToProps = {
   handleError,
   getImages,
   setLoading,
+  submitApplyForQueue
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToQueue);
