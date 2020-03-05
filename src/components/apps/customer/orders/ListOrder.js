@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -18,10 +18,14 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
-import {default as commaNumber} from 'comma-number';
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
+import { default as commaNumber } from 'comma-number';
 import Moment from 'moment';
+import UserInactivity from 'react-native-user-inactivity';
+import Config from 'react-native-config';
+import { startLogout } from '../../../../redux/actions/userActions';
+import NavigationService from '../../../base/navigation/NavigationService';
 
 export const ListOrder = ({
   userState,
@@ -29,10 +33,12 @@ export const ListOrder = ({
   navigation,
   setLoading,
   handleError,
+  startLogout
 }) => {
   const [order, setOrders] = useState([]);
   const [reload, setReload] = useState(0);
-
+  const [active, setActive] = useState(false);
+  
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -44,21 +50,21 @@ export const ListOrder = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
           header
           bordered
           button
-          onPress={() => navigation.navigate('OrderDetail', {id: item.name})}
+          onPress={() => navigation.navigate('OrderDetail', { id: item.name })}
           style={globalStyles.tableHeader}>
           <Body>
             {item.docstatus === 0 ? (
-              <Text style={{color: 'red'}}>{item.name}</Text>
+              <Text style={{ color: 'red' }}>{item.name}</Text>
             ) : (
-              <Text style={{color: 'white'}}>{item.name}</Text>
-            )}
+                <Text style={{ color: 'white' }}>{item.name}</Text>
+              )}
           </Body>
 
           <Right>
@@ -78,8 +84,8 @@ export const ListOrder = ({
                 /-
               </Text>
             ) : (
-              <Text style={{color: 'blue'}}></Text>
-            )}
+                <Text style={{ color: 'blue' }}></Text>
+              )}
             <Text>
               Ordered Date: {Moment(item.creation).format('d MMM YYYY, hh:mma')}
             </Text>
@@ -117,29 +123,43 @@ export const ListOrder = ({
     }
   };
 
+  const onAction = () => {
+    setActive(true);
+    if (!active) {
+      startLogout();
+      NavigationService.navigate('Login');
+    }
+  }
+
+
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.listContent}>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {order.length > 0 ? (
-        <FlatList
-          data={order}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
-        />
-      ) : (
-        <Text style={globalStyles.emptyString}>Place your first order</Text>
-      )}
-    </Container>
-  );
+      <UserInactivity
+        timeForInactivity={parseFloat(Config.SESSION_TIME_OUT)}
+        onAction={onAction}
+      >
+        <Container style={globalStyles.listContent}>
+          <NavigationEvents
+            onWillFocus={_ => {
+              setReload(1);
+            }}
+            onWillBlur={_ => {
+              setReload(0);
+            }}
+          />
+          {order.length > 0 ? (
+            <FlatList
+              data={order}
+              renderItem={renderItem}
+              keyExtractor={item => item.name}
+            />
+          ) : (
+              <Text style={globalStyles.emptyString}>Place your first order</Text>
+            )}
+        </Container>
+      </UserInactivity>
+    );
 };
 
 const mapStateToProps = state => ({
@@ -150,6 +170,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setLoading,
   handleError,
+  startLogout
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListOrder);
