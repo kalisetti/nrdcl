@@ -47,7 +47,7 @@ export const CustomerDashboard = ({ userState, navigation }) => {
                 // type="Material"
                 style={globalStyle.homeIcon}
               />
-              <Text style={globalStyle.homeIconText}>Manage Vehicle</Text>
+              <Text style={globalStyle.homeIconText}>Self Vehicle</Text>
             </Button>
           </Col>
         </Row>
@@ -72,7 +72,7 @@ export const CustomerDashboard = ({ userState, navigation }) => {
                 style={globalStyle.homeIcon}
                 onPress={() => navigation.navigate('DeliveryList')}
               />
-              <Text style={globalStyle.homeIconText}>DELIVERY</Text>
+              <Text style={globalStyle.homeIconText}>Delivery</Text>
             </Button>
           </Col>
         </Row>
