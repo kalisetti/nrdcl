@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, Image } from 'react-native';
+import {
+  callAxios,
+} from '../../../../redux/actions/commonActions';
 
 import {
   Container,
   Content,
-  Form,
-  Grid,
-  Row,
-  Col,
   Text,
+  Button,
+  Icon,
+  List,
+  ListItem,
+  Body,
+  Right
 } from 'native-base';
 import {
   handleError,
@@ -26,11 +30,8 @@ export const AddToQueue = ({
   setLoading,
 }) => {
   //state info for forms
-  const [all_common_pool_branch, set_all_common_pool_branch] = useState([]);
-  const [common_pool_branch, set_common_pool_branch] = useState(undefined);
-  const [Vehicle, setVehicle] = useState(undefined);
-
   const [vehicleDetail, setVehicleDetail] = useState(undefined);
+  const [transporterVehicleList, setTransporterVehicleList] = useState([]);
 
 
   //For proper navigation/auth settings
@@ -40,59 +41,49 @@ export const AddToQueue = ({
     } else if (!userState.profile_verified) {
       navigation.navigate('UserDetail');
     } else {
-      getAllCommonPoolVehicle();
+      getTransporterVehicleList();
     }
   }, []);
 
-
-
-
+  const getTransporterVehicleList = async () => {
+    let params = {
+      "user": userState.login_id
+    };
+    try {
+      const res = await callAxios('method/erpnext.crm_utils.get_vehicle_list',
+        'get',
+        params
+      );
+      console.log(res.data.message);
+      setTransporterVehicleList(res.data.message);
+      setLoading(false);
+    } catch (error) {
+      handleError(error);
+    }
+  };
 
 
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
       <Container>
-        <Content style={globalStyles.content}>
-          <Form>
-            <Row style={[globalStyles.tableContainer]}>
-              <Grid>
-                <Row style={globalStyles.tableHeaderContainer}>
-                  <Col size={2} style={globalStyles.colContainer}>
-                    <Text>Vehicle No</Text>
-                  </Col>
-                  <Col size={1.5} style={globalStyles.colContainer}>
-                    <Text>Status</Text>
-                  </Col>
-                  <Col size={1.5} style={globalStyles.colContainer}>
-                    <Text>Action</Text>
-                  </Col>
-                </Row>
-
-                {commonPoolVehicle.map((vehicleDetail, idx) => (
-                  <Row
-                    key={idx}
-                    style={globalStyles.rowContainer}>
-                    <Col size={2} style={globalStyles.colContainer}>
-                      <Text>{vehicleDetail.vehicle_no}</Text>
-                    </Col>
-                    <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text
-                        style={{
-                          color: 'blue',
-                          textDecorationLine: 'underline',
-                        }}>
-                        {vehicleDetail.status}
-                      </Text>
-                    </Col>
-                    <Col size={1.5} style={globalStyles.colContainer}>
-                      <Text></Text>
-                    </Col>
-                  </Row>
-                ))}
-              </Grid>
-            </Row>
-          </Form>
+        <Content>
+          {transporterVehicleList.map((vehicleDetail, idx) => (
+            <List>
+              <ListItem avatar>
+                <Body>
+                  <Text>{vehicleDetail.name}</Text>
+                  <Text note>Capacity:{vehicleDetail.vehicle_capacity}- {vehicleDetail.vehicle_status}</Text>
+                </Body>
+                <Right>
+                  <Button iconLeft success small >
+                    <Icon name='navigate'/>
+                    <Text>Apply Queue</Text>
+                  </Button>
+                </Right>
+              </ListItem>
+            </List>
+          ))}
         </Content>
       </Container>
     );
