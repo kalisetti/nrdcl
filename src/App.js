@@ -4,10 +4,11 @@
  * @flow
  */
 
-import React from 'react';
-import {connect} from 'react-redux';
-import {Container} from 'native-base';
-import {StatusBar} from 'react-native';
+// import React from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Container } from 'native-base';
+import { StatusBar } from 'react-native';
 import Config from 'react-native-config';
 
 import AppContainer from './components/base/navigation/AppNavigator';
@@ -16,25 +17,31 @@ import NormalAppFooter from './components/base/footer/AppFooter';
 import AuthAppFooter from './components/base/footer/AppFooterAuthenticated';
 
 import globalStyle from './styles/globalStyle';
-
-const App = ({userState}) => {
+import UserInactivity from 'react-native-user-inactivity';
+import { startLogout } from './redux/actions/userActions';
+const App = ({ userState, startLogout }) => {
+   
   return (
     <Container style={globalStyle.container}>
-      <StatusBar
-        backgroundColor={Config.APP_HEADER_COLOR}
-        barStyle="light-content"
-      />
-      <AppContainer
-        ref={navigatorRef => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }}
-      />
-
-      {userState.logged_in && userState.profile_verified ? (
-        <AuthAppFooter />
-      ) : (
-        <NormalAppFooter />
-      )}
+      <UserInactivity
+        timeForInactivity={parseFloat(Config.SESSION_TIME_OUT)}
+        onAction={startLogout}
+      >
+        <StatusBar
+          backgroundColor={Config.APP_HEADER_COLOR}
+          barStyle="light-content"
+        />
+        <AppContainer
+          ref={navigatorRef => {
+            NavigationService.setTopLevelNavigator(navigatorRef);
+          }}
+        />
+        {userState.logged_in && userState.profile_verified ? (
+          <AuthAppFooter />
+        ) : (
+            <NormalAppFooter />
+          )}
+      </UserInactivity>
     </Container>
   );
 };
@@ -46,4 +53,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, { startLogout })(App);

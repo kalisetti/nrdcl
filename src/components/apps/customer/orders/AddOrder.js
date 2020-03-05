@@ -4,7 +4,6 @@ import { Modal } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Config from 'react-native-config';
 import { default as commaNumber } from 'comma-number';
-import UserInactivity from 'react-native-user-inactivity';
 import {
   Container,
   Content,
@@ -31,8 +30,6 @@ import { submitSalesOrder } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import OrderQty from './OrderQty';
-import { startLogout } from '../../../../redux/actions/userActions';
-import NavigationService from '../../../base/navigation/NavigationService';
 export const AddOrder = ({
   userState,
   commonState,
@@ -41,7 +38,6 @@ export const AddOrder = ({
   handleError,
   setLoading,
   showToast,
-  startLogout
 }) => {
   //state info for forms
   let [, setState] = useState();
@@ -80,10 +76,7 @@ export const AddOrder = ({
   const [branchWiseLocation, setBranchWiseLocation] = useState(undefined);
   const [allLocation, setAllLocation] = useState([]);
   const [locationItemRate, setLocationItemRate] = useState(undefined);
-
   const [otherBranchInfo, setOtherBranchInfo] = useState([]);
-
-  const [active, setActive] = useState(false);
 
   var commonPoolLabel = 'Common Pool';
   var selfOwnedLabel = 'Self Owned Transport';
@@ -470,22 +463,10 @@ export const AddOrder = ({
     }
     setLoading(false);
   };
- 
-  const onAction = () => {
-    setActive(true);
-    if (!active) {
-      startLogout();
-      NavigationService.navigate('Login');
-    }
-  }
-
+  
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-      <UserInactivity
-        timeForInactivity={parseFloat(Config.SESSION_TIME_OUT)}
-        onAction={onAction}
-      >
         <Container>
           <NavigationEvents
             onWillFocus={_ => {
@@ -1106,7 +1087,6 @@ export const AddOrder = ({
             </Content>
           </Modal>
         </Container>
-       </UserInactivity>
     );
 };
 
@@ -1121,7 +1101,6 @@ const mapDispatchToProps = {
   getImages,
   setLoading,
   showToast,
-  startLogout
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddOrder);

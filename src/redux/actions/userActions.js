@@ -121,6 +121,7 @@ export const startLogout = () => {
       axios.defaults.headers.common['Authorization'] = null;
       await AsyncStorage.removeItem('nrdcl_token');
       dispatch(logout());
+      NavigationService.navigate('Login');
     } catch (error) {
       dispatch(handleError(error));
     }
