@@ -10,7 +10,7 @@ import {
 } from '../../../../redux/actions/commonActions';
 import {startVehicleDeregistration} from '../../../../redux/actions/siteActions';
 import {default as commaNumber} from 'comma-number';
-
+ 
 export const OrderDetail = ({
   userState,
   commonState,
@@ -19,7 +19,7 @@ export const OrderDetail = ({
   setLoading,
 }) => {
   const [order, setOrder] = useState({});
-
+  
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -68,9 +68,10 @@ export const OrderDetail = ({
       handleError(error);
     }
   };
+ 
   return commonState.isLoading ? (
     <SpinnerScreen />
-  ) : (
+  ) : ( 
     <Container>
       <Content style={globalStyle.content}>
         <Row style={globalStyle.labelContainer}>
