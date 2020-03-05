@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -18,11 +18,11 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
-import {default as commaNumber} from 'comma-number';
-import Moment from 'moment';
-
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
+import { default as commaNumber } from 'comma-number';
+import Moment from 'moment'; 
+import Config from 'react-native-config'; 
 export const ListOrder = ({
   userState,
   commonState,
@@ -32,7 +32,7 @@ export const ListOrder = ({
 }) => {
   const [order, setOrders] = useState([]);
   const [reload, setReload] = useState(0);
-
+  
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -44,21 +44,21 @@ export const ListOrder = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
           header
           bordered
           button
-          onPress={() => navigation.navigate('OrderDetail', {id: item.name})}
+          onPress={() => navigation.navigate('OrderDetail', { id: item.name })}
           style={globalStyles.tableHeader}>
           <Body>
             {item.docstatus === 0 ? (
-              <Text style={{color: 'red'}}>{item.name}</Text>
+              <Text style={{ color: 'red' }}>{item.name}</Text>
             ) : (
-              <Text style={{color: 'white'}}>{item.name}</Text>
-            )}
+                <Text style={{ color: 'white' }}>{item.name}</Text>
+              )}
           </Body>
 
           <Right>
@@ -78,8 +78,8 @@ export const ListOrder = ({
                 /-
               </Text>
             ) : (
-              <Text style={{color: 'blue'}}></Text>
-            )}
+                <Text style={{ color: 'blue' }}></Text>
+              )}
             <Text>
               Ordered Date: {Moment(item.creation).format('d MMM YYYY, hh:mma')}
             </Text>
@@ -116,30 +116,31 @@ export const ListOrder = ({
       handleError(error);
     }
   };
+ 
 
   return commonState.isLoading ? (
     <SpinnerScreen />
-  ) : (
-    <Container style={globalStyles.listContent}>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {order.length > 0 ? (
-        <FlatList
-          data={order}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
-        />
-      ) : (
-        <Text style={globalStyles.emptyString}>Place your first order</Text>
-      )}
-    </Container>
-  );
+  ) : ( 
+        <Container style={globalStyles.listContent}>
+          <NavigationEvents
+            onWillFocus={_ => {
+              setReload(1);
+            }}
+            onWillBlur={_ => {
+              setReload(0);
+            }}
+          />
+          {order.length > 0 ? (
+            <FlatList
+              data={order}
+              renderItem={renderItem}
+              keyExtractor={item => item.name}
+            />
+          ) : (
+              <Text style={globalStyles.emptyString}>Place your first order</Text>
+            )}
+        </Container> 
+    );
 };
 
 const mapStateToProps = state => ({
