@@ -21,23 +21,17 @@ import globalStyles from '../../../../styles/globalStyle';
 import { FlatList } from 'react-native-gesture-handler';
 import { NavigationEvents } from 'react-navigation';
 import { default as commaNumber } from 'comma-number';
-import Moment from 'moment';
-import UserInactivity from 'react-native-user-inactivity';
-import Config from 'react-native-config';
-import { startLogout } from '../../../../redux/actions/userActions';
-import NavigationService from '../../../base/navigation/NavigationService';
-
+import Moment from 'moment'; 
+import Config from 'react-native-config'; 
 export const ListOrder = ({
   userState,
   commonState,
   navigation,
   setLoading,
   handleError,
-  startLogout
 }) => {
   const [order, setOrders] = useState([]);
   const [reload, setReload] = useState(0);
-  const [active, setActive] = useState(false);
   
   useEffect(() => {
     if (!userState.logged_in) {
@@ -122,23 +116,11 @@ export const ListOrder = ({
       handleError(error);
     }
   };
-
-  const onAction = () => {
-    setActive(true);
-    if (!active) {
-      startLogout();
-      NavigationService.navigate('Login');
-    }
-  }
-
+ 
 
   return commonState.isLoading ? (
     <SpinnerScreen />
-  ) : (
-      <UserInactivity
-        timeForInactivity={parseFloat(Config.SESSION_TIME_OUT)}
-        onAction={onAction}
-      >
+  ) : ( 
         <Container style={globalStyles.listContent}>
           <NavigationEvents
             onWillFocus={_ => {
@@ -157,8 +139,7 @@ export const ListOrder = ({
           ) : (
               <Text style={globalStyles.emptyString}>Place your first order</Text>
             )}
-        </Container>
-      </UserInactivity>
+        </Container> 
     );
 };
 
@@ -170,7 +151,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = {
   setLoading,
   handleError,
-  startLogout
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ListOrder);
