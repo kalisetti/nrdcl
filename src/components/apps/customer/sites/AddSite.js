@@ -43,7 +43,6 @@ export const AddSite = ({
   setLoading,
 }) => {
   //state info for forms
-  const [purpose, setPurpose] = useState(undefined);
   const [approval_no, setapproval_no] = useState(undefined);
   const [approval_document, setapproval_document] = useState([]);
   const [construction_type, setconstruction_type] = useState(undefined);
@@ -95,7 +94,6 @@ export const AddSite = ({
   };
 
   //all values
-  const [all_purpose, setall_purpose] = useState([]);
   const [all_construction_type, setall_construction_type] = useState([]);
   const [all_dzongkhag, setall_dzongkhag] = useState([]);
   const [all_sub_item, setall_sub_item] = useState([]);
