@@ -7,7 +7,7 @@ export class SpinnerScreen extends Component {
     return (
       <Container style={globalStyles.container}>
         <Spinner color="green" />
-        <Text style={{ color: 'grey', marginLeft: 152 }}>Please Wait...</Text>
+        <Text style={{ color: 'grey', textAlign: 'center' }}>Please Wait...</Text>
       </Container>
     );
   }
