@@ -122,7 +122,7 @@ export const OrderDetail = ({
               <Text style={globalStyle.label}>Total Order Qty:</Text>
             </Col>
             <Col size={3}>
-              <Text>{order.total_quantity} M3</Text>
+              <Text>{commaNumber(order.total_quantity)} M3</Text>
             </Col>
           </Row>
 
