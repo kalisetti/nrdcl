@@ -1,12 +1,13 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Modal } from 'react-native';
+import { Modal, } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Config from 'react-native-config';
 import { default as commaNumber } from 'comma-number';
 import {
   Container,
   Content,
+  CardItem,
   Form,
   Picker,
   Item,
@@ -463,25 +464,24 @@ export const AddOrder = ({
     }
     setLoading(false);
   };
-  
+
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-        <Container>
-          <NavigationEvents
-            onWillFocus={_ => {
-              setState({});
-            }}
-            onWillBlur={_ => {
-              setState(undefined);
-            }}
-          />
-          <Content style={globalStyles.content}>
-            <Form>
+      <Container>
+        <NavigationEvents
+          onWillFocus={_ => {
+            setState({});
+          }}
+          onWillBlur={_ => {
+            setState(undefined);
+          }}
+        />
+        <Content>
+          <CardItem> 
+            <Form style={{width:'100%'}}> 
               <View style={globalStyles.dropdown}>
-                <Picker
-                  mode="dropdown"
-                  selectedValue={site}
+                <Picker mode="dropdown" selectedValue={site}
                   onValueChange={val => setSite(val)}>
                   <Picker.Item label={'Select Site'} value={undefined} key={-1} />
                   {all_sites &&
@@ -647,7 +647,7 @@ export const AddOrder = ({
                         Click here
                   </Text>{' '}
                       to see information on sand available from other areas.
-                </Text>
+                    </Text>
                   ) : (
                       <Text style={{ color: 'gray' }}>
                         <Icon
@@ -869,14 +869,10 @@ export const AddOrder = ({
 
                   {transport_mode && (
                     <Fragment>
-                      <Button
-                        info
-                        onPress={() => {
-                          setShowModal(true),
-                            resetErrorMsg(),
-                            resetModal(),
-                            checkLocation();
-                        }}
+                      <Button info onPress={() => {
+                        setShowModal(true), resetErrorMsg(),
+                          resetModal(), checkLocation();
+                      }}
                         style={globalStyles.mb10}>
                         {items.length > 0 ? (
                           <Text>Add More Qty</Text>
@@ -894,7 +890,7 @@ export const AddOrder = ({
                   )}
                 </Fragment>
               ) : (
-                  <Text></Text>
+                  <Fragment></Fragment>
                 )}
 
               {items.length > 0 &&
@@ -935,7 +931,6 @@ export const AddOrder = ({
                       )}
                     </Row>
                     <Item></Item>
-
                     <Row style={globalStyles.labelContainer}>
                       <Col size={3}>
                         <Text style={{ textAlign: 'left', fontWeight: 'bold' }}>
@@ -950,143 +945,134 @@ export const AddOrder = ({
                     </Row>
                   </Fragment>
                 ) : (
-                  <Text></Text>
+                  <Fragment></Fragment>
                 )}
-
-              <Text></Text>
-              <Button
-                block
-                success
-                iconLeft
-                style={globalStyles.mb10}
-                onPress={submitOrder}>
+              <Button block success iconLeft style={globalStyles.mb10} onPress={submitOrder}>
                 <Text>Place Order</Text>
               </Button>
             </Form>
-          </Content>
+          </CardItem>
+        </Content>
 
-          <Modal
-            animationType="slide"
-            transparent={false}
-            visible={showModal}
-            onRequestClose={() => setShowModal(false)}>
-            <Content style={globalStyles.content}>
-              <Text
-                style={{
-                  fontSize: 25,
-                  fontWeight: 'bold',
-                  alignSelf: 'center',
-                  marginBottom: 10,
-                  color: Config.APP_HEADER_COLOR,
-                }}>
-                Add Qty
+        <Modal animationType="slide" transparent={false} visible={showModal}
+          onRequestClose={() => setShowModal(false)}>
+          <Content style={globalStyles.content}>
+            <Text
+              style={{
+                fontSize: 25,
+                fontWeight: 'bold',
+                alignSelf: 'center',
+                marginBottom: 10,
+                color: Config.APP_HEADER_COLOR,
+              }}>
+              Add Qty
           </Text>
 
-              {(transport_mode === commonPoolLabel ||
-                transport_mode === othersLabel) && (
-                  <View style={globalStyles.dropdown}>
-                    <Picker
-                      mode="dropdown"
-                      selectedValue={vehicle_capacities}
-                      onValueChange={val => {
-                        setVehicle_capacities(val), resetErrorMsg();
-                      }}>
-                      <Picker.Item
-                        label={'Select Vehicle Capacity'}
-                        value={undefined}
-                        key={-1}
-                      />
-                      {all_vehicle_capacities &&
-                        all_vehicle_capacities.map((pur, idx) => {
-                          return (
-                            <Picker.Item
-                              label={pur.name}
-                              value={pur.name}
-                              key={idx}
-                            />
-                          );
-                        })}
-                    </Picker>
-                  </View>
-                )}
-
-              {transport_mode === selfOwnedLabel && (
+            {(transport_mode === commonPoolLabel ||
+              transport_mode === othersLabel) && (
                 <View style={globalStyles.dropdown}>
                   <Picker
                     mode="dropdown"
-                    selectedValue={vehicle}
+                    selectedValue={vehicle_capacities}
                     onValueChange={val => {
-                      setVehDetails(val), setVehicleErrorMsg('');
+                      setVehicle_capacities(val), resetErrorMsg();
                     }}>
                     <Picker.Item
-                      label={'Select Vehicle'}
+                      label={'Select Vehicle Capacity'}
                       value={undefined}
                       key={-1}
                     />
-                    {allprivatevehicles &&
-                      allprivatevehicles.map((val, idx) => {
+                    {all_vehicle_capacities &&
+                      all_vehicle_capacities.map((pur, idx) => {
                         return (
-                          <Picker.Item label={val.vehicle} value={val.vehicle} key={idx} />
+                          <Picker.Item
+                            label={pur.name}
+                            value={pur.name}
+                            key={idx}
+                          />
                         );
                       })}
                   </Picker>
                 </View>
               )}
-              {(vehicle || vehicle_capacities) && (
-                <Fragment>
-                  {vehicle && (
-                    <Item regular style={globalStyles.mb10}>
-                      <Input
-                        disabled
-                        value={vehicle_capacity}
-                        placeholder="Capacity"
-                      />
-                    </Item>
-                  )}
 
+            {transport_mode === selfOwnedLabel && (
+              <View style={globalStyles.dropdown}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={vehicle}
+                  onValueChange={val => {
+                    setVehDetails(val), setVehicleErrorMsg('');
+                  }}>
+                  <Picker.Item
+                    label={'Select Vehicle'}
+                    value={undefined}
+                    key={-1}
+                  />
+                  {allprivatevehicles &&
+                    allprivatevehicles.map((val, idx) => {
+                      return (
+                        <Picker.Item label={val.vehicle} value={val.vehicle} key={idx} />
+                      );
+                    })}
+                </Picker>
+              </View>
+            )}
+            {(vehicle || vehicle_capacities) && (
+              <Fragment>
+                {vehicle && (
                   <Item regular style={globalStyles.mb10}>
                     <Input
-                      value={noof_truck_load}
-                      onChangeText={val => {
-                        settruckload(val), checkNumeric(val), setTruckLoadErrorMsg('');
-                      }}
-
-                      placeholder="No of Truck Load"
-                      keyboardType={'numeric'}
+                      disabled
+                      value={vehicle_capacity}
+                      placeholder="Capacity"
                     />
                   </Item>
-                </Fragment>
-              )}
-              <Container
-                style={{
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  maxHeight: 50,
-                }}>
-                <Button success onPress={addItemToList}>
-                  <Text>Add Qty</Text>
-                </Button>
-                <Button
-                  danger
-                  onPress={() => {
-                    setShowModal(false), setvehicle(undefined);
-                  }}>
-                  <Text>Cancel</Text>
-                </Button>
-              </Container>
+                )}
 
-              <Container>
-                <View>
-                  <Text style={globalStyles.errorMsg}>
-                    {vehicleCapacityErrorMsg}
-                    {vehicleErrorMsg}
-                    {truckLoadErrorMsg}
-                  </Text>
-                </View>
-              </Container>
-            </Content>
-          </Modal>
-        </Container>
+                <Item regular style={globalStyles.mb10}>
+                  <Input
+                    value={noof_truck_load}
+                    onChangeText={val => {
+                      settruckload(val), checkNumeric(val), setTruckLoadErrorMsg('');
+                    }}
+
+                    placeholder="No of Truck Load"
+                    keyboardType={'numeric'}
+                  />
+                </Item>
+              </Fragment>
+            )}
+            <Container
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                maxHeight: 50,
+              }}>
+              <Button success onPress={addItemToList}>
+                <Text>Add Qty</Text>
+              </Button>
+              <Button
+                danger
+                onPress={() => {
+                  setShowModal(false), setvehicle(undefined);
+                }}>
+                <Text>Cancel</Text>
+              </Button>
+            </Container>
+
+            <Container>
+              <View>
+                <Text style={globalStyles.errorMsg}>
+                  {vehicleCapacityErrorMsg}
+                  {vehicleErrorMsg}
+                  {truckLoadErrorMsg}
+                </Text>
+              </View>
+            </Container>
+          </Content>
+        </Modal>
+      </Container>
     );
 };
 

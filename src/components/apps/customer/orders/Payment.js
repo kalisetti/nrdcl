@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
-import {View, Image} from 'react-native';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { View, Image } from 'react-native';
 import Dialog from 'react-native-dialog';
 import {
   Container,
@@ -15,7 +15,6 @@ import {
   Card,
   CardItem,
   DeckSwiper,
-  Fragment,
   Row,
   Col,
 } from 'native-base';
@@ -32,7 +31,7 @@ import {
 } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
-import {default as commaNumber} from 'comma-number';
+import { default as commaNumber } from 'comma-number';
 export const Payment = ({
   userState,
   commonState,
@@ -196,159 +195,159 @@ export const Payment = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <Row style={globalStyles.labelContainer}>
-            <Col size={2}>
-              <Text style={{textAlign: 'right'}}>Your Order Number is: </Text>
-            </Col>
-            <Col size={2}>
-              <Text style={globalStyles.label}>
-                {navigation.getParam('orderNumber')}
+      <Container>
+        <Content style={globalStyles.content}>
+          <Form>
+            <Row style={globalStyles.labelContainer}>
+              <Col size={2}>
+                <Text style={{ textAlign: 'right' }}>Your Order Number is: </Text>
+              </Col>
+              <Col size={2}>
+                <Text style={globalStyles.label}>
+                  {navigation.getParam('orderNumber')}
+                </Text>
+              </Col>
+            </Row>
+            <Row style={globalStyles.labelContainer}>
+              <Col size={2}>
+                <Text style={{ textAlign: 'right' }}>Amount Payable: </Text>
+              </Col>
+              <Col size={2}>
+                <Text style={globalStyles.label}>
+                  Nu.{commaNumber(navigation.getParam('totalPayableAmount'))}/-
               </Text>
-            </Col>
-          </Row>
-          <Row style={globalStyles.labelContainer}>
-            <Col size={2}>
-              <Text style={{textAlign: 'right'}}>Amount Payable: </Text>
-            </Col>
-            <Col size={2}>
-              <Text style={globalStyles.label}>
-                Nu.{commaNumber(navigation.getParam('totalPayableAmount'))}/-
-              </Text>
-            </Col>
-          </Row>
-          <View style={globalStyles.dropdown}>
-            <Picker
-              mode="dropdown"
-              selectedValue={remitter_bank}
-              onValueChange={val => setremitter_bank(val)}>
-              <Picker.Item
-                label={'Select Remitter Bank'}
-                value={undefined}
-                key={-1}
-              />
-              {all_financial_inst &&
-                all_financial_inst.map((val, idx) => {
-                  return (
-                    <Picker.Item
-                      label={val.bank_name}
-                      value={val.bank_code}
-                      key={idx}
-                    />
-                  );
-                })}
-            </Picker>
-          </View>
-          {remitter_bank && (
-            <Item regular style={globalStyles.mb10}>
-              <Input
-                value={remitter_acc_no}
-                keyboardType="number-pad"
-                onChangeText={val => setremitter_acc_no(val)}
-                placeholder="Remitter Account No"
-              />
-            </Item>
-          )}
-          {remitter_acc_no && (
-            <Button
-              block
-              success
-              iconLeft
-              style={globalStyles.mb10}
-              onPress={paymentRequest}>
-              <Text>Pay Now</Text>
-            </Button>
-          )}
-          {(creditAllowed == 1 &&
-            navigation.getParam('approval_status') === '') ||
-          (creditAllowed == 1 &&
-            navigation.getParam('approval_status') === 'Rejected') ? (
-            <Button
-              block
-              info
-              style={globalStyles.mb10}
-              onPress={getApprovalDoc}>
-              <Text>Upload Approval Documents</Text>
-            </Button>
-          ) : (
-            <Text></Text>
-          )}
-
-          {approvalDoc.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 20}}>
-              <Text style={{alignSelf: 'center', color: 'red'}}>
-                Swipe to review all images
-              </Text>
-              <DeckSwiper
-                dataSource={approvalDocmage}
-                renderItem={image => (
-                  <Card style={{elevation: 3}}>
-                    <CardItem cardBody>
-                      <Image
-                        source={{
-                          uri: image.path,
-                        }}
-                        style={{height: 250, width: '100%'}}
+              </Col>
+            </Row>
+            <View style={globalStyles.dropdown}>
+              <Picker
+                mode="dropdown"
+                selectedValue={remitter_bank}
+                onValueChange={val => setremitter_bank(val)}>
+                <Picker.Item
+                  label={'Select Remitter Bank'}
+                  value={undefined}
+                  key={-1}
+                />
+                {all_financial_inst &&
+                  all_financial_inst.map((val, idx) => {
+                    return (
+                      <Picker.Item
+                        label={val.bank_name}
+                        value={val.bank_code}
+                        key={idx}
                       />
-                    </CardItem>
-                    <CardItem>
-                      <Button
-                        transparent
-                        small
-                        onPress={val => removeAttachment(val)}>
-                        <Icon
-                          name="delete"
-                          type="AntDesign"
-                          style={{color: 'red'}}
-                        />
-                      </Button>
-                      <Text>
-                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                      </Text>
-                    </CardItem>
-                  </Card>
-                )}
-              />
+                    );
+                  })}
+              </Picker>
             </View>
-          )}
-          {(creditAllowed == 1 &&
-            navigation.getParam('approval_status') === '') ||
-          (creditAllowed == 1 &&
-            navigation.getParam('approval_status') === 'Rejected') ? (
-            <Button
-              block
-              success
-              iconLeft
-              style={globalStyles.mb10}
-              onPress={paymentLater}>
-              <Text>Pay Later</Text>
-            </Button>
-          ) : (
-            <Text></Text>
-          )}
-          <View>
-            <Dialog.Container visible={showDialog}>
-              <Dialog.Title>Please enter your OTP</Dialog.Title>
-              <Dialog.Input
-                placeholder="Please enter your OTP"
-                wrapperStyle={globalStyles.dialogueInput}
-                onChangeText={val => setOTP(val)}
-                keyboardType="number-pad"></Dialog.Input>
-              <Dialog.Button
-                label="Cancel"
-                color="red"
-                onPress={() => setshowDialog(false)}
-              />
-              <Dialog.Button label="Make Payment" onPress={makePayment} />
-            </Dialog.Container>
-          </View>
-          <Text></Text>
-        </Form>
-      </Content>
-    </Container>
-  );
+            {remitter_bank && (
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={remitter_acc_no}
+                  keyboardType="number-pad"
+                  onChangeText={val => setremitter_acc_no(val)}
+                  placeholder="Remitter Account No"
+                />
+              </Item>
+            )}
+            {remitter_acc_no && (
+              <Button
+                block
+                success
+                iconLeft
+                style={globalStyles.mb10}
+                onPress={paymentRequest}>
+                <Text>Pay Now</Text>
+              </Button>
+            )}
+            {(creditAllowed == 1 &&
+              navigation.getParam('approval_status') === '') ||
+              (creditAllowed == 1 &&
+                navigation.getParam('approval_status') === 'Rejected') ? (
+                <Button
+                  block
+                  info
+                  style={globalStyles.mb10}
+                  onPress={getApprovalDoc}>
+                  <Text>Upload Approval Documents</Text>
+                </Button>
+              ) : (
+                <Fragment></Fragment>
+              )}
+
+            {approvalDoc.length === 0 ? null : (
+              <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                <Text style={{ alignSelf: 'center', color: 'red' }}>
+                  Swipe to review all images
+              </Text>
+                <DeckSwiper
+                  dataSource={approvalDocmage}
+                  renderItem={image => (
+                    <Card style={{ elevation: 3 }}>
+                      <CardItem cardBody>
+                        <Image
+                          source={{
+                            uri: image.path,
+                          }}
+                          style={{ height: 250, width: '100%' }}
+                        />
+                      </CardItem>
+                      <CardItem>
+                        <Button
+                          transparent
+                          small
+                          onPress={val => removeAttachment(val)}>
+                          <Icon
+                            name="delete"
+                            type="AntDesign"
+                            style={{ color: 'red' }}
+                          />
+                        </Button>
+                        <Text>
+                          {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                        </Text>
+                      </CardItem>
+                    </Card>
+                  )}
+                />
+              </View>
+            )}
+            {(creditAllowed == 1 &&
+              navigation.getParam('approval_status') === '') ||
+              (creditAllowed == 1 &&
+                navigation.getParam('approval_status') === 'Rejected') ? (
+                <Button
+                  block
+                  success
+                  iconLeft
+                  style={globalStyles.mb10}
+                  onPress={paymentLater}>
+                  <Text>Pay Later</Text>
+                </Button>
+              ) : (
+                <Fragment></Fragment>
+              )}
+            <View>
+              <Dialog.Container visible={showDialog}>
+                <Dialog.Title>Please enter your OTP</Dialog.Title>
+                <Dialog.Input
+                  placeholder="Please enter your OTP"
+                  wrapperStyle={globalStyles.dialogueInput}
+                  onChangeText={val => setOTP(val)}
+                  keyboardType="number-pad"></Dialog.Input>
+                <Dialog.Button
+                  label="Cancel"
+                  color="red"
+                  onPress={() => setshowDialog(false)}
+                />
+                <Dialog.Button label="Make Payment" onPress={makePayment} />
+              </Dialog.Container>
+            </View>
+            <Fragment></Fragment>
+          </Form>
+        </Content>
+      </Container>
+    );
 };
 const mapStateToProps = state => ({
   userState: state.userState,

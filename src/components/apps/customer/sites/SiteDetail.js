@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-native';
 import moment from 'moment';
@@ -172,7 +172,7 @@ export const SiteDetail = ({
                 </Button>
               </Col>
             ) : (
-                <Text></Text>
+                <Fragment></Fragment>
               )}
             {site.enabled ? (
               <Col>
@@ -436,24 +436,24 @@ export const SiteDetail = ({
                     </Col>
                   </Row>
                   <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Material Source:</Text>
-                  </Col>
-                  <Col size={3}>
-                    <Text>{currentItem.branch}</Text>
-                  </Col>
-                </Row>
-                <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Transport Mode:</Text>
-                  </Col>
-                  <Col size={3}>
-                    <Text>{currentItem.transport_mode}</Text>
-                  </Col>
-                </Row>
+                    <Col size={2}>
+                      <Text style={globalStyle.lb}>Material Source:</Text>
+                    </Col>
+                    <Col size={3}>
+                      <Text>{currentItem.branch}</Text>
+                    </Col>
+                  </Row>
+                  <Row style={globalStyle.labelContainer}>
+                    <Col size={2}>
+                      <Text style={globalStyle.lb}>Transport Mode:</Text>
+                    </Col>
+                    <Col size={3}>
+                      <Text>{currentItem.transport_mode}</Text>
+                    </Col>
+                  </Row>
                   <Row style={globalStyle.labelContainer}>
                     <Col size={4}>
-                      <Text style={globalStyle.lb}>Remarks;</Text>
+                      <Text style={globalStyle.lb}>Remarks:</Text>
                     </Col>
                     <Col size={2}>
                       <Text>{currentItem.remarks}</Text>
@@ -471,7 +471,7 @@ export const SiteDetail = ({
                       </Col>
                     </Row>
                   ) : (
-                      <Text></Text>
+                    <Fragment></Fragment>
                     )}
                   <Row style={globalStyle.labelContainer}>
                     <Col size={5}>

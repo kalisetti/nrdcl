@@ -71,11 +71,11 @@ export const UpdateDriver = ({
         <Content style={globalStyles.content}>
           <Form>
             <Item regular  style={globalStyles.mb10}>
-              <Label>Vehicle No :</Label>
+              <Label>Vehicle No:</Label>
               <Input disabled value={vehicle} />
             </Item>
             <Item regular style={globalStyles.mb10}>
-              <Label>Driver's Name :</Label>
+              <Label>Driver's Name:</Label>
               <Input
                 value={driver_name}
                 onChangeText={val => setdriver_name(val)}
@@ -83,7 +83,7 @@ export const UpdateDriver = ({
             </Item>
 
             <Item regular style={globalStyles.mb10}>
-              <Label>Driver's Contact No :</Label>
+              <Label>Driver's Contact No:</Label>
               <Input
                 keyboardType='numeric'
                 value={String(driver_contact_no)}

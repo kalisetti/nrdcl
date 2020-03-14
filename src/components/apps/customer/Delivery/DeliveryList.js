@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {
   Container,
@@ -114,7 +114,7 @@ export const DeliveryList = ({
           <Text>Delivery Summary</Text>
         </Button>
       ) : (
-        <Text></Text>
+        <Fragment></Fragment>
       )}
       <NavigationEvents
         onWillFocus={_ => {

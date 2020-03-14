@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {
@@ -86,20 +86,20 @@ export const OrderDetail = ({
                 </CardItem>
                 <CardItem>
                     <View>
-                        <Text>Delivery Note No  : {deliver.delivery_note}</Text>
-                        <Text>Status  : {deliver.confirmation_status}</Text>
-                        <Text>Branch  : {deliver.branch} </Text>
-                        <Text>Vehicle No : {deliver.vehicle}</Text>
-                        <Text>Driver Name  : {deliver.drivers_name}</Text>
-                        <Text>Driver Mobile No  : {deliver.contact_no}</Text>
-                        <Text>Delivery Note Generated :  {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mma')}</Text>
-                        <Text>Receive Time  : {deliver.received_date_time == undefined ? '' :
+                        <Text>Delivery Note No: {deliver.delivery_note}</Text>
+                        <Text>Status: {deliver.confirmation_status}</Text>
+                        <Text>Branch: {deliver.branch} </Text>
+                        <Text>Vehicle No: {deliver.vehicle}</Text>
+                        <Text>Driver Name: {deliver.drivers_name}</Text>
+                        <Text>Driver Mobile No: {deliver.contact_no}</Text>
+                        <Text>Delivery Note Generated: {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mma')}</Text>
+                        <Text>Receive Time: {deliver.received_date_time == undefined ? (<Fragment></Fragment>) :
                             Moment(deliver.received_date_time).format('d MMM YYYY, hh:mma')}</Text>
                         <Text />
                         {deliver.confirmation_status === 'In Transit' ? (
                             <Text style={{ color: 'gray', fontSize: 16 }}>
-                                Note* Please contact above driver for detail.</Text>) : (
-                                <Text></Text>
+                                Note: Please contact above driver for detail</Text>) : (
+                                (<Fragment></Fragment>)
                             )}
 
                         {deliver.confirmation_status === 'In Transit' ? (
@@ -111,30 +111,25 @@ export const OrderDetail = ({
                                 />
                             </Item>
                         ) : (
-                                <Text></Text>
+                                (<Fragment></Fragment>)
                             )}
 
                         {deliver.confirmation_status === 'In Transit' ? (
-                            <Text style={{ color: 'gray' }}>Please click bellow button to acknowledge the receipt.</Text>
+                            <Text style={{ color: 'gray' }}>Please click below button to
+                             acknowledge the receipt</Text>
                         ) : (
-                                <Text></Text>
+                                (<Fragment></Fragment>)
                             )}
                     </View>
                 </CardItem>
-
                 {deliver.confirmation_status === 'In Transit' ? (
-                    <Button
-                        block
-                        success
-                        iconLeft
-                        style={globalStyle.mb10}
+                    <Button block success iconLeft style={globalStyle.mb10}
                         onPress={() => toggleAlert()}
-
                     >
                         <Text>Acknowledge Receipt</Text>
                     </Button>
                 ) : (
-                        <Text></Text>
+                        (<Fragment></Fragment>)
                     )}
             </Card>
         </Content>
@@ -144,7 +139,7 @@ export const OrderDetail = ({
                     show={showAlert}
                     showProgress={false}
                     title="Acknowledge Receipt"
-                    message="Are you sure you want to acknowledge receipt ?"
+                    message="Are you sure you want to acknowledge receipt?"
                     closeOnTouchOutside={false}
                     closeOnHardwareBackPress={false}
                     showCancelButton={true}

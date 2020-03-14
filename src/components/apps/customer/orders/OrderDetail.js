@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
-import {Container, Text, Grid, Row, Col, Content, Button} from 'native-base';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
+import { Container, Text, Grid, Row, Col, Content, Button } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import globalStyle from '../../../../styles/globalStyle';
 import {
@@ -8,9 +8,9 @@ import {
   callAxios,
   handleError,
 } from '../../../../redux/actions/commonActions';
-import {startVehicleDeregistration} from '../../../../redux/actions/siteActions';
-import {default as commaNumber} from 'comma-number';
- 
+import { startVehicleDeregistration } from '../../../../redux/actions/siteActions';
+import { default as commaNumber } from 'comma-number';
+
 export const OrderDetail = ({
   userState,
   commonState,
@@ -19,7 +19,7 @@ export const OrderDetail = ({
   setLoading,
 }) => {
   const [order, setOrder] = useState({});
-  
+
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -68,135 +68,135 @@ export const OrderDetail = ({
       handleError(error);
     }
   };
- 
+
   return commonState.isLoading ? (
     <SpinnerScreen />
-  ) : ( 
-    <Container>
-      <Content style={globalStyle.content}>
-        <Row style={globalStyle.labelContainer}>
-          <Col size={2}>
-            <Text style={globalStyle.label}>Order Number:</Text>
-          </Col>
-          <Col size={3}>
-            <Text>{navigation.state.params.id}</Text>
-          </Col>
-        </Row>
-        <Row style={globalStyle.labelContainer}>
-          <Col size={2}>
-            <Text style={globalStyle.label}>Site:</Text>
-          </Col>
-          <Col size={3}>
-            <Text>{order.site}</Text>
-          </Col>
-        </Row>
+  ) : (
+      <Container>
+        <Content style={globalStyle.content}>
+          <Row style={globalStyle.labelContainer}>
+            <Col size={2}>
+              <Text style={globalStyle.label}>Order Number:</Text>
+            </Col>
+            <Col size={3}>
+              <Text>{navigation.state.params.id}</Text>
+            </Col>
+          </Row>
+          <Row style={globalStyle.labelContainer}>
+            <Col size={2}>
+              <Text style={globalStyle.label}>Site:</Text>
+            </Col>
+            <Col size={3}>
+              <Text>{order.site}</Text>
+            </Col>
+          </Row>
 
-        <Row style={globalStyle.labelContainer}>
-          <Col size={2}>
-            <Text style={globalStyle.label}>Item:</Text>
-          </Col>
-          <Col size={3}>
-            <Text>{order.item_name}</Text>
-          </Col>
-        </Row>
+          <Row style={globalStyle.labelContainer}>
+            <Col size={2}>
+              <Text style={globalStyle.label}>Item:</Text>
+            </Col>
+            <Col size={3}>
+              <Text>{order.item_name}</Text>
+            </Col>
+          </Row>
 
-        <Row style={globalStyle.labelContainer}>
-          <Col size={2}>
-            <Text style={globalStyle.label}>Branch:</Text>
-          </Col>
-          <Col size={3}>
-            <Text>{order.branch}</Text>
-          </Col>
-        </Row>
+          <Row style={globalStyle.labelContainer}>
+            <Col size={2}>
+              <Text style={globalStyle.label}>Branch:</Text>
+            </Col>
+            <Col size={3}>
+              <Text>{order.branch}</Text>
+            </Col>
+          </Row>
 
-        <Row style={globalStyle.labelContainer}>
-          <Col size={2}>
-            <Text style={globalStyle.label}>Transport Mode:</Text>
-          </Col>
-          <Col size={3}>
-            <Text>{order.transport_mode}</Text>
-          </Col>
-        </Row>
-        <Row style={globalStyle.labelContainer}>
-          <Col size={2}>
-            <Text style={globalStyle.label}>Total Order Qty:</Text>
-          </Col>
-          <Col size={3}>
-            <Text>{order.total_quantity} M3</Text>
-          </Col>
-        </Row>
+          <Row style={globalStyle.labelContainer}>
+            <Col size={2}>
+              <Text style={globalStyle.label}>Transport Mode:</Text>
+            </Col>
+            <Col size={3}>
+              <Text>{order.transport_mode}</Text>
+            </Col>
+          </Row>
+          <Row style={globalStyle.labelContainer}>
+            <Col size={2}>
+              <Text style={globalStyle.label}>Total Order Qty:</Text>
+            </Col>
+            <Col size={3}>
+              <Text>{order.total_quantity} M3</Text>
+            </Col>
+          </Row>
 
-        <Row style={[globalStyle.labelContainer]}>
-          <Text style={globalStyle.label}>Invoice Details</Text>
-        </Row>
-        <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
-          <Grid>
-            <Row style={globalStyle.tableHeaderContainer}>
-              <Col size={2} style={globalStyle.colContainer}>
-                <Text>Particulars</Text>
-              </Col>
-              <Col size={1} style={globalStyle.colContainer}>
-                <Text>Amount(Nu)</Text>
-              </Col>
-            </Row>
-            <Row style={globalStyle.rowContainer}>
-              <Col size={2} style={globalStyle.colContainer}>
-                <Text>Total Item Amount</Text>
-              </Col>
-              <Col size={1} style={globalStyle.colContainer}>
-                <Text style={{textAlign: 'right'}}>
-                  {commaNumber(order.total_item_rate)}
-                </Text>
-              </Col>
-            </Row>
-            <Row style={globalStyle.rowContainer}>
-              <Col size={2} style={globalStyle.colContainer}>
-                <Text>Total Transportation Amount</Text>
-              </Col>
-              <Col size={1} style={globalStyle.colContainer}>
-                <Text style={{textAlign: 'right'}}>
-                  {commaNumber(order.total_transportation_rate)}
-                </Text>
-              </Col>
-            </Row>
-            <Row style={globalStyle.rowContainer}>
-              <Col size={2} style={globalStyle.colContainer}>
-                <Text style={{fontWeight: 'bold'}}>Total Payable Amount</Text>
-              </Col>
-              <Col size={1} style={globalStyle.colContainer}>
-                <Text style={{textAlign: 'right', fontWeight: 'bold'}}>
-                  {commaNumber(order.total_payable_amount)}
-                </Text>
-              </Col>
-            </Row>
-            <Row style={globalStyle.rowContainer}>
-              <Col size={2} style={globalStyle.colContainer}>
-                <Text style={{fontWeight: 'bold'}}>Total Balance Amount</Text>
-              </Col>
-              <Col size={1} style={globalStyle.colContainer}>
-                <Text style={{textAlign: 'right', fontWeight: 'bold'}}>
-                  {commaNumber(order.total_balance_amount)}
-                </Text>
-              </Col>
-            </Row>
-          </Grid>
-        </Row>
+          <Row style={[globalStyle.labelContainer]}>
+            <Text style={globalStyle.label}>Invoice Details</Text>
+          </Row>
+          <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
+            <Grid>
+              <Row style={globalStyle.tableHeaderContainer}>
+                <Col size={2} style={globalStyle.colContainer}>
+                  <Text>Particulars</Text>
+                </Col>
+                <Col size={1} style={globalStyle.colContainer}>
+                  <Text>Amount(Nu)</Text>
+                </Col>
+              </Row>
+              <Row style={globalStyle.rowContainer}>
+                <Col size={2} style={globalStyle.colContainer}>
+                  <Text>Total Item Amount</Text>
+                </Col>
+                <Col size={1} style={globalStyle.colContainer}>
+                  <Text style={{ textAlign: 'right' }}>
+                    {commaNumber(order.total_item_rate)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row style={globalStyle.rowContainer}>
+                <Col size={2} style={globalStyle.colContainer}>
+                  <Text>Total Transportation Amount</Text>
+                </Col>
+                <Col size={1} style={globalStyle.colContainer}>
+                  <Text style={{ textAlign: 'right' }}>
+                    {commaNumber(order.total_transportation_rate)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row style={globalStyle.rowContainer}>
+                <Col size={2} style={globalStyle.colContainer}>
+                  <Text style={{ fontWeight: 'bold' }}>Total Payable Amount</Text>
+                </Col>
+                <Col size={1} style={globalStyle.colContainer}>
+                  <Text style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                    {commaNumber(order.total_payable_amount)}
+                  </Text>
+                </Col>
+              </Row>
+              <Row style={globalStyle.rowContainer}>
+                <Col size={2} style={globalStyle.colContainer}>
+                  <Text style={{ fontWeight: 'bold' }}>Total Balance Amount</Text>
+                </Col>
+                <Col size={1} style={globalStyle.colContainer}>
+                  <Text style={{ textAlign: 'right', fontWeight: 'bold' }}>
+                    {commaNumber(order.total_balance_amount)}
+                  </Text>
+                </Col>
+              </Row>
+            </Grid>
+          </Row>
 
-        {order.total_balance_amount > 0 ? (
-          <Button
-            block
-            success
-            iconLeft
-            style={globalStyle.mb10}
-            onPress={proceedPayment}>
-            <Text>Proceed for Payment</Text>
-          </Button>
-        ) : (
-          <Text></Text>
-        )}
-      </Content>
-    </Container>
-  );
+          {order.total_balance_amount > 0 ? (
+            <Button
+              block
+              success
+              iconLeft
+              style={globalStyle.mb10}
+              onPress={proceedPayment}>
+              <Text>Proceed for Payment</Text>
+            </Button>
+          ) : (
+              <Fragment></Fragment>
+            )}
+        </Content>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({
