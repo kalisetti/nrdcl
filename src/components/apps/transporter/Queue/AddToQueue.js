@@ -4,6 +4,7 @@ import {
   callAxios,
 } from '../../../../redux/actions/commonActions';
 import { submitApplyForQueue } from '../../../../redux/actions/siteActions';
+import globalStyle from '../../../../styles/globalStyle';
 
 
 import {
@@ -16,14 +17,19 @@ import {
   ListItem,
   Body,
   Right,
-  Alert
+  Left,
+  Thumbnail,
+  Badge,
+  Row
 } from 'native-base';
+
+
+import { Alert, Image } from 'react-native'
 import {
   handleError,
   getImages,
   setLoading,
 } from '../../../../redux/actions/commonActions';
-import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import NavigationService from '../../../base/navigation/NavigationService';
 
@@ -59,6 +65,7 @@ export const AddToQueue = ({
         'get',
         params
       );
+      console.log(res.data.message)
       setTransporterVehicleList(res.data.message);
       setLoading(false);
     } catch (error) {
@@ -71,29 +78,21 @@ export const AddToQueue = ({
       user: userState.login_id,
       vehicle: vechicle_no
     }
-    const res = await submitApplyForQueue(queueDetail)
-    // Alert.alert(
-    //   'Alert Title',
-    //   'My Alert Msg',
-    //   [
-    //     { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
-    //     {
-    //       text: 'Cancel',
-    //       onPress: () => console.log('Cancel Pressed'),
-    //       style: 'cancel',
-    //     },
-    //     { text: 'OK', onPress: () => console.log('OK Pressed') },
-    //   ],
-    //   { cancelable: false },
-    // );
-  };
-  var BUTTONS = [
-    { text: "Option 0", icon: "american-football", iconColor: "#2c8ef4" },
-    { text: "Option 1", icon: "analytics", iconColor: "#f42ced" },
-    { text: "Option 2", icon: "aperture", iconColor: "#ea943b" },
-    { text: "Delete", icon: "trash", iconColor: "#fa213b" },
-    { text: "Cancel", icon: "close", iconColor: "#25de5b" }
-  ];
+    const res = await submitApplyForQueue(queueDetail);
+    if (res.status == 200) {
+      Alert.alert(
+        //title
+        'My Resources',
+        //body
+        'Your vehicle has been successfully apply to queue.',
+        [
+          { text: 'OK', onPress: () => getTransporterVehicleList() },
+        ],
+        { cancelable: false }
+      );
+    }
+  }
+
 
 
   return commonState.isLoading ? (
@@ -101,33 +100,58 @@ export const AddToQueue = ({
   ) : (
       <Container>
         <Content>
+
           {transporterVehicleList.map((vehicleDetail, idx) => (
             <List>
               <ListItem avatar>
+                <Left>
+                  <Image
+                    source={require('../../../../assets/images/construction-truck.jpg')}
+                    style={{
+                      alignSelf: 'center',
+                      width: 50,
+                      height: 30,
+                      marginBottom: 20,
+                    }}
+                  />
+                </Left>
                 <Body>
-                  <Text>{vehicleDetail.name}</Text>
-                  <Text note>Capacity:{vehicleDetail.vehicle_capacity}</Text>
+                  <Row>
+                    <Text>{vehicleDetail.name}({vehicleDetail.vehicle_capacity} M3)</Text>
+                  </Row>
+                  <Row>
+                    <Text note>Status:</Text>
+                    {vehicleDetail.vehicle_status === "Queued" && (
+                      <Badge info warning>
+                        <Text>{vehicleDetail.vehicle_status}</Text>
+                      </Badge>)}
+                    {vehicleDetail.vehicle_status === "In Transit" && (
+                      <Badge info warning>
+                        <Text>{vehicleDetail.vehicle_status}</Text>
+                      </Badge>)}
+                    {vehicleDetail.vehicle_status === "Available" && (
+                      <Badge info success>
+                        <Text>{vehicleDetail.vehicle_status}</Text>
+                      </Badge>)}
+                    {vehicleDetail.vehicle_status === "Queued" && (
+                      <Row>
+                        <Text></Text>
+                        <Text note>Your position</Text>
+                        <Badge info>
+                          <Text>2</Text>
+                        </Badge>
+                      </Row>
+                    )}
+                  </Row>
+
                 </Body>
                 <Right>
-                {vehicleDetail.vehicle_status === "Available"&&(
-                  <Button iconLeft success small style={{width: 130}}
-                    onPress={() => applyForQueue(vehicleDetail.name)}>
-                    <Icon name='navigate' />
-                    <Text>{vehicleDetail.vehicle_status}</Text>
-                  </Button>)}
-
-                  {vehicleDetail.vehicle_status === "Queued"&&(
-                  <Button iconLeft warning small style={{width: 130}}
-                    onPress={() => NavigationService.navigate('QueueStatus')}>
-                    <Icon name='eye'/>
-                    <Text>{vehicleDetail.vehicle_status}</Text>
-                  </Button>)}
-                  {vehicleDetail.vehicle_status === "Intransit"&&(
-                  <Button iconLeft success small style={{width: 130}}
-                    onPress={() => applyForQueue(vehicleDetail.name)}>
-                    <Icon name='navigate'/>
-                    <Text>{vehicleDetail.vehicle_status}</Text>
-                  </Button>)}
+                  {vehicleDetail.vehicle_status === "Available" && (
+                    <Button iconLeft success small
+                      onPress={() => applyForQueue(vehicleDetail.name)}>
+                      <Icon name='navigate' />
+                      <Text>Apply</Text>
+                    </Button>)}
                 </Right>
               </ListItem>
             </List>
