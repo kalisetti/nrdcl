@@ -189,7 +189,7 @@ export const OrderDetail = ({
               iconLeft
               style={globalStyle.mb10}
               onPress={proceedPayment}>
-              <Text>Proceed for Payment</Text>
+              <Text>Proceed to Payment</Text>
             </Button>
           ) : (
               <Fragment></Fragment>
