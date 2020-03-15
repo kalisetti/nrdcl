@@ -37,7 +37,7 @@ export const ListVehicle = ({
   const [refreshing, setRefreshing] = React.useState(false);
 
   const _refresh = React.useCallback(() => {
-    wait(20).then(() => setRefreshing(false));
+    wait(2000).then(() => setRefreshing(false));
     getActiveVehciles();
   }, [refreshing]);
 
@@ -124,7 +124,8 @@ export const ListVehicle = ({
         <SafeAreaView>
           <ScrollView contentContainerStyle={globalStyles.container}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+              <RefreshControl colors={["#689F38", "#9Bd35A"]}
+                refreshing={refreshing} onRefresh={_refresh} />
             }
           >
             <NavigationEvents

@@ -77,7 +77,7 @@ export const DeliverySummary = ({
         <SafeAreaView>
           <ScrollView contentContainerStyle={globalStyle.container}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+              <RefreshControl colors={["#689F38", "#9Bd35A"]} refreshing={refreshing} onRefresh={_refresh} />
             }
           >
             <Content style={globalStyle.content}>

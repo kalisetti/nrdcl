@@ -143,7 +143,7 @@ export const ListOrder = ({
         <SafeAreaView>
           <ScrollView contentContainerStyle={globalStyles.container}
             refreshControl={
-              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+              <RefreshControl colors={["#689F38", "#9Bd35A"]} refreshing={refreshing} onRefresh={_refresh} />
             }
           >
             <NavigationEvents
