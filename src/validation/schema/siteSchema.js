@@ -145,7 +145,7 @@ export const vehilceSchema = yup.object().shape({
   contact_no: yup
     .string()
     .trim()
-    .required('Contact No is mandatory'),
+    .required('Driver Mobile No is mandatory'),
   drivers_name: yup
     .string()
     .trim()

@@ -14,9 +14,9 @@ export const transportSchema = yup.object().shape({
     .required('User is mandatory'),
   contact_no: yup
     .number()
-    .positive('Invalid Driver Contact No')
-    .required('Driver Contact No is mandatory')
-    .typeError('Invalid Driver Contact No'),
+    .positive('Invalid Driver Mobile No')
+    .required('Driver Mobile No is mandatory')
+    .typeError('Invalid Driver Mobile No'),
   drivers_name: yup
     .string()
     .trim()
@@ -54,7 +54,7 @@ export const driverInfoSchema = yup.object().shape({
     .required('Driver Name is mandatory'),
   driver_mobile_no: yup
     .number()
-    .required('Driver Contact No is mandatory')
+    .required('Driver Mobile No is mandatory')
     .typeError('Invalid Driver Mobile'),
   remarks: yup
     .string()
