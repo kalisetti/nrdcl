@@ -20,7 +20,11 @@ import {
 import globalStyles from '../../../../styles/globalStyle';
 import {FlatList} from 'react-native-gesture-handler';
 import {NavigationEvents} from 'react-navigation';
-
+import {
+  ScrollView,
+  RefreshControl,
+  SafeAreaView
+} from 'react-native';
 export const ListSite = ({
   userState,
   commonState,
@@ -30,7 +34,18 @@ export const ListSite = ({
 }) => {
   const [sites, setsites] = useState([]);
   const [reload, setReload] = useState(0);
+  const [refreshing, setRefreshing] = React.useState(false);
 
+  const _refresh = React.useCallback(() => {
+    wait(20).then(() => setRefreshing(false));
+    getActiveSites();
+  }, [refreshing]);
+
+  function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -101,6 +116,12 @@ export const ListSite = ({
     <SpinnerScreen />
   ) : (
     <Container style={globalStyles.listContent}>
+      <SafeAreaView>
+          <ScrollView contentContainerStyle={globalStyles.container}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+            }
+          > 
       <NavigationEvents
         onWillFocus={_ => {
           setReload(1);
@@ -118,6 +139,8 @@ export const ListSite = ({
       ) : (
         <Text style={globalStyles.emptyString}>No approved sites yet</Text>
       )}
+       </ScrollView>
+          </SafeAreaView>
     </Container>
   );
 };

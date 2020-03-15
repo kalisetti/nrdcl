@@ -5,7 +5,7 @@
  */
 
 // import React from 'react';
-import React, { useEffect, useState, Fragment } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Container } from 'native-base';
 import { StatusBar } from 'react-native';
@@ -23,10 +23,10 @@ const App = ({ userState, startLogout }) => {
    
   return (
     <Container style={globalStyle.container}>
-      <UserInactivity
+      {/* <UserInactivity
         timeForInactivity={parseFloat(Config.SESSION_TIME_OUT)}
         onAction={startLogout}
-      >
+      > */}
         <StatusBar
           backgroundColor={Config.APP_HEADER_COLOR}
           barStyle="light-content"
@@ -41,7 +41,7 @@ const App = ({ userState, startLogout }) => {
         ) : (
             <NormalAppFooter />
           )}
-      </UserInactivity>
+      {/* </UserInactivity> */}
     </Container>
   );
 };

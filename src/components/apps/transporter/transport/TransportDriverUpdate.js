@@ -82,7 +82,7 @@ export const TransportDriverUpdate = ({
           </Item>
 
           <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Driver's Contact No</Label>
+            <Label>Driver's Mobile No</Label>
             <Input
               value={driver_mobile_no}
               onChangeText={val => setdriver_mobile_no(val)}

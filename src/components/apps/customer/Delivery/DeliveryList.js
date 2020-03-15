@@ -1,5 +1,5 @@
-import React, {useEffect, useState, Fragment} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -19,9 +19,13 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
-import {default as commaNumber} from 'comma-number';
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
+import {
+  ScrollView,
+  RefreshControl,
+  SafeAreaView
+} from 'react-native';
 
 export const DeliveryList = ({
   userState,
@@ -32,6 +36,18 @@ export const DeliveryList = ({
 }) => {
   const [deliveryList, setDeliverList] = useState([]);
   const [reload, setReload] = useState(0);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const _refresh = React.useCallback(() => {
+    wait(20).then(() => setRefreshing(false));
+    getDeliveryList();
+  }, [refreshing]);
+
+  function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
 
   useEffect(() => {
     if (!userState.logged_in) {
@@ -44,21 +60,21 @@ export const DeliveryList = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
           header
           bordered
           button
-          onPress={() => navigation.navigate('DeliveryDetail', {id: item.name})}
+          onPress={() => navigation.navigate('DeliveryDetail', { id: item.name })}
           style={globalStyles.tableHeader}>
           <Body>
             {item.docstatus === 0 ? (
-              <Text style={{color: 'red'}}>{item.delivery_note}</Text>
+              <Text style={{ color: 'red' }}>{item.delivery_note}</Text>
             ) : (
-              <Text style={{color: 'white'}}>{item.delivery_note}</Text>
-            )}
+                <Text style={{ color: 'white' }}>{item.delivery_note}</Text>
+              )}
           </Body>
 
           <Right>
@@ -103,40 +119,48 @@ export const DeliveryList = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.listContent}>
-      {deliveryList.length > 0 ? (
-        <Button
-          block
-          success
-          iconLeft
-          style={globalStyles.mb10}
-          onPress={() => navigation.navigate('DeliverySummary')}>
-          <Text>Delivery Summary</Text>
-        </Button>
-      ) : (
-        <Fragment></Fragment>
-      )}
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {deliveryList.length > 0 ? (
-        <FlatList
-          data={deliveryList}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
-        />
-      ) : (
-        <Text style={globalStyles.emptyString}>
-          Currently no delivery in transit for your order.
-        </Text>
-      )}
-    </Container>
-  );
+      <Container style={globalStyles.listContent}>
+        <SafeAreaView>
+          <ScrollView contentContainerStyle={globalStyles.container}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+            }
+          >
+            {deliveryList.length > 0 ? (
+              <Button
+                block
+                success
+                iconLeft
+                style={globalStyles.mb10}
+                onPress={() => navigation.navigate('DeliverySummary')}>
+                <Text>Delivery Summary</Text>
+              </Button>
+            ) : (
+                <Fragment></Fragment>
+              )}
+            <NavigationEvents
+              onWillFocus={_ => {
+                setReload(1);
+              }}
+              onWillBlur={_ => {
+                setReload(0);
+              }}
+            />
+            {deliveryList.length > 0 ? (
+              <FlatList
+                data={deliveryList}
+                renderItem={renderItem}
+                keyExtractor={item => item.name}
+              />
+            ) : (
+                <Text style={globalStyles.emptyString}>
+                  Currently no delivery in transit for your order.
+                </Text>
+              )}
+          </ScrollView>
+        </SafeAreaView>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

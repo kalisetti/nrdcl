@@ -21,8 +21,13 @@ import globalStyles from '../../../../styles/globalStyle';
 import { FlatList } from 'react-native-gesture-handler';
 import { NavigationEvents } from 'react-navigation';
 import { default as commaNumber } from 'comma-number';
-import Moment from 'moment'; 
-import Config from 'react-native-config'; 
+import Moment from 'moment';
+import Config from 'react-native-config';
+import {
+  ScrollView,
+  RefreshControl,
+  SafeAreaView
+} from 'react-native';
 export const ListOrder = ({
   userState,
   commonState,
@@ -32,7 +37,20 @@ export const ListOrder = ({
 }) => {
   const [order, setOrders] = useState([]);
   const [reload, setReload] = useState(0);
-  
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const _refresh = React.useCallback(() => {
+    wait(20).then(() => setRefreshing(false));
+    getAllOrders();
+  }, [refreshing]);
+
+  function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
+
+
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -116,30 +134,38 @@ export const ListOrder = ({
       handleError(error);
     }
   };
- 
+
 
   return commonState.isLoading ? (
     <SpinnerScreen />
-  ) : ( 
-        <Container style={globalStyles.listContent}>
-          <NavigationEvents
-            onWillFocus={_ => {
-              setReload(1);
-            }}
-            onWillBlur={_ => {
-              setReload(0);
-            }}
-          />
-          {order.length > 0 ? (
-            <FlatList
-              data={order}
-              renderItem={renderItem}
-              keyExtractor={item => item.name}
+  ) : (
+      <Container style={globalStyles.listContent}>
+        <SafeAreaView>
+          <ScrollView contentContainerStyle={globalStyles.container}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+            }
+          >
+            <NavigationEvents
+              onWillFocus={_ => {
+                setReload(1);
+              }}
+              onWillBlur={_ => {
+                setReload(0);
+              }}
             />
-          ) : (
-              <Text style={globalStyles.emptyString}>Place your first order</Text>
-            )}
-        </Container> 
+            {order.length > 0 ? (
+              <FlatList
+                data={order}
+                renderItem={renderItem}
+                keyExtractor={item => item.name}
+              />
+            ) : (
+                <Text style={globalStyles.emptyString}>Place your first order</Text>
+              )}
+          </ScrollView>
+        </SafeAreaView>
+      </Container>
     );
 };
 

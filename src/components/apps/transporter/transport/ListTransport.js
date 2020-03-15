@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Text,
@@ -18,8 +18,13 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {FlatList} from 'react-native-gesture-handler';
-import {NavigationEvents} from 'react-navigation';
+import { FlatList } from 'react-native-gesture-handler';
+import { NavigationEvents } from 'react-navigation';
+import {
+  ScrollView,
+  RefreshControl,
+  SafeAreaView
+} from 'react-native';
 
 export const ListTransport = ({
   userState,
@@ -30,6 +35,18 @@ export const ListTransport = ({
 }) => {
   const [vehicle, setVehicle] = useState([]);
   const [reload, setReload] = useState(0);
+  const [refreshing, setRefreshing] = React.useState(false);
+
+  const _refresh = React.useCallback(() => {
+    wait(20).then(() => setRefreshing(false));
+    getActiveVehciles();
+  }, [refreshing]);
+
+  function wait(timeout) {
+    return new Promise(resolve => {
+      setTimeout(resolve, timeout);
+    });
+  }
 
   useEffect(() => {
     if (!userState.logged_in) {
@@ -42,7 +59,7 @@ export const ListTransport = ({
     }
   }, [reload]);
 
-  const renderItem = ({item}) => {
+  const renderItem = ({ item }) => {
     return (
       <Card>
         <CardItem
@@ -50,15 +67,15 @@ export const ListTransport = ({
           bordered
           button
           onPress={() => {
-            navigation.navigate('TransportDetail', {id: item.name});
+            navigation.navigate('TransportDetail', { id: item.name });
           }}
           style={globalStyles.tableHeader}>
           <Body>
             {item.approval_status === 'Pending' ? (
-              <Text style={{color: 'red'}}>{item.vehicle_no}</Text>
+              <Text style={{ color: 'red' }}>{item.vehicle_no}</Text>
             ) : (
-              <Text style={{color: 'white'}}>{item.vehicle_no}</Text>
-            )}
+                <Text style={{ color: 'white' }}>{item.vehicle_no}</Text>
+              )}
           </Body>
 
           <Right>
@@ -106,28 +123,36 @@ export const ListTransport = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container style={globalStyles.listContent}>
-      <NavigationEvents
-        onWillFocus={_ => {
-          setReload(1);
-        }}
-        onWillBlur={_ => {
-          setReload(0);
-        }}
-      />
-      {vehicle.length > 0 ? (
-        <FlatList
-          data={vehicle}
-          renderItem={renderItem}
-          keyExtractor={item => item.name}
-        />
-      ) : (
-        <Text style={globalStyles.emptyString}>
-          No common pool transports yet under your name.
-        </Text>
-      )}
-    </Container>
-  );
+      <Container style={globalStyles.listContent}>
+        <SafeAreaView>
+          <ScrollView contentContainerStyle={globalStyles.container}
+            refreshControl={
+              <RefreshControl refreshing={refreshing} onRefresh={_refresh} />
+            }
+          >
+            <NavigationEvents
+              onWillFocus={_ => {
+                setReload(1);
+              }}
+              onWillBlur={_ => {
+                setReload(0);
+              }}
+            />
+            {vehicle.length > 0 ? (
+              <FlatList
+                data={vehicle}
+                renderItem={renderItem}
+                keyExtractor={item => item.name}
+              />
+            ) : (
+                <Text style={globalStyles.emptyString}>
+                  No common pool transports yet under your name.
+                </Text>
+              )}
+          </ScrollView>
+        </SafeAreaView>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({
