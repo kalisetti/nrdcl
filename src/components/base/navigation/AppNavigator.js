@@ -46,7 +46,7 @@ import ExtendQty from '../../apps/customer/sites/ExtendQty';
 import AddVehicle from '../../apps/customer/vehicles/AddVehicle';
 import ListVehicle from '../../apps/customer/vehicles/ListVehicle';
 import VehicleDetail from '../../apps/customer/vehicles/VehicleDetail';
-import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver';
+import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver'; 
 import OrderDashboard from '../../apps/customer/OrderDashboard';
 import ListOrder from '../../apps/customer/orders/ListOrder';
 import AddOrder from '../../apps/customer/orders/AddOrder';
@@ -246,7 +246,7 @@ const AppNavigator = createStackNavigator(
     TransportDriverUpdate: {
       screen: TransportDriverUpdate,
       navigationOptions: {
-        title: 'Driver Update',
+        title: 'Transport Driver Update',
       },
     },
     TransportDetail: {

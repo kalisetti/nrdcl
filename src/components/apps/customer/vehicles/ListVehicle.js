@@ -46,7 +46,7 @@ export const ListVehicle = ({
       setTimeout(resolve, timeout);
     });
   }
-  
+
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');

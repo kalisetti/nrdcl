@@ -146,7 +146,7 @@ export const ListTransport = ({
               />
             ) : (
                 <Text style={globalStyles.emptyString}>
-                  No common pool transports yet under your name.
+                  No common pool transports yet under your name
                 </Text>
               )}
           </ScrollView>

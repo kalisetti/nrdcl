@@ -1,5 +1,5 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 import {
   Container,
   Form,
@@ -13,8 +13,8 @@ import {
   Textarea,
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
-import {startUpdateDriverDetail} from '../../../../redux/actions/siteActions';
-import {setLoading} from '../../../../redux/actions/commonActions';
+import { startUpdateDriverDetail } from '../../../../redux/actions/siteActions';
+import { setLoading } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
 
 export const TransportDriverUpdate = ({
@@ -62,60 +62,62 @@ export const TransportDriverUpdate = ({
     startUpdateDriverDetail(driver_info);
   };
 
+
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Vehicle No</Label>
-            <Input disabled value={vehicle} />
-          </Item>
+      <Container>
+        <Content style={globalStyles.content}>
+          <Form>
+            <Item regular inlineLabel style={globalStyles.mb10}>
+              <Label>Vehicle No</Label>
+              <Input disabled value={vehicle} />
+            </Item>
 
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Driver's Name</Label>
-            <Input
-              value={driver_name}
-              onChangeText={val => setdriver_name(val)}
+            <Item regular inlineLabel style={globalStyles.mb10}>
+              <Label>Driver Name</Label>
+              <Input
+                value={driver_name}
+                onChangeText={val => setdriver_name(val)}
+              />
+            </Item>
+
+            <Item regular inlineLabel style={globalStyles.mb10}>
+              <Label>Driver Mobile No</Label>
+              <Input
+                keyboardType='numeric'
+                value={String(driver_mobile_no)}
+                onChangeText={val => setdriver_mobile_no(val)}
+              />
+            </Item>
+
+            <Textarea
+              rowSpan={3}
+              width="100%"
+              bordered
+              placeholder="Remarks"
+              value={remarks}
+              onChangeText={val => setremarks(val)}
+              style={globalStyles.mb10}
             />
-          </Item>
 
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Driver's Mobile No</Label>
-            <Input
-              value={driver_mobile_no}
-              onChangeText={val => setdriver_mobile_no(val)}
-            />
-          </Item>
-
-          <Textarea
-            rowSpan={3}
-            width="100%"
-            bordered
-            placeholder="Remarks"
-            value={remarks}
-            onChangeText={val => setremarks(val)}
-            style={globalStyles.mb10}
-          />
-
-          <Button
-            success
-            style={[globalStyles.mb10, globalStyles.button]}
-            onPress={updateDriverDetail}>
-            <Text>Update Driver Info</Text>
-          </Button>
-          <Button
-            warning
-            style={[globalStyles.mb50, globalStyles.button]}
-            onPress={() => navigation.goBack()}>
-            <Icon name="ios-arrow-back" />
-            <Text>Go Back</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  );
+            <Button
+              success
+              style={[globalStyles.mb10, globalStyles.button]}
+              onPress={updateDriverDetail}>
+              <Text>Update Driver Info</Text>
+            </Button>
+            <Button
+              warning
+              style={[globalStyles.mb50, globalStyles.button]}
+              onPress={() => navigation.goBack()}>
+              <Icon name="ios-arrow-back" />
+              <Text>Go Back</Text>
+            </Button>
+          </Form>
+        </Content>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

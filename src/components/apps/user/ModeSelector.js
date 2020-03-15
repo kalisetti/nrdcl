@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
-import {Text, Button, Icon, Grid, Row, Col} from 'native-base';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Text, Button, Icon, Grid, Row, Col } from 'native-base';
 import Logo from '../../base/header/Logo';
 import globalStyle from '../../../styles/globalStyle';
-import {StyleSheet, AsyncStorage} from 'react-native';
+import { StyleSheet, AsyncStorage } from 'react-native';
 
-export const ModeSelector = ({userState, navigation}) => {
+export const ModeSelector = ({ userState, navigation }) => {
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -48,7 +48,7 @@ export const ModeSelector = ({userState, navigation}) => {
   return (
     <Grid>
       <Row>
-        <Col style={{justifyContent: 'space-evenly'}}>
+        <Col style={{ justifyContent: 'space-evenly' }}>
           <Logo />
         </Col>
       </Row>
@@ -57,7 +57,7 @@ export const ModeSelector = ({userState, navigation}) => {
           <Button
             vertical
             transparent
-            style={{alignSelf: 'center'}}
+            style={{ alignSelf: 'center' }}
             onPress={checkLocalStorageForCustomer}>
             <Icon name="ios-people" style={globalStyle.modeIcon} />
             <Text style={globalStyle.homeIconText}>Customer</Text>
@@ -67,7 +67,7 @@ export const ModeSelector = ({userState, navigation}) => {
           <Button
             vertical
             transparent
-            style={{alignSelf: 'center'}}
+            style={{ alignSelf: 'center' }}
             onPress={checkLocalStorageTransporter}>
             <Icon
               name="dump-truck"

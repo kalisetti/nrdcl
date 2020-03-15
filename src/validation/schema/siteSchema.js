@@ -185,14 +185,10 @@ export const driverInfoSchema = yup.object().shape({
     .string()
     .trim()
     .required('Driver Name is mandatory'),
-  driver_contact_no: yup
+  driver_mobile_no: yup
     .string()
     .trim()
-    .required('Driver Contact No is mandatory'),
-  // driver_cid: yup
-  //   .string()
-  //   .trim()
-  //   .required('Driver CID is mandatory'),
+    .required('Driver Mobile No is mandatory'),
   remarks: yup
     .string()
     .trim()
@@ -219,7 +215,7 @@ export const driverInfoSchemaSelf = yup.object().shape({
   driver_mobile_no: yup
     .string()
     .trim()
-    .required('Driver Contact No is mandatory'),
+    .required('Driver Mobile No is mandatory'),
   remarks: yup
     .string()
     .trim()

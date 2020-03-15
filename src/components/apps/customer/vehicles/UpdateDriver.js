@@ -11,7 +11,7 @@ import {
   Icon,
   Label,
   Textarea,
-  Row,Col
+  Row, Col
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import { startUpdateDriverDetailSelf } from '../../../../redux/actions/siteActions';
@@ -58,7 +58,7 @@ export const UpdateDriver = ({
       user: userState.login_id,
       vehicle: vehicle.toUpperCase(),
       driver_name,
-      driver_mobile_no:driver_contact_no,
+      driver_mobile_no: driver_contact_no,
       remarks,
     };
     startUpdateDriverDetailSelf(driver_info);
@@ -70,12 +70,12 @@ export const UpdateDriver = ({
       <Container>
         <Content style={globalStyles.content}>
           <Form>
-            <Item regular  style={globalStyles.mb10}>
+            <Item regular style={globalStyles.mb10}>
               <Label>Vehicle No:</Label>
               <Input disabled value={vehicle} />
             </Item>
             <Item regular style={globalStyles.mb10}>
-              <Label>Driver's Name:</Label>
+              <Label>Driver Name:</Label>
               <Input
                 value={driver_name}
                 onChangeText={val => setdriver_name(val)}
@@ -83,7 +83,7 @@ export const UpdateDriver = ({
             </Item>
 
             <Item regular style={globalStyles.mb10}>
-              <Label>Driver's Contact No:</Label>
+              <Label>Driver Mobile No:</Label>
               <Input
                 keyboardType='numeric'
                 value={String(driver_contact_no)}

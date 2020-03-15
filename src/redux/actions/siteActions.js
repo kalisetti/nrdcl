@@ -16,7 +16,7 @@ import {
   vehilceSchema,
   driverInfoSchemaSelf,
 } from '../../validation/schema/siteSchema';
-import {paymentOTPSchema} from '../../validation/schema/customerSchema';
+import { paymentOTPSchema } from '../../validation/schema/customerSchema';
 import NavigationService from '../../components/base/navigation/NavigationService';
 
 /**

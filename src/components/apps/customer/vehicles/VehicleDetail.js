@@ -173,7 +173,7 @@ export const VehicleDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.label}>Driver's Name:</Text>
+                <Text style={globalStyle.label}>Driver Name:</Text>
               </Col>
               <Col size={3}>
                 <Text>{vehicle.drivers_name}</Text>
@@ -182,21 +182,12 @@ export const VehicleDetail = ({
 
             <Row style={globalStyle.labelContainer}>
               <Col size={2}>
-                <Text style={globalStyle.label}>Driver's Mobile No:</Text>
+                <Text style={globalStyle.label}>Driver Mobile No:</Text>
               </Col>
               <Col size={3}>
                 <Text>{vehicle.contact_no}</Text>
               </Col>
             </Row>
-
-            {/* <Row style={globalStyle.labelContainer}>
-            <Col size={2}>
-              <Text style={globalStyle.label}>Driver's CID</Text>
-            </Col>
-            <Col size={3}>
-              <Text>{vehicle.driver_cid}</Text>
-            </Col>
-          </Row> */}
           </Content>
         </Grid>
       </Container>
