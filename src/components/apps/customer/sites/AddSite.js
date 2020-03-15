@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
+import React, { useEffect, useState, Fragment } from 'react';
+import { connect } from 'react-redux';
 import DatePicker from 'react-native-datepicker';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
-import {View, Image} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
+import { View, Image } from 'react-native';
 import moment from 'moment';
 
 import {
@@ -26,9 +26,9 @@ import {
   handleError,
   getImages,
 } from '../../../../redux/actions/commonActions';
-import {startSiteRegistration} from '../../../../redux/actions/siteActions';
+import { startSiteRegistration } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
-import {getGPSLocation} from '../../../helper/Geolocation';
+import { getGPSLocation } from '../../../helper/Geolocation';
 import ModalSiteItem from './ModalSiteItem';
 import SiteItemList from './SiteItemList';
 import SpinnerScreen from '../../../base/SpinnerScreen';
@@ -43,7 +43,6 @@ export const AddSite = ({
   setLoading,
 }) => {
   //state info for forms
-  const [purpose, setPurpose] = useState(undefined);
   const [approval_no, setapproval_no] = useState(undefined);
   const [approval_document, setapproval_document] = useState([]);
   const [construction_type, setconstruction_type] = useState(undefined);
@@ -90,12 +89,11 @@ export const AddSite = ({
     setShowmap(true);
     const gps = await getGPSLocation();
     if (gps) {
-      setLatLong({latitude: gps.latitude, longitude: gps.longitude});
+      setLatLong({ latitude: gps.latitude, longitude: gps.longitude });
     }
   };
 
   //all values
-  const [all_purpose, setall_purpose] = useState([]);
   const [all_construction_type, setall_construction_type] = useState([]);
   const [all_dzongkhag, setall_dzongkhag] = useState([]);
   const [all_sub_item, setall_sub_item] = useState([]);
@@ -149,7 +147,7 @@ export const AddSite = ({
       );
       setall_construction_type(all_ct.data.data);
       const dz_all = await callAxios('resource/Dzongkhags?limit_page_length=100&order_by=name', 'get');
-      console.log( dz_all.data.data);
+      console.log(dz_all.data.data);
       setall_dzongkhag(dz_all.data.data);
 
       const sg_all = await callAxios(
@@ -223,225 +221,206 @@ export const AddSite = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <View style={globalStyles.dropdown}>
-            <Picker
-              mode="dropdown"
-              selectedValue={construction_type}
-              onValueChange={val => {
-                setconstruction_type(val), getIsBuilding(val);
-              }}>
-              <Picker.Item
-                label={'Select Construction Type'}
-                value={undefined}
-                key={-1}
+      <Container>
+        <Content>
+          <CardItem>
+            <Form>
+              <View style={globalStyles.dropdown}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={construction_type}
+                  onValueChange={val => {
+                    setconstruction_type(val), getIsBuilding(val);
+                  }}>
+                  <Picker.Item
+                    label={'Select Construction Type'}
+                    value={undefined}
+                    key={-1}
+                  />
+                  {all_construction_type &&
+                    all_construction_type.map((val, idx) => {
+                      return (
+                        <Picker.Item label={val.name} value={val.name} key={idx} />
+                      );
+                    })}
+                </Picker>
+              </View>
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={approval_no}
+                  onChangeText={val => setapproval_no(val)}
+                  placeholder="Construction Approval No."
+                />
+              </Item>
+
+              {isBuilding === 1 ? (
+                <Item regular style={globalStyles.mb10}>
+                  <Input
+                    value={number_of_floors}
+                    onChangeText={val => setnumber_of_floors(val)}
+                    placeholder="Number of Floors"
+                  />
+                </Item>
+              ) : (<Fragment></Fragment>)}
+
+              {isBuilding === 1 ? (
+                <Item regular style={globalStyles.mb10}>
+                  <Input
+                    value={plot_no}
+                    onChangeText={val => setplot_no(val)}
+                    placeholder="Plot/Thram No."
+                  />
+                </Item>
+              ) : (<Fragment></Fragment>)}
+
+              <Item regular style={globalStyles.mb11}>
+                <DatePicker
+                  style={{ width: '50%' }}
+                  date={construction_start_date}
+                  mode="date"
+                  customStyles={{ dateInput: { borderWidth: 0 } }}
+                  placeholder="Construction Start Date"
+                  format="DD-MM-YYYY"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  onDateChange={date => setStartDate(date)}
+                />
+                <DatePicker
+                  style={{ width: '50%' }}
+                  date={construction_end_date}
+                  mode="date"
+                  customStyles={{ dateInput: { borderWidth: 0 } }}
+                  placeholder="Construction End Date"
+                  format="DD-MM-YYYY"
+                  confirmBtnText="Confirm"
+                  cancelBtnText="Cancel"
+                  onDateChange={date => setEndDate(date)}
+                />
+              </Item>
+              <View style={globalStyles.dropdown}>
+                <Picker
+                  mode="dropdown"
+                  selectedValue={dzongkhag}
+                  onValueChange={val => setdzongkhag(val)}>
+                  <Picker.Item
+                    label={'Select Dzongkhag'}
+                    value={undefined}
+                    key={-1}
+                  />
+                  {all_dzongkhag &&
+                    all_dzongkhag.map((val, idx) => {
+                      return (
+                        <Picker.Item label={val.name} value={val.name} key={idx} />
+                      );
+                    })}
+                </Picker>
+              </View>
+              <Item regular style={globalStyles.mb10}>
+                <Textarea
+                  value={location}
+                  rowSpan={3}
+                  onChangeText={val => setlocation(val)}
+                  placeholder="Location (Specific Location of Construction Site)"
+                />
+              </Item>
+
+              <Item regular style={globalStyles.mb10}>
+                <Input
+                  value={remarks}
+                  onChangeText={val => setremarks(val)}
+                  placeholder="Remarks"
+                />
+              </Item>
+
+              <Button
+                info
+                onPress={() => setShowModal(true)}
+                style={globalStyles.mb10}>
+                <Text>
+                  {items.length == 0 ? 'Add Expected Materials'
+                    : 'Add More Expected Materials'}
+                </Text>
+              </Button>
+              <ModalSiteItem showModal={showModal} setShowModal={setShowModal}
+                addItem={addItem} all_sub_item={all_sub_item}
               />
-              {all_construction_type &&
-                all_construction_type.map((val, idx) => {
-                  return (
-                    <Picker.Item label={val.name} value={val.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </View>
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={approval_no}
-              onChangeText={val => setapproval_no(val)}
-              placeholder="Construction Approval No."
-            />
-          </Item>
-
-          {isBuilding === 1 ? (
-            <Item regular style={globalStyles.mb10}>
-              <Input
-                value={number_of_floors}
-                onChangeText={val => setnumber_of_floors(val)}
-                placeholder="Number of Floors"
-              />
-            </Item>
-          ) : null}
-
-          {isBuilding === 1 ? (
-            <Item regular style={globalStyles.mb10}>
-              <Input
-                value={plot_no}
-                onChangeText={val => setplot_no(val)}
-                placeholder="Plot/Thram No."
-              />
-            </Item>
-          ) : null}
-
-          <Item regular style={globalStyles.mb11}>
-            <DatePicker
-              style={{width: '50%'}}
-              date={construction_start_date}
-              mode="date"
-              customStyles={{dateInput: {borderWidth: 0}}}
-              placeholder="Construction Start Date"
-              format="DD-MM-YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              onDateChange={date => setStartDate(date)}
-            />
-            <DatePicker
-              style={{width: '50%'}}
-              date={construction_end_date}
-              mode="date"
-              customStyles={{dateInput: {borderWidth: 0}}}
-              placeholder="Construction End Date"
-              format="DD-MM-YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              onDateChange={date => setEndDate(date)}
-            />
-          </Item>
-          {/* <Item regular style={globalStyles.mb10}>
-              <DatePicker
-                style={{ width: '100%' }}
-                date={construction_end_date}
-                mode="date"
-                customStyles={{ dateInput: { borderWidth: 0 } }}
-                placeholder="Construction End Date"
-                format="DD-MM-YYYY"
-                confirmBtnText="Confirm"
-                cancelBtnText="Cancel"
-                onDateChange={date => setEndDate(date)}
-              />
-            </Item> */}
-          <View style={globalStyles.dropdown}>
-            <Picker
-              mode="dropdown"
-              selectedValue={dzongkhag}
-              onValueChange={val => setdzongkhag(val)}>
-              <Picker.Item
-                label={'Select Dzongkhag'}
-                value={undefined}
-                key={-1}
-              />
-              {all_dzongkhag &&
-                all_dzongkhag.map((val, idx) => {
-                  return (
-                    <Picker.Item label={val.name} value={val.name} key={idx} />
-                  );
-                })}
-            </Picker>
-          </View>
-
-          <Item regular style={globalStyles.mb10}>
-            <Textarea
-              value={location}
-              rowSpan={3}
-              onChangeText={val => setlocation(val)}
-              placeholder="Location (Specific Location of Construction Site)"
-            />
-          </Item>
-
-          <Item regular style={globalStyles.mb10}>
-            <Input
-              value={remarks}
-              onChangeText={val => setremarks(val)}
-              placeholder="Remarks"
-            />
-          </Item>
-
-          <Button
-            info
-            onPress={() => setShowModal(true)}
-            style={globalStyles.mb10}>
-            <Text>
-              {items.length == 0
-                ? 'Add Expected Materials'
-                : 'Add More Expected Materials'}
-            </Text>
-          </Button>
-
-          <ModalSiteItem
-            showModal={showModal}
-            setShowModal={setShowModal}
-            addItem={addItem}
-            all_sub_item={all_sub_item}
-          />
-
-          <SiteItemList data={items} removeItem={removeItem} />
-
-          <Button info style={globalStyles.mb10} onPress={getSiteDocuments}>
-            <Text>Attach Construction approval Documents</Text>
-          </Button>
-          {images.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 15}}>
-              <Text style={{alignSelf: 'center', color: 'red'}}>
-                Swipe to review all images
+              <SiteItemList data={items} removeItem={removeItem} />
+              <Button info style={globalStyles.mb10} onPress={getSiteDocuments}>
+                <Text>Attach Construction approval Documents</Text>
+              </Button>
+              {images.length === 0 ? (<Fragment></Fragment>) : (
+                <View style={{ height: 300, width: '100%', marginBottom: 15 }}>
+                  <Text style={{ alignSelf: 'center', color: 'red' }}>
+                    Swipe to review all images
               </Text>
-              <DeckSwiper
-                dataSource={approval_document}
-                renderItem={image => (
-                  <Card style={{elevation: 3}}>
-                    <CardItem cardBody>
-                      <Image
-                        source={{
-                          uri: image.path,
-                        }}
-                        style={{height: 250, width: '100%'}}
-                      />
-                    </CardItem>
-                    <CardItem>
-                      <Button
-                        transparent
-                        small
-                        onPress={val => removeImage(val)}>
-                        <Icon
-                          name="delete"
-                          type="AntDesign"
-                          style={{color: 'red'}}
-                        />
-                      </Button>
-                      <Text>
-                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                      </Text>
-                    </CardItem>
-                  </Card>
-                )}
-              />
-            </View>
-          )}
-          <View style={{marginBottom: 15}}></View>
+                  <DeckSwiper
+                    dataSource={approval_document}
+                    renderItem={image => (
+                      <Card style={{ elevation: 3 }}>
+                        <CardItem cardBody>
+                          <Image
+                            source={{
+                              uri: image.path,
+                            }}
+                            style={{ height: 250, width: '100%' }}
+                          />
+                        </CardItem>
+                        <CardItem>
+                          <Button
+                            transparent
+                            small
+                            onPress={val => removeImage(val)}>
+                            <Icon
+                              name="delete"
+                              type="AntDesign"
+                              style={{ color: 'red' }}
+                            />
+                          </Button>
+                          <Text>
+                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                          </Text>
+                        </CardItem>
+                      </Card>
+                    )}
+                  />
+                </View>
+              )}
+              <View style={{ marginBottom: 15 }}></View>
 
-          {/* <Button info style={globalStyles.mb10} onPress={getGPS}>
+              {/* <Button info style={globalStyles.mb10} onPress={getGPS}>
               <Text>Set Site GPS Location</Text>
             </Button> */}
-          {showmap && (
-            <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
-              <MapView
-                provider={PROVIDER_GOOGLE}
-                style={globalStyles.map}
-                initialRegion={region}
-                showUserLocation={true}
-                onLongPress={e => setLatLong(e.nativeEvent.coordinate)}>
-                <Marker
-                  draggable
-                  coordinate={coordinate}
-                  onDragEnd={e => setLatLong(e.nativeEvent.coordinate)}
-                />
-              </MapView>
-            </View>
-          )}
-          <View style={{marginBottom: 15}}></View>
-          <Button
-            block
-            info
-            iconLeft
-            success
-            style={globalStyles.mb10}
-            onPress={submitSiteInfo}>
-            <Text>Submit for Approval</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  );
+              {showmap && (
+                <View style={[globalStyles.mapcontainer, globalStyles.mb10]}>
+                  <MapView
+                    provider={PROVIDER_GOOGLE}
+                    style={globalStyles.map}
+                    initialRegion={region}
+                    showUserLocation={true}
+                    onLongPress={e => setLatLong(e.nativeEvent.coordinate)}>
+                    <Marker
+                      draggable
+                      coordinate={coordinate}
+                      onDragEnd={e => setLatLong(e.nativeEvent.coordinate)}
+                    />
+                  </MapView>
+                </View>
+              )}
+              <View style={{ marginBottom: 15 }}></View>
+              <Button
+                block
+                info
+                iconLeft
+                success
+                style={globalStyles.mb10}
+                onPress={submitSiteInfo}>
+                <Text>Submit for Approval</Text>
+              </Button>
+            </Form>
+          </CardItem>
+        </Content>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({

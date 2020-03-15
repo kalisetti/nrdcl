@@ -141,8 +141,9 @@ export const AddVehicle = ({
           setState(undefined);
         }}
       />
-      <Content style={globalStyles.content}>
-        <Form>
+      <Content>
+        <CardItem>
+        <Form style={{width:'100%'}}>
           <Item regular style={globalStyles.mb10}>
             <Input
               value={vehicle_no}
@@ -238,7 +239,7 @@ export const AddVehicle = ({
                         {image.path.substring(image.path.lastIndexOf('/') + 1)}
                       </Text>
                     </CardItem>
-                  </Card>
+                  </Card> 
                 )}
               />
             </View>
@@ -316,6 +317,7 @@ export const AddVehicle = ({
             <Text>Submit for Approval</Text>
           </Button>
         </Form>
+        </CardItem>
       </Content>
     </Container>
   );

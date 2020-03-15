@@ -103,8 +103,9 @@ export const AddTransport = ({
     <SpinnerScreen />
   ) : (
       <Container>
-        <Content style={globalStyles.content}>
-          <Form>
+        <Content>
+          <CardItem>
+          <Form style={{width:'100%'}}>
             <Item regular style={globalStyles.mb10}>
               <Input
                 value={vehicle_no}
@@ -188,6 +189,7 @@ export const AddTransport = ({
               <Text>Submit for Approval</Text>
             </Button>
           </Form>
+          </CardItem> 
         </Content>
       </Container>
     );

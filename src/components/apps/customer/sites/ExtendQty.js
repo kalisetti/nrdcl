@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {connect} from 'react-redux';
-import {View, Image} from 'react-native';
+import {View,} from 'react-native';
 import {
   Container,
   Form,
@@ -10,10 +10,7 @@ import {
   Text,
   Content,
   Icon,
-  Label,
-  DeckSwiper,
-  Card,
-  CardItem,
+  Label, 
   Textarea,
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
@@ -98,17 +95,17 @@ export const ExtendQty = ({
       <Content style={globalStyles.content}>
         <Form>
           <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Site ID</Label>
+            <Label>Site ID:</Label>
             <Input disabled value={site} />
           </Item>
 
           <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Item</Label>
+            <Label>Item:</Label>
             <Input disabled value={item} />
           </Item>
 
-          <Item regular stackedLabel style={globalStyles.mb10}>
-            <Label>Additional Qty</Label>
+          <Item regular inlineLabel style={globalStyles.mb10}>
+            <Label>Additional Qty (M3):</Label>
             <Input
               value={additional_quantity}
               onChangeText={val => setQty(val)}
@@ -125,48 +122,13 @@ export const ExtendQty = ({
             onChangeText={val => setRemarks(val)}
             style={globalStyles.mb10}
           />
-
-          {/* <Button
-            info
-            style={globalStyles.mb10}
-            onPress={getSupportingDocuments}>
-            <Text>Attach Supporting Documents</Text>
-          </Button> */}
-
-          {extension_approval_document.length === 0 ? null : (
-            <View style={{height: 300, width: '100%', marginBottom: 20}}>
-              <Text style={{alignSelf: 'center', color: 'red'}}>
-                Swipe to review all images
-              </Text>
-              <DeckSwiper
-                dataSource={extension_approval_document}
-                renderItem={image => (
-                  <Card style={{elevation: 3}}>
-                    <CardItem cardBody>
-                      <Image
-                        source={{
-                          uri: image.path,
-                        }}
-                        style={{height: 250, width: '100%'}}
-                      />
-                    </CardItem>
-                    <CardItem>
-                      <Icon name="heart" style={{color: '#ED4A6A'}} />
-                      <Text>
-                        {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                      </Text>
-                    </CardItem>
-                  </Card>
-                )}
-              />
-            </View>
-          )}
+           
           <View style={{marginBottom: 20}}></View>
           <Button
             success
             style={[globalStyles.mb10, globalStyles.button]}
             onPress={extendQty}>
-            <Text>Request Qty Extension</Text>
+            <Text>Request Qty Extension:</Text>
           </Button>
           <Button
             warning

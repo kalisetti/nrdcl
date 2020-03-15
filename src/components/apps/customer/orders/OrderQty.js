@@ -40,7 +40,7 @@ const OrderQty = ({ data, removeItem, transport_mode }) => {
           marginHorizontal: 0,
         }}>
         {data.length == 0 ? (
-          <Text></Text>
+         <Fragment></Fragment>
         ) : (
             <Row
               size={1}

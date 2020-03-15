@@ -1,5 +1,5 @@
-import React from 'react';
-import { Text, Button, Icon, Grid, Row, Col, Item } from 'native-base';
+import React, {Fragment}from 'react';
+import { Text, Button, Icon, Grid, Row, Col, } from 'native-base';
 import globalStyles from '../../../../styles/globalStyle';
 
 const SiteItemList = ({ data, removeItem }) => {
@@ -43,7 +43,7 @@ const SiteItemList = ({ data, removeItem }) => {
           marginHorizontal: 0,
         }}>
         {data.length == 0 ? (
-          <Text></Text>
+        <Fragment></Fragment>
         ) : (
             <Row
               size={1}

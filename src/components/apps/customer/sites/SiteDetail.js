@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Modal } from 'react-native';
 import moment from 'moment';
@@ -22,7 +22,7 @@ import {
   handleError,
 } from '../../../../redux/actions/commonActions';
 import { startSetSiteStatus } from '../../../../redux/actions/siteActions';
-
+import { default as commaNumber } from 'comma-number';
 export const SiteDetail = ({
   userState,
   commonState,
@@ -172,7 +172,7 @@ export const SiteDetail = ({
                 </Button>
               </Col>
             ) : (
-                <Text></Text>
+                <Fragment></Fragment>
               )}
             {site.enabled ? (
               <Col>
@@ -354,7 +354,7 @@ export const SiteDetail = ({
                     </Col>
                     <Col size={1}>
                       <Text>
-                        {item.overall_expected_quantity} {item.uom}
+                        {commaNumber(item.overall_expected_quantity)} {item.uom}
                       </Text>
                     </Col>
                     <Col size={0.6}>
@@ -400,7 +400,7 @@ export const SiteDetail = ({
                       <Text style={globalStyle.lb}>Initial Qty:</Text>
                     </Col>
                     <Col size={2}>
-                      <Text>{currentItem.expected_quantity}</Text>
+                      <Text>{commaNumber(currentItem.expected_quantity)}</Text>
                     </Col>
                   </Row>
                   <Row style={globalStyle.labelContainer}>
@@ -408,7 +408,7 @@ export const SiteDetail = ({
                       <Text style={globalStyle.lb}>Additional Qty:</Text>
                     </Col>
                     <Col size={2}>
-                      <Text>{currentItem.extended_quantity}</Text>
+                      <Text>{commaNumber(currentItem.extended_quantity)}</Text>
                     </Col>
                   </Row>
                   <Row style={globalStyle.labelContainer}>
@@ -416,7 +416,7 @@ export const SiteDetail = ({
                       <Text style={globalStyle.lb}>Overall Expected Quantity:</Text>
                     </Col>
                     <Col size={2}>
-                      <Text>{currentItem.overall_expected_quantity}</Text>
+                      <Text>{commaNumber(currentItem.overall_expected_quantity)}</Text>
                     </Col>
                   </Row>
                   <Row style={globalStyle.labelContainer}>
@@ -424,7 +424,7 @@ export const SiteDetail = ({
                       <Text style={globalStyle.lb}>Ordered Quantity:</Text>
                     </Col>
                     <Col size={2}>
-                      <Text>{currentItem.ordered_quantity}</Text>
+                      <Text>{commaNumber(currentItem.ordered_quantity)}</Text>
                     </Col>
                   </Row>
                   <Row style={globalStyle.labelContainer}>
@@ -432,28 +432,28 @@ export const SiteDetail = ({
                       <Text style={globalStyle.lb}>Balance Quantity:</Text>
                     </Col>
                     <Col size={2}>
-                      <Text>{currentItem.balance_quantity}</Text>
+                      <Text>{commaNumber(currentItem.balance_quantity)}</Text>
                     </Col>
                   </Row>
                   <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Material Source:</Text>
-                  </Col>
-                  <Col size={3}>
-                    <Text>{currentItem.branch}</Text>
-                  </Col>
-                </Row>
-                <Row style={globalStyle.labelContainer}>
-                  <Col size={2}>
-                    <Text style={globalStyle.lb}>Transport Mode:</Text>
-                  </Col>
-                  <Col size={3}>
-                    <Text>{currentItem.transport_mode}</Text>
-                  </Col>
-                </Row>
+                    <Col size={2}>
+                      <Text style={globalStyle.lb}>Material Source:</Text>
+                    </Col>
+                    <Col size={3}>
+                      <Text>{currentItem.branch}</Text>
+                    </Col>
+                  </Row>
+                  <Row style={globalStyle.labelContainer}>
+                    <Col size={2}>
+                      <Text style={globalStyle.lb}>Transport Mode:</Text>
+                    </Col>
+                    <Col size={3}>
+                      <Text>{currentItem.transport_mode}</Text>
+                    </Col>
+                  </Row>
                   <Row style={globalStyle.labelContainer}>
                     <Col size={4}>
-                      <Text style={globalStyle.lb}>Remarks;</Text>
+                      <Text style={globalStyle.lb}>Remarks:</Text>
                     </Col>
                     <Col size={2}>
                       <Text>{currentItem.remarks}</Text>
@@ -471,7 +471,7 @@ export const SiteDetail = ({
                       </Col>
                     </Row>
                   ) : (
-                      <Text></Text>
+                    <Fragment></Fragment>
                     )}
                   <Row style={globalStyle.labelContainer}>
                     <Col size={5}>

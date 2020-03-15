@@ -67,7 +67,7 @@ export const ListSite = ({
           <Text>Type of Construction: {item.construction_type}</Text>
         </CardItem>
         <CardItem>
-          <Text>Specific Location:{item.location}</Text>
+          <Text>Specific Location: {item.location}</Text>
         </CardItem>
       </Card>
     );

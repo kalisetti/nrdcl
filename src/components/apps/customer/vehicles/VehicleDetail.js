@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { View } from 'react-native';
@@ -68,7 +68,7 @@ export const VehicleDetail = ({
               show={showAlert}
               showProgress={false}
               title="Remove Vehicle"
-              message="Are you sure you want to remove vehicle"
+              message="Are you sure you want to remove vehicle?"
               closeOnTouchOutside={false}
               closeOnHardwareBackPress={false}
               showCancelButton={true}
@@ -119,10 +119,7 @@ export const VehicleDetail = ({
               </Col>
 
               <Col>
-                <Button
-                  vertical
-                  transparent
-                  style={{ alignSelf: 'center' }}
+                <Button vertical transparent style={{ alignSelf: 'center' }}
                   onPress={() => toggleAlert()}>
                   <Icon
                     name="truck-loading"
@@ -134,7 +131,7 @@ export const VehicleDetail = ({
               </Col>
             </Row>
           ) : (
-              <Text></Text>
+              <Fragment></Fragment>
             )}
 
           <Content style={globalStyle.content}>
