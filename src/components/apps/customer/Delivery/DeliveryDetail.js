@@ -92,9 +92,9 @@ export const OrderDetail = ({
                         <Text>Vehicle No: {deliver.vehicle}</Text>
                         <Text>Driver Name: {deliver.drivers_name}</Text>
                         <Text>Driver Mobile No: {deliver.contact_no}</Text>
-                        <Text>Delivery Note Generated: {Moment(deliver.exit_date_time).format('d MMM YYYY, hh:mma')}</Text>
+                        <Text>Processing Date: {Moment(deliver.exit_date_time).format('DD MMM YYYY, hh:mma')}</Text>
                         <Text>Receive Time: {deliver.received_date_time == undefined ? (<Fragment></Fragment>) :
-                            Moment(deliver.received_date_time).format('d MMM YYYY, hh:mma')}</Text>
+                            Moment(deliver.received_date_time).format('DD MMM YYYY, hh:mma')}</Text>
                         <Text />
                         {deliver.confirmation_status === 'In Transit' ? (
                             <Text style={{ color: 'gray', fontSize: 16 }}>

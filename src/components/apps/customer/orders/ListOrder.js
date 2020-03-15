@@ -81,7 +81,7 @@ export const ListOrder = ({
                 <Text style={{ color: 'blue' }}></Text>
               )}
             <Text>
-              Order Date: {Moment(item.creation).format('d MMM YYYY, hh:mma')}
+              Order Date: {Moment(item.creation).format('DD MMM YYYY, hh:mma')}
             </Text>
           </View>
         </CardItem>
