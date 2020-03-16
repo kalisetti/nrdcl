@@ -57,7 +57,7 @@ export const TransporterDashboard = ({ userState, navigation }) => {
               vertical
               transparent
               style={{ alignSelf: 'center' }}
-              onPress={() => navigation.navigate('TransporterTerms')}>
+              onPress={() => navigation.navigate('TransporterTermsRead')}>
               <Icon
                 name="dump-truck"
                 type="MaterialCommunityIcons"

@@ -34,6 +34,8 @@ import Settings from '../../apps/user/Settings';
 //Customer Screens
 import CustomerTerms from '../../apps/customer/CustomerTerms';
 import TransporterTerms from '../../apps/transporter/TransporterTerms';
+import TransporterTermsRead from '../../apps/transporter/TransporterTermsRead';
+
 import CustomerDashboard from '../../apps/customer/CustomerDashboard';
 import SiteDashboard from '../../apps/customer/SiteDashboard';
 import VehicleDashboard from '../../apps/customer/VehicleDashboard';
@@ -88,6 +90,12 @@ const AppNavigator = createStackNavigator(
       screen: TransporterTerms,
       navigationOptions: { title: 'Terms & Conditions' },
     },
+    
+    TransporterTermsRead: {
+      screen: TransporterTermsRead,
+      navigationOptions: { title: 'Terms & Conditions' },
+    },
+    
     CustomerDashboard: {
       screen: CustomerDashboard,
       navigationOptions: {
