@@ -235,7 +235,6 @@ export const AddOrder = ({
             branch,
           },
         );
-        console.log("zepa   " + res.data.message)
         setAllTransportMode(res.data.message);
         setLoading(false);
       } catch (error) {
