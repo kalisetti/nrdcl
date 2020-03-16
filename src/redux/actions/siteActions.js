@@ -425,3 +425,21 @@ export const confirmRecived = data => {
     }
   };
 };
+
+export const submitApplyForQueue = (queueDetail) => { 
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      let res = await callAxios(
+        'resource/Load Request/',
+        'post',
+        {},
+        queueDetail
+      );
+       dispatch(setLoading(false));  
+      return res;     
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
