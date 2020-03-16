@@ -132,25 +132,24 @@ export const AddToQueue = ({
                     <Body>
                       <Row>
                         <Text>{vehicleDetail.name} ({vehicleDetail.vehicle_capacity} M3)</Text>
-                      </Row>
-                      <Row>
-                        <Text note>Status:</Text>
                         {vehicleDetail.vehicle_status === "Queued" && (
                           <Badge info warning>
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
                         {vehicleDetail.vehicle_status === "In Transit" && (
-                          <Badge info warning>
+                          <Badge info danger>
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
                         {vehicleDetail.vehicle_status === "Available" && (
                           <Badge info success>
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
+                      </Row>
+                      <Row> 
                         {vehicleDetail.vehicle_status === "Queued" && (
                           <Row>
-                            <Text></Text>
-                            <Text note>Your position</Text>
+                            {/* <Text></Text> */}
+                            <Text style={{color:'green'}}>Token No</Text>
                             <Badge info>
                               <Text>{vehicleDetail.queue_count}</Text>
                             </Badge>
