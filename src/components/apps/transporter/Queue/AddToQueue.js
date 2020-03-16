@@ -84,7 +84,7 @@ export const AddToQueue = ({
         //title
         'My Resources',
         //body
-        'Your vehicle has been successfully apply to queue.',
+        'Your vehicle has been successfully applied to the queue.',
         [
           { text: 'OK', onPress: () => getTransporterVehicleList() },
         ],
@@ -117,7 +117,7 @@ export const AddToQueue = ({
                 </Left>
                 <Body>
                   <Row>
-                    <Text>{vehicleDetail.name}({vehicleDetail.vehicle_capacity} M3)</Text>
+                    <Text>{vehicleDetail.name} ({vehicleDetail.vehicle_capacity} M3)</Text>
                   </Row>
                   <Row>
                     <Text note>Status:</Text>

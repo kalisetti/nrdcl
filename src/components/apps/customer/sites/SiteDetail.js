@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Modal } from 'react-native';
+import { Modal, SafeAreaView, ScrollView } from 'react-native';
 import moment from 'moment';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {
@@ -208,284 +208,288 @@ export const SiteDetail = ({
           </Row>
 
           <Content style={globalStyle.content}>
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Site Status:</Text>
-              </Col>
-              <Col size={3}>
-                {site.enabled ? (
-                  <Text style={{ color: 'blue', fontWeight: 'bold' }}>Active</Text>
-                ) : (
-                    <Text style={{ color: 'red', fontWeight: 'bold' }}>Inactive</Text>
-                  )}
-              </Col>
-            </Row>
+            <SafeAreaView>
+              <ScrollView>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Site Status:</Text>
+                  </Col>
+                  <Col size={3}>
+                    {site.enabled ? (
+                      <Text style={{ color: 'blue', fontWeight: 'bold' }}>Active</Text>
+                    ) : (
+                        <Text style={{ color: 'red', fontWeight: 'bold' }}>Inactive</Text>
+                      )}
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Site ID:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.name}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Site ID:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.name}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Site Type:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.site_type}</Text>
-              </Col>
-            </Row>
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Construction Type:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.construction_type}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Site Type:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.site_type}</Text>
+                  </Col>
+                </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Construction Type:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.construction_type}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Start Date:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>
-                  {moment(site.construction_start_date)
-                    .format('Do MMM YYYY')
-                    .toString()}
-                </Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Start Date:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>
+                      {moment(site.construction_start_date)
+                        .format('Do MMM YYYY')
+                        .toString()}
+                    </Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>End Date:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>
-                  {moment(site.extension_till_date)
-                    .format('Do MMM YYYY')
-                    .toString()}
-                </Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>End Date:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>
+                      {moment(site.extension_till_date)
+                        .format('Do MMM YYYY')
+                        .toString()}
+                    </Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Number of Floors:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.number_of_floors}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Number of Floors:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.number_of_floors}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Approval Number:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.approval_no}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Approval Number:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.approval_no}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Dzongkhag:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.dzongkhag}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Dzongkhag:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.dzongkhag}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Plot/Thram Number:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.plot_no}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Plot/Thram Number:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.plot_no}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Location:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.location}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Location:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.location}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={globalStyle.labelContainer}>
-              <Col size={2}>
-                <Text style={globalStyle.lb}>Remarks:</Text>
-              </Col>
-              <Col size={3}>
-                <Text>{site.remarks}</Text>
-              </Col>
-            </Row>
+                <Row style={globalStyle.labelContainer}>
+                  <Col size={2}>
+                    <Text style={globalStyle.lb}>Remarks:</Text>
+                  </Col>
+                  <Col size={3}>
+                    <Text>{site.remarks}</Text>
+                  </Col>
+                </Row>
 
-            <Row style={[globalStyle.ss]}>
-              <Text style={globalStyle.lb}>EXPECTED MATERIAL DETAILS</Text>
-            </Row>
-            <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
-              <Grid>
-                <Row style={globalStyle.tableHeaderContainer}>
-                  {/* <Col size={2} style={globalStyle.colContainer}>
+                <Row style={[globalStyle.ss]}>
+                  <Text style={globalStyle.lb}>EXPECTED MATERIAL DETAILS</Text>
+                </Row>
+                <Row style={[globalStyle.tableContainer, globalStyle.mb50]}>
+                  <Grid>
+                    <Row style={globalStyle.tableHeaderContainer}>
+                      {/* <Col size={2} style={globalStyle.colContainer}>
                   <Text>From</Text>
                 </Col> */}
-                  <Col size={1.5} style={globalStyle.colContainer}>
-                    <Text>Material</Text>
-                  </Col>
-                  <Col size={1}>
-                    <Text>Quantity</Text>
-                  </Col>
-                  <Col size={0.6}></Col>
-                </Row>
-                {site.items.map((item, idx) => (
-                  <Row key={idx} style={globalStyle.rowContainer}>
-                    {/* <Col size={2} style={globalStyle.colContainer}>
+                      <Col size={1.5} style={globalStyle.colContainer}>
+                        <Text>Material</Text>
+                      </Col>
+                      <Col size={1}>
+                        <Text>Quantity</Text>
+                      </Col>
+                      <Col size={0.6}></Col>
+                    </Row>
+                    {site.items.map((item, idx) => (
+                      <Row key={idx} style={globalStyle.rowContainer}>
+                        {/* <Col size={2} style={globalStyle.colContainer}>
                     <Text>{item.branch}</Text>
                   </Col> */}
-                    <Col size={1.5} style={globalStyle.colContainer}>
-                      <Text>{item.item_sub_group}</Text>
-                    </Col>
-                    <Col size={1}>
-                      <Text>
-                        {commaNumber(item.overall_expected_quantity)} {item.uom}
-                      </Text>
-                    </Col>
-                    <Col size={0.6}>
-                      <Button
-                        vertical
-                        transparent
-                        onPress={() => openModal(item)}
-                        style={{
-                          width: 100,
-                        }}>
-                        <Icon name="md-more" />
-                      </Button>
-                    </Col>
-                  </Row>
-                ))}
-              </Grid>
-            </Row>
-            <Modal
-              animationType="slide"
-              transparent={true}
-              visible={modalIsVisible}
-              onRequestClose={() => closeModal()}>
-              <Container style={globalStyle.modal}>
-                <Grid style={{ marginTop: 5 }}>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Material:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{currentItem.item_sub_group}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>UoM:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{currentItem.uom}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Initial Qty:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{commaNumber(currentItem.expected_quantity)}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Additional Qty:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{commaNumber(currentItem.extended_quantity)}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Overall Expected Quantity:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{commaNumber(currentItem.overall_expected_quantity)}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Ordered Quantity:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{commaNumber(currentItem.ordered_quantity)}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Balance Quantity:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{commaNumber(currentItem.balance_quantity)}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={2}>
-                      <Text style={globalStyle.lb}>Material Source:</Text>
-                    </Col>
-                    <Col size={3}>
-                      <Text>{currentItem.branch}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={2}>
-                      <Text style={globalStyle.lb}>Transport Mode:</Text>
-                    </Col>
-                    <Col size={3}>
-                      <Text>{currentItem.transport_mode}</Text>
-                    </Col>
-                  </Row>
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={4}>
-                      <Text style={globalStyle.lb}>Remarks:</Text>
-                    </Col>
-                    <Col size={2}>
-                      <Text>{currentItem.remarks}</Text>
-                    </Col>
-                  </Row>
-                  {site.enabled ? (
-                    <Row style={globalStyle.labelContainer}>
-                      <Col size={5}>
-                        <Button
-                          success
-                          style={[globalStyle.mb10, globalStyle.button]}
-                          onPress={extendSiteQty}>
-                          <Text>Request Additional Qty</Text>
-                        </Button>
-                      </Col>
-                    </Row>
-                  ) : (
-                    <Fragment></Fragment>
-                    )}
-                  <Row style={globalStyle.labelContainer}>
-                    <Col size={5}>
-                      <Button
-                        warning
-                        style={[globalStyle.mb10, globalStyle.button]}
-                        onPress={() => closeModal()}>
-                        <Text style={{}}>Close</Text>
-                      </Button>
-                    </Col>
-                  </Row>
-                </Grid>
-              </Container>
-            </Modal>
+                        <Col size={1.5} style={globalStyle.colContainer}>
+                          <Text>{item.item_sub_group}</Text>
+                        </Col>
+                        <Col size={1}>
+                          <Text>
+                            {commaNumber(item.overall_expected_quantity)} {item.uom}
+                          </Text>
+                        </Col>
+                        <Col size={0.6}>
+                          <Button
+                            vertical
+                            transparent
+                            onPress={() => openModal(item)}
+                            style={{
+                              width: 100,
+                            }}>
+                            <Icon name="md-more" />
+                          </Button>
+                        </Col>
+                      </Row>
+                    ))}
+                  </Grid>
+                </Row>
+                <Modal
+                  animationType="slide"
+                  transparent={true}
+                  visible={modalIsVisible}
+                  onRequestClose={() => closeModal()}>
+                  <Container style={globalStyle.modal}>
+                    <Grid style={{ marginTop: 5 }}>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Material:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{currentItem.item_sub_group}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>UoM:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{currentItem.uom}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Initial Qty:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{commaNumber(currentItem.expected_quantity)}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Additional Qty:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{commaNumber(currentItem.extended_quantity)}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Overall Expected Quantity:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{commaNumber(currentItem.overall_expected_quantity)}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Ordered Quantity:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{commaNumber(currentItem.ordered_quantity)}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Balance Quantity:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{commaNumber(currentItem.balance_quantity)}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={2}>
+                          <Text style={globalStyle.lb}>Material Source:</Text>
+                        </Col>
+                        <Col size={3}>
+                          <Text>{currentItem.branch}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={2}>
+                          <Text style={globalStyle.lb}>Transport Mode:</Text>
+                        </Col>
+                        <Col size={3}>
+                          <Text>{currentItem.transport_mode}</Text>
+                        </Col>
+                      </Row>
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={4}>
+                          <Text style={globalStyle.lb}>Remarks:</Text>
+                        </Col>
+                        <Col size={2}>
+                          <Text>{currentItem.remarks}</Text>
+                        </Col>
+                      </Row>
+                      {site.enabled ? (
+                        <Row style={globalStyle.labelContainer}>
+                          <Col size={5}>
+                            <Button
+                              success
+                              style={[globalStyle.mb10, globalStyle.button]}
+                              onPress={extendSiteQty}>
+                              <Text>Request Additional Qty</Text>
+                            </Button>
+                          </Col>
+                        </Row>
+                      ) : (
+                          <Fragment></Fragment>
+                        )}
+                      <Row style={globalStyle.labelContainer}>
+                        <Col size={5}>
+                          <Button
+                            warning
+                            style={[globalStyle.mb10, globalStyle.button]}
+                            onPress={() => closeModal()}>
+                            <Text style={{}}>Close</Text>
+                          </Button>
+                        </Col>
+                      </Row>
+                    </Grid>
+                  </Container>
+                </Modal>
+              </ScrollView>
+            </SafeAreaView>
           </Content>
         </Grid>
       </Container>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import DatePicker from 'react-native-datepicker';
 import moment from 'moment';
-import { View, Image } from 'react-native';
+import { View, Image, SafeAreaView, ScrollView } from 'react-native';
 import {
   Container,
   Form,
@@ -109,101 +109,105 @@ export const ExtendSite = ({
     <SpinnerScreen />
   ) : (
       <Container>
-        <Content>
-          <CardItem>
-            <Form>
-              <Item regular inlineLabel style={globalStyles.mb10}>
-                <Label>Site ID:</Label>
-                <Input disabled value={site} placeholder="Site ID" />
-              </Item>
-              <Item regular inlineLabel style={globalStyles.mb10}>
-                <Label>Construction Start Date:</Label>
-                <Input
-                  disabled
-                  value={construction_start_date}
-                  placeholder="Start Date"
-                />
-              </Item>
-              <Item regular inlineLabel style={globalStyles.mb10}>
-                <Label>Construction End Date:</Label>
-                <Input
-                  disabled
-                  value={construction_end_date}
-                  placeholder="End Date"
-                />
-              </Item>
+        <SafeAreaView>
+          <ScrollView>
+            <Content>
+              <CardItem>
+                <Form>
+                  <Item regular inlineLabel style={globalStyles.mb10}>
+                    <Label>Site ID:</Label>
+                    <Input disabled value={site} placeholder="Site ID" />
+                  </Item>
+                  <Item regular inlineLabel style={globalStyles.mb10}>
+                    <Label>Construction Start Date:</Label>
+                    <Input
+                      disabled
+                      value={construction_start_date}
+                      placeholder="Start Date"
+                    />
+                  </Item>
+                  <Item regular inlineLabel style={globalStyles.mb10}>
+                    <Label>Construction End Date:</Label>
+                    <Input
+                      disabled
+                      value={construction_end_date}
+                      placeholder="End Date"
+                    />
+                  </Item>
 
-              <Item regular inlineLabel style={globalStyles.mb10}>
-                <Label>Extension Till Date:</Label>
-                <DatePicker
-                  style={{ width: '50%' }}
-                  date={extension_till_date}
-                  mode="date"
-                  customStyles={{ dateInput: { borderWidth: 0 } }}
-                  placeholder="Extension Till Date"
-                  format="DD-MM-YYYY"
-                  confirmBtnText="Confirm"
-                  cancelBtnText="Cancel"
-                  onDateChange={date => {
-                    setDate(date), setExtendDateErrorMsg('');
-                  }}
-                />
-              </Item>
-              <Text style={globalStyles.errorMsg}>{extendDateErrorMsg}</Text>
+                  <Item regular inlineLabel style={globalStyles.mb10}>
+                    <Label>Extension Till Date:</Label>
+                    <DatePicker
+                      style={{ width: '50%' }}
+                      date={extension_till_date}
+                      mode="date"
+                      customStyles={{ dateInput: { borderWidth: 0 } }}
+                      placeholder="Extension Till Date"
+                      format="DD-MM-YYYY"
+                      confirmBtnText="Confirm"
+                      cancelBtnText="Cancel"
+                      onDateChange={date => {
+                        setDate(date), setExtendDateErrorMsg('');
+                      }}
+                    />
+                  </Item>
+                  <Text style={globalStyles.errorMsg}>{extendDateErrorMsg}</Text>
 
-              <Button info
-                style={globalStyles.mb10}
-                onPress={pickImages}>
-                <Text>Attach Supporting Documents</Text>
-              </Button>
-              {documents.length === 0 ? null : (
-                <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
-                  <Text style={{ alignSelf: 'center', color: 'red' }}>
-                    Swipe to review all images
+                  <Button info
+                    style={globalStyles.mb10}
+                    onPress={pickImages}>
+                    <Text>Attach Supporting Documents</Text>
+                  </Button>
+                  {documents.length === 0 ? null : (
+                    <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                      <Text style={{ alignSelf: 'center', color: 'red' }}>
+                        Swipe to review all images
               </Text>
-                  <DeckSwiper
-                    dataSource={images}
-                    renderItem={image => (
-                      <Card style={{ elevation: 3 }}>
-                        <CardItem cardBody>
-                          <Image
-                            source={{
-                              uri: image.path,
-                            }}
-                            style={{ height: 250, width: '100%' }}
-                          />
-                        </CardItem>
-                        <CardItem>
-                          <Button
-                            transparent
-                            small
-                            onPress={val => removeImage(val)}>
-                            <Icon
-                              name="delete"
-                              type="AntDesign"
-                              style={{ color: 'red' }}
-                            />
-                          </Button>
-                          <Text>
-                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                          </Text>
-                        </CardItem>
-                      </Card>
-                    )}
-                  />
-                </View>
-              )}
-              <Text style={globalStyles.errorMsg}>{docErrorMsg}</Text>
-              <Button success style={[globalStyles.mb10, globalStyles.button]} onPress={extendSite}>
-                <Text>Request Site Extension</Text>
-              </Button>
-              <Button warning style={[globalStyles.mb10, globalStyles.button]} onPress={() => navigation.goBack()}>
-                <Icon name="ios-arrow-back" />
-                <Text>Go Back</Text>
-              </Button>
-            </Form>
-          </CardItem>
-        </Content>
+                      <DeckSwiper
+                        dataSource={images}
+                        renderItem={image => (
+                          <Card style={{ elevation: 3 }}>
+                            <CardItem cardBody>
+                              <Image
+                                source={{
+                                  uri: image.path,
+                                }}
+                                style={{ height: 250, width: '100%' }}
+                              />
+                            </CardItem>
+                            <CardItem>
+                              <Button
+                                transparent
+                                small
+                                onPress={val => removeImage(val)}>
+                                <Icon
+                                  name="delete"
+                                  type="AntDesign"
+                                  style={{ color: 'red' }}
+                                />
+                              </Button>
+                              <Text>
+                                {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                              </Text>
+                            </CardItem>
+                          </Card>
+                        )}
+                      />
+                    </View>
+                  )}
+                  <Text style={globalStyles.errorMsg}>{docErrorMsg}</Text>
+                  <Button success style={[globalStyles.mb10, globalStyles.button]} onPress={extendSite}>
+                    <Text>Request Site Extension</Text>
+                  </Button>
+                  <Button warning style={[globalStyles.mb10, globalStyles.button]} onPress={() => navigation.goBack()}>
+                    <Icon name="ios-arrow-back" />
+                    <Text>Go Back</Text>
+                  </Button>
+                </Form>
+              </CardItem>
+            </Content>
+          </ScrollView>
+        </SafeAreaView>
       </Container>
     );
 };

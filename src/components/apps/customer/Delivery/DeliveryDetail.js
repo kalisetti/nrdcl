@@ -1,6 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
+import { SafeAreaView, ScrollView } from 'react-native';
 import {
     Container,
     Text,
@@ -73,87 +74,92 @@ export const OrderDetail = ({
 
     return commonState.isLoading ? (
         <SpinnerScreen />
-    ) : (<Container>
-        <Content style={globalStyle.content}>
-            <Card>
-                <CardItem
-                    header
-                    bordered
-                    style={globalStyle.tableHeader}>
-                    <Body>
-                        <Text style={globalStyle.label, { color: 'white' }}>Delivery Status</Text>
-                    </Body>
-                </CardItem>
-                <CardItem>
-                    <View>
-                        <Text>Delivery Note No: {deliver.delivery_note}</Text>
-                        <Text>Status: {deliver.confirmation_status}</Text>
-                        <Text>Branch: {deliver.branch} </Text>
-                        <Text>Vehicle No: {deliver.vehicle}</Text>
-                        <Text>Driver Name: {deliver.drivers_name}</Text>
-                        <Text>Driver Mobile No: {deliver.contact_no}</Text>
-                        <Text>Processing Date: {Moment(deliver.exit_date_time).format('DD MMM YYYY, hh:mma')}</Text>
-                        <Text>Receive Time: {deliver.received_date_time == undefined ? (<Fragment></Fragment>) :
-                            Moment(deliver.received_date_time).format('DD MMM YYYY, hh:mma')}</Text>
-                        <Text />
-                        {deliver.confirmation_status === 'In Transit' ? (
-                            <Text style={{ color: 'gray', fontSize: 16 }}>
-                                Note: Please contact above driver for detail</Text>) : (
-                                (<Fragment></Fragment>)
-                            )}
+    ) : (
+            <Container>
+                <SafeAreaView>
+                    <ScrollView>
+                        <Content style={globalStyle.content}>
+                            <Card>
+                                <CardItem
+                                    header
+                                    bordered
+                                    style={globalStyle.tableHeader}>
+                                    <Body>
+                                        <Text style={globalStyle.label, { color: 'white' }}>Delivery Status</Text>
+                                    </Body>
+                                </CardItem>
+                                <CardItem>
+                                    <View>
+                                        <Text>Delivery Note No: {deliver.delivery_note}</Text>
+                                        <Text>Status: {deliver.confirmation_status}</Text>
+                                        <Text>Branch: {deliver.branch} </Text>
+                                        <Text>Vehicle No: {deliver.vehicle}</Text>
+                                        <Text>Driver Name: {deliver.drivers_name}</Text>
+                                        <Text>Driver Mobile No: {deliver.contact_no}</Text>
+                                        <Text>Processing Date: {Moment(deliver.exit_date_time).format('DD MMM YYYY, hh:mma')}</Text>
+                                        <Text>Receive Time: {deliver.received_date_time == undefined ? (<Fragment></Fragment>) :
+                                            Moment(deliver.received_date_time).format('DD MMM YYYY, hh:mma')}</Text>
+                                        <Text />
+                                        {deliver.confirmation_status === 'In Transit' ? (
+                                            <Text style={{ color: 'gray', fontSize: 16 }}>
+                                                Note: Please contact above driver for detail</Text>) : (
+                                                (<Fragment></Fragment>)
+                                            )}
 
-                        {deliver.confirmation_status === 'In Transit' ? (
-                            <Item regular style={globalStyle.mb10}>
-                                <Input
-                                    value={remarks}
-                                    onChangeText={val => setremarks(val)}
-                                    placeholder="Remarks"
-                                />
-                            </Item>
-                        ) : (
-                                (<Fragment></Fragment>)
-                            )}
+                                        {deliver.confirmation_status === 'In Transit' ? (
+                                            <Item regular style={globalStyle.mb10}>
+                                                <Input
+                                                    value={remarks}
+                                                    onChangeText={val => setremarks(val)}
+                                                    placeholder="Remarks"
+                                                />
+                                            </Item>
+                                        ) : (
+                                                (<Fragment></Fragment>)
+                                            )}
 
-                        {deliver.confirmation_status === 'In Transit' ? (
-                            <Text style={{ color: 'gray' }}>Please click below button to
+                                        {deliver.confirmation_status === 'In Transit' ? (
+                                            <Text style={{ color: 'gray' }}>Please click below button to
                              acknowledge the receipt</Text>
-                        ) : (
-                                (<Fragment></Fragment>)
-                            )}
-                    </View>
-                </CardItem>
-                {deliver.confirmation_status === 'In Transit' ? (
-                    <Button block success iconLeft style={globalStyle.mb10}
-                        onPress={() => toggleAlert()}
-                    >
-                        <Text>Acknowledge Receipt</Text>
-                    </Button>
-                ) : (
-                        (<Fragment></Fragment>)
-                    )}
-            </Card>
-        </Content>
-        {showAlert && (
-            <View style={{ width: '100%', height: '100%' }}>
-                <AwesomeAlert
-                    show={showAlert}
-                    showProgress={false}
-                    title="Acknowledge Receipt"
-                    message="Are you sure you want to acknowledge receipt?"
-                    closeOnTouchOutside={false}
-                    closeOnHardwareBackPress={false}
-                    showCancelButton={true}
-                    showConfirmButton={true}
-                    cancelText="No"
-                    confirmText="Yes"
-                    confirmButtonColor="#DD6B55"
-                    onCancelPressed={() => {
-                        toggleAlert();
-                    }}
-                    onConfirmPressed={confirmDelivery} />
-            </View>
-        )}
-    </Container>
+                                        ) : (
+                                                (<Fragment></Fragment>)
+                                            )}
+                                    </View>
+                                </CardItem>
+                                {deliver.confirmation_status === 'In Transit' ? (
+                                    <Button block success iconLeft style={globalStyle.mb10}
+                                        onPress={() => toggleAlert()}
+                                    >
+                                        <Text>Acknowledge Receipt</Text>
+                                    </Button>
+                                ) : (
+                                        (<Fragment></Fragment>)
+                                    )}
+                            </Card>
+                        </Content>
+                        {showAlert && (
+                            <View style={{ width: '100%', height: '100%' }}>
+                                <AwesomeAlert
+                                    show={showAlert}
+                                    showProgress={false}
+                                    title="Acknowledge Receipt"
+                                    message="Are you sure you want to acknowledge receipt?"
+                                    closeOnTouchOutside={false}
+                                    closeOnHardwareBackPress={false}
+                                    showCancelButton={true}
+                                    showConfirmButton={true}
+                                    cancelText="No"
+                                    confirmText="Yes"
+                                    confirmButtonColor="#DD6B55"
+                                    onCancelPressed={() => {
+                                        toggleAlert();
+                                    }}
+                                    onConfirmPressed={confirmDelivery} />
+                            </View>
+                        )}
+                    </ScrollView>
+                </SafeAreaView>
+            </Container>
         );
 };
 const mapStateToProps = state => ({

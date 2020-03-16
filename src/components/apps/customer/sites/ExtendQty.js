@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
-import {connect} from 'react-redux';
-import {View,} from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
+import { View, SafeAreaView, ScrollView} from 'react-native';
 import {
   Container,
   Form,
@@ -10,14 +10,13 @@ import {
   Text,
   Content,
   Icon,
-  Label, 
+  Label,
   Textarea,
 } from 'native-base';
 import SpinnerScreen from '../../../base/SpinnerScreen';
-import {startQtyExtension} from '../../../../redux/actions/siteActions';
-import {handleError, getImages} from '../../../../redux/actions/commonActions';
-import globalStyles from '../../../../styles/globalStyle';
-
+import { startQtyExtension } from '../../../../redux/actions/siteActions';
+import { handleError, getImages } from '../../../../redux/actions/commonActions';
+import globalStyles from '../../../../styles/globalStyle'; 
 export const ExtendQty = ({
   userState,
   commonState,
@@ -58,7 +57,7 @@ export const ExtendQty = ({
   const setQty = num => {
     if (isNaN(num)) {
       setAdditionalQuantity('0');
-      handleError({message: 'Addditional Qty should be a number'});
+      handleError({ message: 'Addditional Qty should be a number' });
     } else {
       setAdditionalQuantity(num);
     }
@@ -91,56 +90,60 @@ export const ExtendQty = ({
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
-    <Container>
-      <Content style={globalStyles.content}>
-        <Form>
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Site ID:</Label>
-            <Input disabled value={site} />
-          </Item>
+      <Container>
+        <SafeAreaView>
+          <ScrollView>
+            <Content style={globalStyles.content}>
+              <Form>
+                <Item regular inlineLabel style={globalStyles.mb10}>
+                  <Label>Site ID:</Label>
+                  <Input disabled value={site} />
+                </Item>
 
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Item:</Label>
-            <Input disabled value={item} />
-          </Item>
+                <Item regular inlineLabel style={globalStyles.mb10}>
+                  <Label>Item:</Label>
+                  <Input disabled value={item} />
+                </Item>
 
-          <Item regular inlineLabel style={globalStyles.mb10}>
-            <Label>Additional Qty (M3):</Label>
-            <Input
-              value={additional_quantity}
-              onChangeText={val => setQty(val)}
-              keyboardType="numeric"
-            />
-          </Item>
+                <Item regular inlineLabel style={globalStyles.mb10}>
+                  <Label>Additional Qty (M3):</Label>
+                  <Input
+                    value={additional_quantity}
+                    onChangeText={val => setQty(val)}
+                    keyboardType="numeric"
+                  />
+                </Item>
 
-          <Textarea
-            rowSpan={3}
-            width="100%"
-            bordered
-            placeholder="Remarks"
-            value={remarks}
-            onChangeText={val => setRemarks(val)}
-            style={globalStyles.mb10}
-          />
-           
-          <View style={{marginBottom: 20}}></View>
-          <Button
-            success
-            style={[globalStyles.mb10, globalStyles.button]}
-            onPress={extendQty}>
-            <Text>Request Qty Extension:</Text>
-          </Button>
-          <Button
-            warning
-            style={[globalStyles.mb10, globalStyles.button]}
-            onPress={() => navigation.goBack()}>
-            <Icon name="ios-arrow-back" />
-            <Text>Go Back</Text>
-          </Button>
-        </Form>
-      </Content>
-    </Container>
-  );
+                <Textarea
+                  rowSpan={3}
+                  width="100%"
+                  bordered
+                  placeholder="Remarks"
+                  value={remarks}
+                  onChangeText={val => setRemarks(val)}
+                  style={globalStyles.mb10}
+                />
+
+                <View style={{ marginBottom: 20 }}></View>
+                <Button
+                  success
+                  style={[globalStyles.mb10, globalStyles.button]}
+                  onPress={extendQty}>
+                  <Text>Request Qty Extension:</Text>
+                </Button>
+                <Button
+                  warning
+                  style={[globalStyles.mb10, globalStyles.button]}
+                  onPress={() => navigation.goBack()}>
+                  <Icon name="ios-arrow-back" />
+                  <Text>Go Back</Text>
+                </Button>
+              </Form>
+            </Content>
+          </ScrollView>
+        </SafeAreaView>
+      </Container>
+    );
 };
 
 const mapStateToProps = state => ({
@@ -148,6 +151,6 @@ const mapStateToProps = state => ({
   commonState: state.commonState,
 });
 
-const mapDispatchToProps = {startQtyExtension, handleError, getImages};
+const mapDispatchToProps = { startQtyExtension, handleError, getImages };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ExtendQty);

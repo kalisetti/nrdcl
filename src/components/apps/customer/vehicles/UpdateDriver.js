@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
+import { SafeAreaView, ScrollView } from 'react-native';
 import {
   Container,
   Form,
@@ -68,54 +69,58 @@ export const UpdateDriver = ({
     <SpinnerScreen />
   ) : (
       <Container>
-        <Content style={globalStyles.content}>
-          <Form>
-            <Item regular style={globalStyles.mb10}>
-              <Label>Vehicle No:</Label>
-              <Input disabled value={vehicle} />
-            </Item>
-            <Item regular style={globalStyles.mb10}>
-              <Label>Driver Name:</Label>
-              <Input
-                value={driver_name}
-                onChangeText={val => setdriver_name(val)}
-              />
-            </Item>
+        <SafeAreaView>
+          <ScrollView>
+            <Content style={globalStyles.content}>
+              <Form>
+                <Item regular style={globalStyles.mb10}>
+                  <Label>Vehicle No:</Label>
+                  <Input disabled value={vehicle} />
+                </Item>
+                <Item regular style={globalStyles.mb10}>
+                  <Label>Driver Name:</Label>
+                  <Input
+                    value={driver_name}
+                    onChangeText={val => setdriver_name(val)}
+                  />
+                </Item>
 
-            <Item regular style={globalStyles.mb10}>
-              <Label>Driver Mobile No:</Label>
-              <Input
-                keyboardType='numeric'
-                value={String(driver_contact_no)}
-                onChangeText={val => setdriver_contact_no(val)}
-              />
-            </Item>
+                <Item regular style={globalStyles.mb10}>
+                  <Label>Driver Mobile No:</Label>
+                  <Input
+                    keyboardType='numeric'
+                    value={String(driver_contact_no)}
+                    onChangeText={val => setdriver_contact_no(val)}
+                  />
+                </Item>
 
-            <Textarea
-              rowSpan={2}
-              width="100%"
-              bordered
-              placeholder="Remarks"
-              value={remarks}
-              onChangeText={val => setremarks(val)}
-              style={globalStyles.mb10}
-            />
+                <Textarea
+                  rowSpan={2}
+                  width="100%"
+                  bordered
+                  placeholder="Remarks"
+                  value={remarks}
+                  onChangeText={val => setremarks(val)}
+                  style={globalStyles.mb10}
+                />
 
-            <Button
-              success
-              style={[globalStyles.mb10, globalStyles.button]}
-              onPress={updateDriverDetail}>
-              <Text>Update Driver Info</Text>
-            </Button>
-            <Button
-              warning
-              style={[globalStyles.mb10, globalStyles.button]}
-              onPress={() => navigation.goBack()}>
-              <Icon name="ios-arrow-back" />
-              <Text>Go Back</Text>
-            </Button>
-          </Form>
-        </Content>
+                <Button
+                  success
+                  style={[globalStyles.mb10, globalStyles.button]}
+                  onPress={updateDriverDetail}>
+                  <Text>Update Driver Info</Text>
+                </Button>
+                <Button
+                  warning
+                  style={[globalStyles.mb10, globalStyles.button]}
+                  onPress={() => navigation.goBack()}>
+                  <Icon name="ios-arrow-back" />
+                  <Text>Go Back</Text>
+                </Button>
+              </Form>
+            </Content>
+          </ScrollView>
+        </SafeAreaView>
       </Container>
     );
 };
