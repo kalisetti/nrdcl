@@ -1,9 +1,9 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Modal,SafeAreaView, ScrollView } from 'react-native';
+import { Modal, SafeAreaView, ScrollView } from 'react-native';
 import { NavigationEvents } from 'react-navigation';
 import Config from 'react-native-config';
-import { default as commaNumber } from 'comma-number'; 
+import { default as commaNumber } from 'comma-number';
 import {
   Container,
   Content,
@@ -79,6 +79,8 @@ export const AddOrder = ({
   const [locationItemRate, setLocationItemRate] = useState(undefined);
   const [otherBranchInfo, setOtherBranchInfo] = useState([]);
 
+  const [allTransportMode, setAllTransportMode] = useState([]);
+
   var commonPoolLabel = 'Common Pool';
   var selfOwnedLabel = 'Self Owned Transport';
   var othersLabel = 'Others';
@@ -109,6 +111,14 @@ export const AddOrder = ({
     setLoading(true);
     getAllBranches();
   }, [item]);
+
+  useEffect(() => {
+    setTransportMode(undefined);
+    setAllTransportMode([]);
+    setLoading(true);
+    getAllTransportMode();
+  }, [site, branch]);
+
 
   useEffect(() => {
     setLoading(true);
@@ -205,6 +215,28 @@ export const AddOrder = ({
           },
         );
         setall_branches(all_it.data.message);
+        setLoading(false);
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
+  const getAllTransportMode = async () => {
+    if (site === undefined || branch === undefined) {
+      setLoading(false);
+    } else {
+      try {
+        const res = await callAxios(
+          'method/erpnext.crm_utils.get_transport_mode',
+          'post',
+          {
+            site,
+            branch,
+          },
+        );
+        console.log("zepa   " + res.data.message)
+        setAllTransportMode(res.data.message);
         setLoading(false);
       } catch (error) {
         handleError(error);
@@ -700,173 +732,27 @@ export const AddOrder = ({
                       )}
 
                       <View style={globalStyles.dropdown}>
-                        {/* to select self owned */}
-                        {itemDetail.allow_self_owned_transport === 1 &&
-                          itemDetail.has_common_pool !== 1 &&
-                          itemDetail.allow_other_transport !== 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
+                        <Picker
+                          mode="dropdown"
+                          selectedValue={transport_mode}
+                          onValueChange={val => {
+                            setTransportMode(val), resetDataGrid(val);
+                          }}>
+                          <Picker.Item
+                            label={'Select Transport Mode'}
+                            value={undefined}
+                            key={-1}
+                          />
+                          {allTransportMode && allTransportMode.map((pur, idx) => {
+                            return (
+                              <Picker.Item
+                                label={pur}
+                                value={pur}
+                                key={idx}
                               />
-                              <Item
-                                label={selfOwnedLabel}
-                                value={selfOwnedLabel}
-                                key={0}
-                              />
-                            </Picker>
-                          )}
-                        {/* to select common pool */}
-                        {itemDetail.allow_self_owned_transport !== 1 &&
-                          itemDetail.has_common_pool === 1 &&
-                          itemDetail.allow_other_transport !== 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
-                              />
-                              <Item
-                                label={commonPoolLabel}
-                                value={commonPoolLabel}
-                                key={0}
-                              />
-                            </Picker>
-                          )}
-
-                        {/* to select Others */}
-                        {itemDetail.allow_self_owned_transport !== 1 &&
-                          itemDetail.has_common_pool !== 1 &&
-                          itemDetail.allow_other_transport == 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
-                              />
-                              <Item label={othersLabel} value={othersLabel} key={0} />
-                            </Picker>
-                          )}
-
-                        {/* to select common pool and self owned */}
-                        {itemDetail.allow_self_owned_transport === 1 &&
-                          itemDetail.has_common_pool === 1 &&
-                          itemDetail.allow_other_transport !== 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
-                              />
-                              <Item
-                                label={selfOwnedLabel}
-                                value={selfOwnedLabel}
-                                key={0}
-                              />
-                              <Item
-                                label={commonPoolLabel}
-                                value={commonPoolLabel}
-                                key={1}
-                              />
-                            </Picker>
-                          )}
-                        {/* to select common pool and Other */}
-                        {itemDetail.allow_self_owned_transport !== 1 &&
-                          itemDetail.has_common_pool === 1 &&
-                          itemDetail.allow_other_transport === 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
-                              />
-                              <Item
-                                label={commonPoolLabel}
-                                value={commonPoolLabel}
-                                key={0}
-                              />
-                              <Item label={othersLabel} value={othersLabel} key={1} />
-                            </Picker>
-                          )}
-
-                        {/* to select self owned and Others */}
-                        {itemDetail.allow_self_owned_transport === 1 &&
-                          itemDetail.has_common_pool !== 1 &&
-                          itemDetail.allow_other_transport === 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
-                              />
-                              <Item
-                                label={selfOwnedLabel}
-                                value={selfOwnedLabel}
-                                key={0}
-                              />
-                              <Item label={othersLabel} value={othersLabel} key={1} />
-                            </Picker>
-                          )}
-
-                        {/* to select all three */}
-                        {itemDetail.allow_self_owned_transport === 1 &&
-                          itemDetail.has_common_pool === 1 &&
-                          itemDetail.allow_other_transport === 1 && (
-                            <Picker
-                              mode="dropdown"
-                              selectedValue={transport_mode}
-                              onValueChange={val => {
-                                setTransportMode(val), resetDataGrid(val);
-                              }}>
-                              <Item
-                                label={'Select Transport Mode'}
-                                value={undefined}
-                                key={-1}
-                              />
-                              <Item
-                                label={selfOwnedLabel}
-                                value={selfOwnedLabel}
-                                key={0}
-                              />
-                              <Item
-                                label={commonPoolLabel}
-                                value={commonPoolLabel}
-                                key={1}
-                              />
-                              <Item label={othersLabel} value={othersLabel} key={2} />
-                            </Picker>
-                          )}
+                            );
+                          })}
+                        </Picker>
                       </View>
 
                       {transport_mode && (

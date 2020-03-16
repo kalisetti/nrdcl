@@ -146,7 +146,6 @@ export const AddSite = ({
       );
       setall_construction_type(all_ct.data.data);
       const dz_all = await callAxios('resource/Dzongkhags?limit_page_length=100&order_by=name', 'get');
-      console.log(dz_all.data.data);
       setall_dzongkhag(dz_all.data.data);
 
       const sg_all = await callAxios(
