@@ -29,13 +29,41 @@ export const TransporterDashboard = ({ userState, navigation }) => {
               vertical
               transparent
               style={{ alignSelf: 'center' }}
-              onPress={() => navigation.navigate('TransportDashboard')}>
+              onPress={() => navigation.navigate('ListTransport')}>
+              <Icon
+                name="truck-fast"
+                type="MaterialCommunityIcons"
+                style={globalStyle.homeIcon}
+              />
+              <Text style={globalStyle.homeIconText}>List Transport</Text>
+            </Button>
+          </Col>
+          <Col style={globalStyle.homeButton}>
+            <Button vertical transparent style={{alignSelf: 'center'}}
+             onPress={() => navigation.navigate('AddTransport')}>
+            <Icon
+                name="truck-check"
+                type="MaterialCommunityIcons"
+                style={globalStyle.homeIcon}
+              />
+              <Text style={globalStyle.homeIconText}>Add Transport</Text>
+            </Button>
+          </Col>
+        </Row>
+
+        <Row size={1}>
+          <Col style={globalStyle.homeButton}>
+            <Button
+              vertical
+              transparent
+              style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('TransporterTerms')}>
               <Icon
                 name="dump-truck"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
               />
-              <Text style={globalStyle.homeIconText}>Manage Transport</Text>
+              <Text style={globalStyle.homeIconText}>T O R</Text>
             </Button>
           </Col>
           <Col style={globalStyle.homeButton}>
@@ -44,7 +72,7 @@ export const TransporterDashboard = ({ userState, navigation }) => {
                 name="link-box"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('QueueDashboard')}
+                onPress={() => navigation.navigate('AddToQueue')}
               />
               <Text style={globalStyle.homeIconText}>Manage Queue</Text>
             </Button>

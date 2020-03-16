@@ -59,15 +59,12 @@ import SuccessMsg from '../../apps/customer/orders/SuccessMsg';
 
 
 //Transporter Screens
-import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
-import TransportDashboard from '../../apps/transporter/TransportDashboard';
+import TransporterDashboard from '../../apps/transporter/TransporterDashboard'; 
 import AddTransport from '../../apps/transporter/transport/AddTransport';
 import ListTransport from '../../apps/transporter/transport/ListTransport';
 import TransportDetail from '../../apps/transporter/transport/TransportDetail';
 import TransportDriverUpdate from '../../apps/transporter/transport/TransportDriverUpdate';
-import QueueDashboard from '../../apps/transporter/QueueDashboard';
-import AddToQueue from '../../apps/transporter/Queue/AddToQueue';
-import QueueStatus from '../../apps/transporter/Queue/QueueStatus';
+import AddToQueue from '../../apps/transporter/Queue/AddToQueue'; 
 
 const AppNavigator = createStackNavigator(
 
@@ -224,13 +221,7 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         title: 'Transporter',
       },
-    },
-    TransportDashboard: {
-      screen: TransportDashboard,
-      navigationOptions: {
-        title: 'Transport Dashboard',
-      },
-    },
+    }, 
     AddTransport: {
       screen: AddTransport,
       navigationOptions: {
@@ -266,28 +257,14 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         title: 'Transaction Details',
       },
-    },
-
-    QueueDashboard: {
-      screen: QueueDashboard,
-      navigationOptions: {
-        title: 'Queue Dashboard',
-      },
-    },
+    }, 
 
     AddToQueue: {
       screen: AddToQueue,
       navigationOptions: {
-        title: 'Apply for Queue',
+        title: 'Apply to Queue',
       },
-    },
-
-    QueueStatus: {
-      screen: QueueStatus,
-      navigationOptions: {
-        title: 'Queue Status',
-      },
-    },
+    }, 
   },
 
   

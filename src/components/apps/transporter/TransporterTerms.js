@@ -104,19 +104,7 @@ export const TransporterTerms = ({ userState, navigation }) => {
           </Body>
         </CardItem>
       {/* </Card> */}
-
-      <Container style={style.innerContainer}>
-        <Button
-          success
-          onPress={transporterTearmsAgreed}>
-          <Icon name="thumbs-up" />
-          <Text>Agree</Text>
-        </Button>
-        <Button danger onPress={() => navigation.goBack()}>
-          <Icon name="thumbs-down" />
-          <Text>Decline</Text>
-        </Button>
-      </Container>
+ 
     </Content>
   );
 };
