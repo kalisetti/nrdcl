@@ -32,7 +32,6 @@ import {
 } from '../../../../redux/actions/commonActions';
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import NavigationService from '../../../base/navigation/NavigationService';
-import AwesomeAlert from 'react-native-awesome-alerts';
 
 export const AddToQueue = ({
   userState,
@@ -45,11 +44,7 @@ export const AddToQueue = ({
   const [vehicleDetail, setVehicleDetail] = useState(undefined);
   const [transporterVehicleList, setTransporterVehicleList] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
-  const [showAlert, setShowAlert] = useState(false);
-
-  const toggleAlert = () => {
-    setShowAlert(!showAlert);
-  };
+ 
   const _refresh = React.useCallback(() => {
     wait(20).then(() => setRefreshing(false));
     getTransporterVehicleList();
@@ -157,7 +152,7 @@ export const AddToQueue = ({
                             <Text></Text>
                             <Text note>Your position</Text>
                             <Badge info>
-                              <Text>2</Text>
+                              <Text>{vehicleDetail.queue_count}</Text>
                             </Badge>
                           </Row>
                         )}
@@ -171,36 +166,10 @@ export const AddToQueue = ({
                           <Icon name='navigate' />
                           <Text>Apply</Text>
                         </Button>)}
-                    </Right>
-
-                    {showAlert && (
-                      <View style={{ width: '100%', height: '100%' }}>
-                        <AwesomeAlert
-                          show={showAlert}
-                          showProgress={false}
-                          title="Confirmation"
-                          message="Are you sure you want to apply?"
-                          closeOnTouchOutside={true}
-                          closeOnHardwareBackPress={false}
-                          showCancelButton={true}
-                          showConfirmButton={true}
-                          cancelText="No, cancel"
-                          confirmText="Yes, remove it"
-                          confirmButtonColor="#DD6B55"
-                          onCancelPressed={() => {
-                            toggleAlert();
-                          }}
-                          onConfirmPressed={() => {
-                            toggleAlert();
-                            applyForQueue(vehicleDetail.name);
-                          }}
-                        />
-                      </View>
-                    )}
+                    </Right> 
                   </ListItem>
                 </List>
               ))}
-
             </Content>
           </ScrollView>
         </SafeAreaView>
