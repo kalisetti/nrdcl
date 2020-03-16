@@ -41,10 +41,9 @@ export const AddToQueue = ({
   submitApplyForQueue
 }) => {
   //state info for forms
-  const [vehicleDetail, setVehicleDetail] = useState(undefined);
   const [transporterVehicleList, setTransporterVehicleList] = useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
- 
+
   const _refresh = React.useCallback(() => {
     wait(20).then(() => setRefreshing(false));
     getTransporterVehicleList();
@@ -84,18 +83,32 @@ export const AddToQueue = ({
   };
 
   const applyForQueue = async (vechicle_no) => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to apply vehicle ' + vechicle_no + ' to the queue?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        { text: 'Yes', onPress: () => applyToQueue(vechicle_no) },
+      ],
+      { cancelable: false },
+    );
+  }
+  
+  const applyToQueue = async (vechicle_no) => {
     const queueDetail = {
       user: userState.login_id,
       vehicle: vechicle_no
     }
     const res = await submitApplyForQueue(queueDetail);
-
     if (res.status == 200) {
       Alert.alert(
         //title
         'My Resources',
         //body
-        'Your vehicle has been successfully applied to the queue.',
+        'Your vehicle has been successfully applied to the queue',
         [
           { text: 'OK', onPress: () => getTransporterVehicleList() },
         ],
@@ -145,11 +158,10 @@ export const AddToQueue = ({
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
                       </Row>
-                      <Row> 
+                      <Row>
                         {vehicleDetail.vehicle_status === "Queued" && (
                           <Row>
-                            {/* <Text></Text> */}
-                            <Text style={{color:'green'}}>Token No</Text>
+                            <Text style={{ color: 'green' }}>Token No</Text>
                             <Badge info>
                               <Text>{vehicleDetail.queue_count}</Text>
                             </Badge>
@@ -164,7 +176,7 @@ export const AddToQueue = ({
                           <Icon name='navigate' />
                           <Text>Apply</Text>
                         </Button>)}
-                    </Right> 
+                    </Right>
                   </ListItem>
                 </List>
               ))}
