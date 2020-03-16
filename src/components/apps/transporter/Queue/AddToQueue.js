@@ -157,7 +157,6 @@ export const AddToQueue = ({
                           </Row>
                         )}
                       </Row>
-
                     </Body>
                     <Right>
                       {vehicleDetail.vehicle_status === "Available" && (
