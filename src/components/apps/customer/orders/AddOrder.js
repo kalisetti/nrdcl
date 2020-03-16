@@ -353,9 +353,10 @@ export const AddOrder = ({
           'post',
           {
             user: userState.login_id,
+            site,
+            transport_mode
           },
         );
-
         setallprivatevehicles(all_its.data.message);
         setLoading(false);
       } catch (error) {

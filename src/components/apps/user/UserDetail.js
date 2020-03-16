@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { View, Image } from 'react-native';
+import { View, Image, SafeAreaView, ScrollView } from 'react-native';
 import {
   Container,
   Button,
@@ -42,9 +42,6 @@ const UserDetail = ({
   const [imagesBack, setImagesBack] = useState([]);
   const [cidBackImage, setCidBackImage] = useState([]);
 
-  const [imgFrontReqMsg, setImgFrontReqMsg] = useState('');
-  const [imgBackReqMsg, setImgBackReqMsg] = useState('');
-
   const [cid, setCid] = useState(userState.login_id);
   const [fullname, setFullname] = useState(userState.first_name);
   const [issued, setIssued] = useState(moment());
@@ -74,7 +71,6 @@ const UserDetail = ({
   const getCidFrontPage = async () => {
     const frontPageImage = await getImages('Front');
     setCidFrontImage(frontPageImage);
-    setImgFrontReqMsg('');
   };
 
   const removeCidFront = () => {
@@ -87,7 +83,6 @@ const UserDetail = ({
   const getCidBackPage = async () => {
     const backPageImage = await getImages('Back');
     setCidBackImage(backPageImage);
-    setImgBackReqMsg('');
   };
 
   const removeCidBack = () => {
@@ -99,9 +94,6 @@ const UserDetail = ({
     if (imagesFront.length < 1) {
       showToast('CID Copy is mandatory');
     }
-    // else if (imagesBack.length < 1) {
-    //   setImgBackReqMsg('CID back side is required');
-    // }
     else {
       const userRequest = {
         approval_status: 'Pending',
@@ -121,22 +113,25 @@ const UserDetail = ({
   ) : userState.profile_submitted ? (
     userState.profile_verified ? (
       <Container>
-        <Content style={globalStyles.content}>
-          <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
-            CID: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
-              {userState.login_id}
-            </Text></Text>
+        <SafeAreaView>
+          <ScrollView>
+            <Content style={globalStyles.content}>
+              <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
+                CID: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
+                  {userState.login_id}
+                </Text></Text>
 
-          <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
-            Full Name: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
-              {userState.first_name}
-            </Text></Text>
-          <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
-            Mobile Number: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
-              {userState.mobile_no}
-            </Text></Text>
-
-        </Content>
+              <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
+                Full Name: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
+                  {userState.first_name}
+                </Text></Text>
+              <Text style={{ color: 'black', fontSize: 15, fontWeight: 'bold' }}>
+                Mobile Number: <Text style={{ color: 'green', fontSize: 15, fontWeight: 'bold' }}>
+                  {userState.mobile_no}
+                </Text></Text>
+            </Content>
+          </ScrollView>
+        </SafeAreaView>
       </Container>
     ) : (
         <Container>
@@ -150,93 +145,91 @@ const UserDetail = ({
       )
   ) : (
         <Container>
-          <Content style={globalStyles.content}>
-            <Form>
-              <Text>Full Name :<Text style={globalStyles.label}> {fullname}</Text></Text>
-              <Text></Text>
-              <Text >CID Number : <Text style={globalStyles.label}>{cid}</Text></Text>
-              <Text></Text>
+          <SafeAreaView>
+            <ScrollView>
+              <Content style={globalStyles.content}>
+                <Form>
+                  <Text>Full Name :<Text style={globalStyles.label}> {fullname}</Text></Text>
+                  <Text></Text>
+                  <Text >CID Number : <Text style={globalStyles.label}>{cid}</Text></Text>
+                  <Text></Text>
 
-              <Button block info style={globalStyles.mb10} onPress={getCidFrontPage}>
-                <Text>Upload CID COPY</Text>
-              </Button>
+                  <Button block info style={globalStyles.mb10} onPress={getCidFrontPage}>
+                    <Text>Upload CID COPY</Text>
+                  </Button>
 
-              {imagesFront.length === 0 ? null : (
-                <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
-                  <Text style={{ alignSelf: 'center', color: 'red' }}>
-                    Swipe to review all images
+                  {imagesFront.length === 0 ? <Fragment></Fragment> : (
+                    <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                      <Text style={{ alignSelf: 'center', color: 'red' }}>
+                        Swipe to review all images
               </Text>
-                  <DeckSwiper
-                    dataSource={cidFrontImage}
-                    renderItem={image => (
-                      <Card style={{ elevation: 3 }}>
-                        <CardItem cardBody>
-                          <Image
-                            source={{
-                              uri: image.path,
-                            }}
-                            style={{ height: 250, width: '100%' }}
-                          />
-                        </CardItem>
-                        <CardItem>
-                          <Button transparent small onPress={val => removeCidFront(val)}>
-                            <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
-                          </Button>
-                          <Text>
-                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                          </Text>
-                        </CardItem>
-                      </Card>
-                    )}
-                  />
-                </View>
-              )}
-              <View style={{ marginBottom: 20 }}></View>
-              {/* <Button block info style={globalStyles.mb10} onPress={getCidBackPage}>
+                      <DeckSwiper
+                        dataSource={cidFrontImage}
+                        renderItem={image => (
+                          <Card style={{ elevation: 3 }}>
+                            <CardItem cardBody>
+                              <Image
+                                source={{
+                                  uri: image.path,
+                                }}
+                                style={{ height: 250, width: '100%' }}
+                              />
+                            </CardItem>
+                            <CardItem>
+                              <Button transparent small onPress={val => removeCidFront(val)}>
+                                <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                              </Button>
+                              <Text>
+                                {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                              </Text>
+                            </CardItem>
+                          </Card>
+                        )}
+                      />
+                    </View>
+                  )}
+                  <View style={{ marginBottom: 20 }}></View>
+                  {/* <Button block info style={globalStyles.mb10} onPress={getCidBackPage}>
                 <Text>Upload CID (Back Side) *</Text>
               </Button> */}
 
-              {imagesBack.length === 0 ? null : (
-                <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
-                  <Text style={{ alignSelf: 'center', color: 'red' }}>
-                    Swipe to review all images
+                  {imagesBack.length === 0 ? <Fragment></Fragment> : (
+                    <View style={{ height: 300, width: '100%', marginBottom: 20 }}>
+                      <Text style={{ alignSelf: 'center', color: 'red' }}>
+                        Swipe to review all images
               </Text>
-                  <DeckSwiper
-                    dataSource={cidBackImage}
-                    renderItem={image => (
-                      <Card style={{ elevation: 3 }}>
-                        <CardItem cardBody>
-                          <Image
-                            source={{
-                              uri: image.path,
-                            }}
-                            style={{ height: 250, width: '100%' }}
-                          />
-                        </CardItem>
-                        <CardItem>
-                          <Button transparent small onPress={val => removeCidBack(val)}>
-                            <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
-                          </Button>
-                          <Text>
-                            {image.path.substring(image.path.lastIndexOf('/') + 1)}
-                          </Text>
-                        </CardItem>
-                      </Card>
-                    )}
-                  />
-                </View>
-              )}
-              <View style={{ marginBottom: 20 }}></View>
-              <Text style={globalStyles.errorMsg}>
-                {imgFrontReqMsg}
-                {imgBackReqMsg}
-              </Text>
-              <Item style={{ marginBottom: 25 }}></Item>
-              <Button block success onPress={submitInformation} style={globalStyles.mb10}>
-                <Text>Submit For Approval</Text>
-              </Button>
-            </Form>
-          </Content>
+                      <DeckSwiper
+                        dataSource={cidBackImage}
+                        renderItem={image => (
+                          <Card style={{ elevation: 3 }}>
+                            <CardItem cardBody>
+                              <Image
+                                source={{
+                                  uri: image.path,
+                                }}
+                                style={{ height: 250, width: '100%' }}
+                              />
+                            </CardItem>
+                            <CardItem>
+                              <Button transparent small onPress={val => removeCidBack(val)}>
+                                <Icon name="delete" type="AntDesign" style={{ color: 'red' }} />
+                              </Button>
+                              <Text>
+                                {image.path.substring(image.path.lastIndexOf('/') + 1)}
+                              </Text>
+                            </CardItem>
+                          </Card>
+                        )}
+                      />
+                    </View>
+                  )}
+                  <Button block success onPress={submitInformation} style={globalStyles.mb10}>
+                    <Text>Submit For Approval</Text>
+                  </Button>
+                </Form>
+              </Content>
+            </ScrollView>
+          </SafeAreaView>
         </Container>
       );
 };
