@@ -4,7 +4,7 @@ import { Container, Text, Icon, Button } from 'native-base';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 import globalStyle from '../../../styles/globalStyle';
 import Logo from '../../base/header/Logo';
-
+import { Image } from 'react-native'
 export const TransporterDashboard = ({ userState, navigation }) => {
   useEffect(() => {
     if (!userState.logged_in) {
@@ -39,9 +39,9 @@ export const TransporterDashboard = ({ userState, navigation }) => {
             </Button>
           </Col>
           <Col style={globalStyle.homeButton}>
-            <Button vertical transparent style={{alignSelf: 'center'}}
-             onPress={() => navigation.navigate('AddTransport')}>
-            <Icon
+            <Button vertical transparent style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('AddTransport')}>
+              <Icon
                 name="truck-check"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
@@ -58,16 +58,19 @@ export const TransporterDashboard = ({ userState, navigation }) => {
               transparent
               style={{ alignSelf: 'center' }}
               onPress={() => navigation.navigate('TransporterTermsRead')}>
-              <Icon
-                name="dump-truck"
-                type="MaterialCommunityIcons"
-                style={globalStyle.homeIcon}
+              <Image
+                source={require('../../../assets/images/tor_transport.png')}
+                style={{
+                  alignSelf: 'center',
+                  width: 100,
+                  height: 110,
+                }}
               />
-              <Text style={globalStyle.homeIconText}>T O R</Text>
             </Button>
+
           </Col>
           <Col style={globalStyle.homeButton}>
-            <Button vertical transparent style={{alignSelf: 'center'}}>
+            <Button vertical transparent style={{ alignSelf: 'center' }}>
               <Icon
                 name="link-box"
                 type="MaterialCommunityIcons"
