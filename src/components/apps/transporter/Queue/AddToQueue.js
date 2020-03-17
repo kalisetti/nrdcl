@@ -57,6 +57,7 @@ export const AddToQueue = ({
     } else if (!userState.profile_verified) {
       navigation.navigate('UserDetail');
     } else {
+      setLoading(true);
       getTransporterVehicleList();
     }
   }, []);
@@ -86,13 +87,13 @@ export const AddToQueue = ({
           text: 'Cancel',
           style: 'cancel',
         },
-        { text: 'Yes', onPress: () => applyToQueue(vechicle_no) },
+        { text: 'Yes', onPress: () => enterToQueue(vechicle_no) },
       ],
       { cancelable: false },
     );
   }
 
-  const applyToQueue = async (vechicle_no) => {
+  const enterToQueue = async (vechicle_no) => {
     const queueDetail = {
       user: userState.login_id,
       vehicle: vechicle_no
