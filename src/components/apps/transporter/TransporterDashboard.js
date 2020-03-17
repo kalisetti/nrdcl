@@ -23,53 +23,43 @@ export const TransporterDashboard = ({ userState, navigation }) => {
             <Logo />
           </Col>
         </Row>
-        <Row size={1}>
-          <Col style={globalStyle.homeButton}>
+        <Row size={1} >
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('ListTransport')}>
             <Button
               vertical
               transparent
               style={{ alignSelf: 'center' }}
-              onPress={() => navigation.navigate('ListTransport')}>
+              onPress={() => navigation.navigate('ListTransport')}
+            >
               <Icon
                 name="truck-fast"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
+                onPress={() => navigation.navigate('ListTransport')}
               />
-              <Text style={globalStyle.homeIconText}>List Transport</Text>
+              <Text style={globalStyle.homeIconText}
+                onPress={() => navigation.navigate('ListTransport')}>List Transport</Text>
             </Button>
           </Col>
-          <Col style={globalStyle.homeButton}>
-            <Button vertical transparent style={{ alignSelf: 'center' }}
-              onPress={() => navigation.navigate('AddTransport')}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('AddTransport')}>
+            <Button vertical transparent style={{ alignSelf: 'center' }} >
               <Icon
                 name="truck-check"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
+                onPress={() => navigation.navigate('AddTransport')}
               />
-              <Text style={globalStyle.homeIconText}>Add Transport</Text>
+              <Text style={globalStyle.homeIconText}
+                onPress={() => navigation.navigate('AddTransport')}>Add Transport</Text>
             </Button>
           </Col>
         </Row>
 
         <Row size={1}>
-          <Col style={globalStyle.homeButton}>
-            <Button
-              vertical
-              transparent
-              style={{ alignSelf: 'center' }}
-              onPress={() => navigation.navigate('TransporterTermsRead')}>
-              <Image
-                source={require('../../../assets/images/tor_transport.png')}
-                style={{
-                  alignSelf: 'center',
-                  width: 100,
-                  height: 110,
-                }}
-              />
-            </Button>
-
-          </Col>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('AddToQueue')}>
             <Button vertical transparent style={{ alignSelf: 'center' }}>
               <Icon
                 name="link-box"
@@ -77,7 +67,25 @@ export const TransporterDashboard = ({ userState, navigation }) => {
                 style={globalStyle.homeIcon}
                 onPress={() => navigation.navigate('AddToQueue')}
               />
-              <Text style={globalStyle.homeIconText}>Manage Queue</Text>
+              <Text style={globalStyle.homeIconText}
+              onPress={() => navigation.navigate('AddToQueue')}>Manage Queue</Text>
+            </Button>
+          </Col>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('TransporterTermsRead')}>
+            <Button
+              vertical
+              transparent
+              style={{ alignSelf: 'center' }}
+            >
+              <Icon
+                name="forward"
+                type="MaterialCommunityIcons"
+                style={globalStyle.homeIcon}
+                onPress={() => navigation.navigate('TransporterTermsRead')}
+              />
+              <Text style={globalStyle.homeIconText}
+              onPress={() => navigation.navigate('TransporterTermsRead')}>TOR</Text>
             </Button>
           </Col>
         </Row>
