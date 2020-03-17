@@ -83,6 +83,7 @@ export const AddOrder = ({
 
   var commonPoolLabel = 'Common Pool';
   var selfOwnedLabel = 'Self Owned Transport';
+  var privatePool = 'Private Pool';
   var othersLabel = 'Others';
 
   //For proper navigation/auth settings
@@ -346,7 +347,7 @@ export const AddOrder = ({
   };
 
   const getPrivateVehicles = async () => {
-    if (transport_mode === selfOwnedLabel) {
+    if (transport_mode === selfOwnedLabel || transport_mode === privatePool) {
       try {
         const all_its = await callAxios(
           'method/erpnext.crm_utils.get_vehicles',
@@ -429,9 +430,8 @@ export const AddOrder = ({
       const item = {
         vehicle,
         vehicle_capacity:
-          transport_mode == selfOwnedLabel
-            ? vehicle_capacity
-            : vehicle_capacities,
+          transport_mode == (selfOwnedLabel || privatePool) ?
+            vehicle_capacity : vehicle_capacities,
         noof_truck_load,
       };
       addItem(item);
@@ -856,35 +856,34 @@ export const AddOrder = ({
                   Add Qty
           </Text>
 
-                {(transport_mode === commonPoolLabel ||
-                  transport_mode === othersLabel) && (
-                    <View style={globalStyles.dropdown}>
-                      <Picker
-                        mode="dropdown"
-                        selectedValue={vehicle_capacities}
-                        onValueChange={val => {
-                          setVehicle_capacities(val), resetErrorMsg();
-                        }}>
-                        <Picker.Item
-                          label={'Select Vehicle Capacity'}
-                          value={undefined}
-                          key={-1}
-                        />
-                        {all_vehicle_capacities &&
-                          all_vehicle_capacities.map((pur, idx) => {
-                            return (
-                              <Picker.Item
-                                label={pur.name}
-                                value={pur.name}
-                                key={idx}
-                              />
-                            );
-                          })}
-                      </Picker>
-                    </View>
-                  )}
+                {(transport_mode === commonPoolLabel || transport_mode === othersLabel) && (
+                  <View style={globalStyles.dropdown}>
+                    <Picker
+                      mode="dropdown"
+                      selectedValue={vehicle_capacities}
+                      onValueChange={val => {
+                        setVehicle_capacities(val), resetErrorMsg();
+                      }}>
+                      <Picker.Item
+                        label={'Select Vehicle Capacity'}
+                        value={undefined}
+                        key={-1}
+                      />
+                      {all_vehicle_capacities &&
+                        all_vehicle_capacities.map((pur, idx) => {
+                          return (
+                            <Picker.Item
+                              label={pur.name}
+                              value={pur.name}
+                              key={idx}
+                            />
+                          );
+                        })}
+                    </Picker>
+                  </View>
+                )}
 
-                {transport_mode === selfOwnedLabel && (
+                {(transport_mode === selfOwnedLabel || transport_mode === privatePool) && (
                   <View style={globalStyles.dropdown}>
                     <Picker
                       mode="dropdown"

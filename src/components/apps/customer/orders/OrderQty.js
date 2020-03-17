@@ -11,7 +11,7 @@ const OrderQty = ({ data, removeItem, transport_mode }) => {
           borderWidth: 0.2,
           borderColor: 'black',
         }}>
-        {transport_mode === 'Self Owned Transport' ? (
+        {(transport_mode === 'Self Owned Transport' || transport_mode === 'Private Pool') ? (
           <Col size={2} style={globalStyles.colContainer}>
             <Text style={globalStyles.siteItem}>{item.vehicle}</Text>
           </Col>
@@ -34,44 +34,44 @@ const OrderQty = ({ data, removeItem, transport_mode }) => {
   };
 
   return (
-      <Grid
-        style={{
-          width: '100%',
-          marginHorizontal: 0,
-        }}>
-        {data.length == 0 ? (
-         <Fragment></Fragment>
-        ) : (
-            <Row
-              size={1}
-              style={{
-                borderWidth: 0.2,
-                borderColor: 'black',
-                // backgroundColor: 'grey',
-              }}>
-              {transport_mode === 'Self Owned Transport' ? (
-                <Col size={2} style={globalStyles.tableHeaderContainer}>
-                  <Text style={globalStyles.siteItem}>{'Vehicle'}</Text>
-                </Col>
-              ) : (
-                  <Fragment></Fragment>
-                )}
-              <Col size={1} style={globalStyles.tableHeaderContainer}>
-                <Text style={globalStyles.siteItem}>{'Capacity'}</Text>
+    <Grid
+      style={{
+        width: '100%',
+        marginHorizontal: 0,
+      }}>
+      {data.length == 0 ? (
+        <Fragment></Fragment>
+      ) : (
+          <Row
+            size={1}
+            style={{
+              borderWidth: 0.2,
+              borderColor: 'black',
+              // backgroundColor: 'grey',
+            }}>
+            {(transport_mode === 'Self Owned Transport' || transport_mode === 'Private Pool') ? (
+              <Col size={2} style={globalStyles.tableHeaderContainer}>
+                <Text style={globalStyles.siteItem}>{'Vehicle'}</Text>
               </Col>
-              <Col size={1} style={globalStyles.tableHeaderContainer}>
-                <Text style={globalStyles.siteItem}>{'Truck Load'}</Text>
-              </Col>
-              <Col size={1} style={globalStyles.tableHeaderContainer}>
-                <Text style={globalStyles.siteItem}>{'Remove'}</Text>
-              </Col>
-            </Row>
-          )}
+            ) : (
+                <Fragment></Fragment>
+              )}
+            <Col size={1} style={globalStyles.tableHeaderContainer}>
+              <Text style={globalStyles.siteItem}>{'Capacity'}</Text>
+            </Col>
+            <Col size={1} style={globalStyles.tableHeaderContainer}>
+              <Text style={globalStyles.siteItem}>{'Truck Load'}</Text>
+            </Col>
+            <Col size={1} style={globalStyles.tableHeaderContainer}>
+              <Text style={globalStyles.siteItem}>{'Remove'}</Text>
+            </Col>
+          </Row>
+        )}
 
-        {data.map((val, index) => {
-          return <RenderItem item={val} index={index} key={index} />;
-        })}
-      </Grid>
+      {data.map((val, index) => {
+        return <RenderItem item={val} index={index} key={index} />;
+      })}
+    </Grid>
   );
 };
 
