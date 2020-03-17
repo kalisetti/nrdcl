@@ -70,7 +70,7 @@ export const callAxios = (
   if (method.toLowerCase() === 'get') {
     data = null;
   }
-  
+
   return axios({
     url: Config.API_URL + url,
     method: method,
@@ -116,16 +116,10 @@ export const getImages = (
 ) => {
   return async dispatch => {
     try {
-      
       if (Platform.OS === 'android') {
-
-
-
         const perm = await PermissionsAndroid.check(
           PermissionsAndroid.PERMISSIONS.CAMERA,
         );
-
-
         if (perm === false) {
           const granted = await PermissionsAndroid.request(
             PermissionsAndroid.PERMISSIONS.CAMERA,
@@ -172,11 +166,11 @@ export const getImages = (
         includeBase64: true,
         isCamera: true,
         forceJpg: true,
-        compressQuality: 10,
+        compressQuality: 50,
         cropping: cropping,
         width: width,
         height: height,
-        minCompressSize: 20000, //2 MB
+        minCompressSize: 6000, //6 MB
         title: title,
         cropping: true,
       });
