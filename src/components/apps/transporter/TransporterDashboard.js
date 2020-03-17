@@ -76,8 +76,8 @@ export const TransporterDashboard = ({ userState, navigation }) => {
               onPress={() => navigation.navigate('TransporterTermsRead')}
             >
               <Icon
-                name="forward"
-                type="MaterialCommunityIcons"
+                name="payment"
+                type="MaterialIcons"
                 style={globalStyle.homeIcon}
               />
               <Text style={globalStyle.homeIconText}>TOR</Text>

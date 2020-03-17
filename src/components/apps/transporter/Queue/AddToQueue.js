@@ -5,8 +5,6 @@ import {
 } from '../../../../redux/actions/commonActions';
 import { submitApplyForQueue } from '../../../../redux/actions/siteActions';
 import globalStyle from '../../../../styles/globalStyle';
-
-
 import {
   Container,
   Content,
@@ -22,8 +20,6 @@ import {
   Badge,
   Row
 } from 'native-base';
-
-
 import { Alert, Image, ScrollView, RefreshControl, SafeAreaView } from 'react-native'
 import {
   handleError,
@@ -31,7 +27,6 @@ import {
   setLoading,
 } from '../../../../redux/actions/commonActions';
 import SpinnerScreen from '../../../base/SpinnerScreen';
-import NavigationService from '../../../base/navigation/NavigationService';
 
 export const AddToQueue = ({
   userState,
