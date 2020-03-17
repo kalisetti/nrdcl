@@ -84,7 +84,7 @@ export default StyleSheet.create({
   },
 
   tableHeader: {
-    backgroundColor: Config.APP_HEADER_COLOR,
+    backgroundColor: '#5cb85c',
   },
 
   homeIcon: {
