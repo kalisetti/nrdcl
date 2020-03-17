@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
-import {connect} from 'react-redux';
-import {Container, Text, Icon, Button} from 'native-base';
-import {Grid, Col, Row} from 'react-native-easy-grid';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Container, Text, Icon, Button } from 'native-base';
+import { Grid, Col, Row } from 'react-native-easy-grid';
 import globalStyle from '../../../styles/globalStyle';
 import Logo from '../../base/header/Logo';
 
-export const SiteDashboard = ({userState, navigation}) => {
+export const SiteDashboard = ({ userState, navigation }) => {
   useEffect(() => {
     if (!userState.logged_in) {
       navigation.navigate('Auth');
@@ -19,16 +19,17 @@ export const SiteDashboard = ({userState, navigation}) => {
     <Container>
       <Grid>
         <Row size={2}>
-          <Col style={{justifyContent: 'space-evenly'}}>
+          <Col style={{ justifyContent: 'space-evenly' }}>
             <Logo />
           </Col>
         </Row>
         <Row size={1}>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('ListSite')}>
             <Button
               vertical
               transparent
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
               onPress={() => navigation.navigate('ListSite')}>
               <Icon
                 name="list-ol"
@@ -38,11 +39,12 @@ export const SiteDashboard = ({userState, navigation}) => {
               <Text style={globalStyle.homeIconText}>List Site</Text>
             </Button>
           </Col>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('AddSite')}>
             <Button
               vertical
               transparent
-              style={{alignSelf: 'center'}}
+              style={{ alignSelf: 'center' }}
               onPress={() => navigation.navigate('AddSite')}>
               <Icon
                 name="add-to-list"

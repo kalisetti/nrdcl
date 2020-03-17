@@ -24,7 +24,8 @@ export const OrderDashboard = ({ userState, navigation }) => {
           </Col>
         </Row>
         <Row size={1}>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+          onPress={() => navigation.navigate('ListOrder')}>
             <Button
               vertical
               transparent
@@ -38,13 +39,13 @@ export const OrderDashboard = ({ userState, navigation }) => {
               <Text style={globalStyle.homeIconText}>List Order</Text>
             </Button>
           </Col>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+          onPress={() => navigation.navigate('AddOrder')}>
             <Button
               vertical
               transparent
               style={{ alignSelf: 'center' }}
               onPress={() => navigation.navigate('AddOrder')}>
-              {/* onPress={() => navigation.navigate('Payment')}> */}
               <Icon
                 name="add-to-list"
                 type="Entypo"

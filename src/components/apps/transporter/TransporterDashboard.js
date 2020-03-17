@@ -36,23 +36,20 @@ export const TransporterDashboard = ({ userState, navigation }) => {
                 name="truck-fast"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('ListTransport')}
               />
-              <Text style={globalStyle.homeIconText}
-                onPress={() => navigation.navigate('ListTransport')}>List Transport</Text>
+              <Text style={globalStyle.homeIconText} >List Transport</Text>
             </Button>
           </Col>
           <Col style={globalStyle.homeButton}
             onPress={() => navigation.navigate('AddTransport')}>
-            <Button vertical transparent style={{ alignSelf: 'center' }} >
+            <Button vertical transparent style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('AddTransport')}>
               <Icon
                 name="truck-check"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('AddTransport')}
               />
-              <Text style={globalStyle.homeIconText}
-                onPress={() => navigation.navigate('AddTransport')}>Add Transport</Text>
+              <Text style={globalStyle.homeIconText} >Add Transport</Text>
             </Button>
           </Col>
         </Row>
@@ -60,15 +57,14 @@ export const TransporterDashboard = ({ userState, navigation }) => {
         <Row size={1}>
           <Col style={globalStyle.homeButton}
             onPress={() => navigation.navigate('AddToQueue')}>
-            <Button vertical transparent style={{ alignSelf: 'center' }}>
+            <Button vertical transparent style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('AddToQueue')}>
               <Icon
                 name="link-box"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('AddToQueue')}
               />
-              <Text style={globalStyle.homeIconText}
-              onPress={() => navigation.navigate('AddToQueue')}>Manage Queue</Text>
+              <Text style={globalStyle.homeIconText} >Manage Queue</Text>
             </Button>
           </Col>
           <Col style={globalStyle.homeButton}
@@ -77,15 +73,14 @@ export const TransporterDashboard = ({ userState, navigation }) => {
               vertical
               transparent
               style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('TransporterTermsRead')}
             >
               <Icon
                 name="forward"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('TransporterTermsRead')}
               />
-              <Text style={globalStyle.homeIconText}
-              onPress={() => navigation.navigate('TransporterTermsRead')}>TOR</Text>
+              <Text style={globalStyle.homeIconText}>TOR</Text>
             </Button>
           </Col>
         </Row>

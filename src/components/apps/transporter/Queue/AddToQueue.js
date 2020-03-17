@@ -96,7 +96,7 @@ export const AddToQueue = ({
       { cancelable: false },
     );
   }
-  
+
   const applyToQueue = async (vechicle_no) => {
     const queueDetail = {
       user: userState.login_id,
@@ -130,13 +130,13 @@ export const AddToQueue = ({
             <Content>
               {transporterVehicleList.map((vehicleDetail, idx) => (
                 <List>
-                  <ListItem avatar>
+                  <ListItem avatar style={{ flex: 1 }}>
                     <Left>
                       <Image
                         source={require('../../../../assets/images/construction-truck.jpg')}
                         style={{
                           alignSelf: 'center',
-                          width: 50,
+                          width: 40,
                           height: 30,
                           marginBottom: 20,
                         }}
@@ -145,6 +145,20 @@ export const AddToQueue = ({
                     <Body>
                       <Row>
                         <Text>{vehicleDetail.name} ({vehicleDetail.vehicle_capacity} M3)</Text>
+                        {/* {vehicleDetail.vehicle_status === "Queued" && (
+                          <Badge info warning>
+                            <Text>{vehicleDetail.vehicle_status}</Text>
+                          </Badge>)}
+                        {vehicleDetail.vehicle_status === "In Transit" && (
+                          <Badge info danger>
+                            <Text>{vehicleDetail.vehicle_status}</Text>
+                          </Badge>)}
+                        {vehicleDetail.vehicle_status === "Available" && (
+                          <Badge info success>
+                            <Text>{vehicleDetail.vehicle_status}</Text>
+                          </Badge>)} */}
+                      </Row>
+                      <Row>
                         {vehicleDetail.vehicle_status === "Queued" && (
                           <Badge info warning>
                             <Text>{vehicleDetail.vehicle_status}</Text>
@@ -157,11 +171,10 @@ export const AddToQueue = ({
                           <Badge info success>
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
-                      </Row>
-                      <Row>
+
                         {vehicleDetail.vehicle_status === "Queued" && (
                           <Row>
-                            <Text style={{ color: 'green' }}>Token No</Text>
+                            <Text style={{ color: 'green' }} >{'   '}Token</Text>
                             <Badge info>
                               <Text>{vehicleDetail.queue_count}</Text>
                             </Badge>
@@ -173,8 +186,18 @@ export const AddToQueue = ({
                       {vehicleDetail.vehicle_status === "Available" && (
                         <Button iconLeft success small
                           onPress={() => applyForQueue(vehicleDetail.name)}>
-                          <Icon name='navigate' />
+                          {/* <Icon name='navigate' /> */}
                           <Text>Apply</Text>
+                        </Button>)}
+                        {vehicleDetail.vehicle_status === "Queued" && (
+                        <Button iconLeft danger small
+                        >
+                          <Text>Cancel</Text>
+                        </Button>)}
+                        {vehicleDetail.vehicle_status === "In Transit" && (
+                        <Button iconLeft info small
+                        >
+                          <Text>View</Text>
                         </Button>)}
                     </Right>
                   </ListItem>

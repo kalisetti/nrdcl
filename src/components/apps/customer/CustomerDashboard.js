@@ -24,7 +24,8 @@ export const CustomerDashboard = ({ userState, navigation }) => {
           </Col>
         </Row>
         <Row size={1}>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('SiteDashboard')}>
             <Button
               vertical
               transparent
@@ -34,43 +35,44 @@ export const CustomerDashboard = ({ userState, navigation }) => {
               <Text style={globalStyle.homeIconText}>Manage Site</Text>
             </Button>
           </Col>
-          <Col style={globalStyle.homeButton}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('VehicleDashboard')}>
             <Button
               vertical
               transparent
               style={{ alignSelf: 'center' }}
-              onPress={() => navigation.navigate('VehicleDashboard')}>
+              onPress={() => navigation.navigate('VehicleDashboard')}
+            >
               <Icon
                 name="dump-truck"
                 type="MaterialCommunityIcons"
-                // name="commute"
-                // type="Material"
                 style={globalStyle.homeIcon}
               />
-              <Text style={globalStyle.homeIconText}>Self Vehicle</Text>
+              <Text style={globalStyle.homeIconText} >Self Vehicle</Text>
             </Button>
           </Col>
         </Row>
         <Row size={1}>
-          <Col style={globalStyle.homeButton}>
-            <Button vertical transparent style={{ alignSelf: 'center' }}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('OrderDashboard')}>
+            <Button vertical transparent style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('OrderDashboard')}>
               <Icon
                 name="payment"
                 type="MaterialIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('OrderDashboard')}
-              // onPress={() => navigation.navigate('Payment')}
               />
               <Text style={globalStyle.homeIconText}>Manage Orders</Text>
             </Button>
           </Col>
-          <Col style={globalStyle.homeButton}>
-            <Button vertical transparent style={{ alignSelf: 'center' }}>
+          <Col style={globalStyle.homeButton}
+            onPress={() => navigation.navigate('DeliveryList')}>
+            <Button vertical transparent style={{ alignSelf: 'center' }}
+              onPress={() => navigation.navigate('DeliveryList')}>
               <Icon
                 name="dump-truck"
                 type="MaterialCommunityIcons"
                 style={globalStyle.homeIcon}
-                onPress={() => navigation.navigate('DeliveryList')}
               />
               <Text style={globalStyle.homeIconText}>Delivery</Text>
             </Button>
