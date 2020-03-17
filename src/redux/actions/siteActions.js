@@ -49,6 +49,8 @@ export const startSiteRegistration = (site_info, images, isBuilding) => {
           {},
           site_info,
         );
+
+        console.log(res)
         const docname = res.data.data.name;
         const doctype = res.data.data.doctype;
 
@@ -426,18 +428,38 @@ export const confirmRecived = data => {
   };
 };
 
-export const submitApplyForQueue = (queueDetail) => { 
+export const submitApplyForQueue = (queueDetail) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
-      let res = await callAxios(
+       await callAxios(
         'resource/Load Request/',
         'post',
         {},
         queueDetail
       );
-       dispatch(setLoading(false));  
-      return res;     
+      dispatch(setLoading(false));
+      dispatch(showToast('Your vehicle has been successfully applied to the queue ', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+export const submitCancelFromQueue = (user, vehicle) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      await callAxios(
+        'method/erpnext.crm_api.cancel_load_request',
+        'post',
+        {
+          user,
+          vehicle,
+        },
+      );
+      dispatch(setLoading(false));
+      dispatch(showToast('Cancelled successfully ', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }

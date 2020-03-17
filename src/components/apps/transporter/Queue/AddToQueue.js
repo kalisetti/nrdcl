@@ -4,6 +4,7 @@ import {
   callAxios,
 } from '../../../../redux/actions/commonActions';
 import { submitApplyForQueue } from '../../../../redux/actions/siteActions';
+import { submitCancelFromQueue } from '../../../../redux/actions/siteActions';
 import globalStyle from '../../../../styles/globalStyle';
 import {
   Container,
@@ -33,7 +34,8 @@ export const AddToQueue = ({
   commonState,
   navigation,
   setLoading,
-  submitApplyForQueue
+  submitApplyForQueue,
+  submitCancelFromQueue
 }) => {
   //state info for forms
   const [transporterVehicleList, setTransporterVehicleList] = useState([]);
@@ -78,7 +80,31 @@ export const AddToQueue = ({
     }
   };
 
+  const cancelFromQueue = async (vechicle_no) => {
+    Alert.alert(
+      'Confirmation',
+      'Are you sure you want to cancel vehicle ' + vechicle_no + ' from the queue?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Yes', onPress: () => {
+            submitCancelFromQueue(userState.login_id, vechicle_no);
+            getTransporterVehicleList();
+          }
+        },
+      ],
+      { cancelable: false },
+    );
+  }
+
   const applyForQueue = async (vechicle_no) => {
+    const queueDetail = {
+      user: userState.login_id,
+      vehicle: vechicle_no
+    }
     Alert.alert(
       'Confirmation',
       'Are you sure you want to apply vehicle ' + vechicle_no + ' to the queue?',
@@ -87,30 +113,15 @@ export const AddToQueue = ({
           text: 'Cancel',
           style: 'cancel',
         },
-        { text: 'Yes', onPress: () => enterToQueue(vechicle_no) },
+        {
+          text: 'Yes', onPress: () => {
+            submitApplyForQueue(queueDetail);
+            getTransporterVehicleList();
+          }
+        },
       ],
       { cancelable: false },
     );
-  }
-
-  const enterToQueue = async (vechicle_no) => {
-    const queueDetail = {
-      user: userState.login_id,
-      vehicle: vechicle_no
-    }
-    const res = await submitApplyForQueue(queueDetail);
-    if (res.status == 200) {
-      Alert.alert(
-        //title
-        'My Resources',
-        //body
-        'Your vehicle has been successfully applied to the queue',
-        [
-          { text: 'OK', onPress: () => getTransporterVehicleList() },
-        ],
-        { cancelable: false }
-      );
-    }
   }
 
   return commonState.isLoading ? (
@@ -160,7 +171,7 @@ export const AddToQueue = ({
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
                         {vehicleDetail.vehicle_status === "In Transit" && (
-                          <Badge info danger>
+                          <Badge info primary>
                             <Text>{vehicleDetail.vehicle_status}</Text>
                           </Badge>)}
                         {vehicleDetail.vehicle_status === "Available" && (
@@ -185,12 +196,13 @@ export const AddToQueue = ({
                           {/* <Icon name='navigate' /> */}
                           <Text>Apply</Text>
                         </Button>)}
-                        {vehicleDetail.vehicle_status === "Queued" && (
+                      {vehicleDetail.vehicle_status === "Queued" && (
                         <Button iconLeft danger small
+                          onPress={() => cancelFromQueue(vehicleDetail.name)}
                         >
                           <Text>Cancel</Text>
                         </Button>)}
-                        {vehicleDetail.vehicle_status === "In Transit" && (
+                      {vehicleDetail.vehicle_status === "In Transit" && (
                         <Button iconLeft info small
                         >
                           <Text>View</Text>
@@ -215,7 +227,8 @@ const mapDispatchToProps = {
   handleError,
   getImages,
   setLoading,
-  submitApplyForQueue
+  submitApplyForQueue,
+  submitCancelFromQueue
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddToQueue);
