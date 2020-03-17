@@ -35,7 +35,7 @@ export const startTransportRegistration = (vehicle_info, bluebook = []) => {
           await attachFile(doctype, docname, image);
         });
 
-        NavigationService.navigate('TransportDashboard');
+        NavigationService.navigate('TransporterDashboard');
         dispatch(setLoading(false));
         dispatch(showToast('Transport Registration request sent, please wait for approval', 'success'));
       }
