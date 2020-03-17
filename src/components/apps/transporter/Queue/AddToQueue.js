@@ -124,6 +124,20 @@ export const AddToQueue = ({
     );
   }
 
+  const showCustomerDetail = async (location, customer_name, contact_mobile, delivery_note) => {
+    Alert.alert(
+      'Customer Detail',
+      'Customer Name: ' + customer_name + '\nMobile No: ' + contact_mobile +
+      '\nLocation: ' + location + '\nDN No: ' + delivery_note,
+      [
+        {
+          text: 'OK',
+        },
+      ],
+      { cancelable: false },
+    );
+  }
+
   return commonState.isLoading ? (
     <SpinnerScreen />
   ) : (
@@ -152,18 +166,6 @@ export const AddToQueue = ({
                     <Body>
                       <Row>
                         <Text>{vehicleDetail.name} ({vehicleDetail.vehicle_capacity} M3)</Text>
-                        {/* {vehicleDetail.vehicle_status === "Queued" && (
-                          <Badge info warning>
-                            <Text>{vehicleDetail.vehicle_status}</Text>
-                          </Badge>)}
-                        {vehicleDetail.vehicle_status === "In Transit" && (
-                          <Badge info danger>
-                            <Text>{vehicleDetail.vehicle_status}</Text>
-                          </Badge>)}
-                        {vehicleDetail.vehicle_status === "Available" && (
-                          <Badge info success>
-                            <Text>{vehicleDetail.vehicle_status}</Text>
-                          </Badge>)} */}
                       </Row>
                       <Row>
                         {vehicleDetail.vehicle_status === "Queued" && (
@@ -193,7 +195,6 @@ export const AddToQueue = ({
                       {vehicleDetail.vehicle_status === "Available" && (
                         <Button iconLeft success small
                           onPress={() => applyForQueue(vehicleDetail.name)}>
-                          {/* <Icon name='navigate' /> */}
                           <Text>Apply</Text>
                         </Button>)}
                       {vehicleDetail.vehicle_status === "Queued" && (
@@ -205,7 +206,13 @@ export const AddToQueue = ({
                       {vehicleDetail.vehicle_status === "In Transit" && (
                         <Button iconLeft info small
                         >
-                          <Text>View</Text>
+                          <Text
+                            onPress={() => showCustomerDetail( 
+                              vehicleDetail.location,
+                              vehicleDetail.customer_name,
+                              vehicleDetail.contact_mobile,
+                              vehicleDetail.delivery_note
+                            )}>View</Text>
                         </Button>)}
                     </Right>
                   </ListItem>
