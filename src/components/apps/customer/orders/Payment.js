@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { View, Image } from 'react-native';
 import Dialog from 'react-native-dialog';
+import Config from 'react-native-config';
 import {
   Container,
   Content,
@@ -247,6 +248,7 @@ export const Payment = ({
                   keyboardType="number-pad"
                   onChangeText={val => setremitter_acc_no(val)}
                   placeholder="Remitter Account No"
+                  placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                 />
               </Item>
             )}
@@ -332,6 +334,7 @@ export const Payment = ({
                 <Dialog.Title>Please enter your OTP</Dialog.Title>
                 <Dialog.Input
                   placeholder="Please enter your OTP"
+                  placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                   wrapperStyle={globalStyles.dialogueInput}
                   onChangeText={val => setOTP(val)}
                   keyboardType="number-pad"></Dialog.Input>

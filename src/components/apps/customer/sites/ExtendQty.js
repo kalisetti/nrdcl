@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { View, SafeAreaView, ScrollView} from 'react-native';
+import { View, SafeAreaView, ScrollView } from 'react-native';
+import Config from 'react-native-config';
 import {
   Container,
   Form,
@@ -16,7 +17,7 @@ import {
 import SpinnerScreen from '../../../base/SpinnerScreen';
 import { startQtyExtension } from '../../../../redux/actions/siteActions';
 import { handleError, getImages } from '../../../../redux/actions/commonActions';
-import globalStyles from '../../../../styles/globalStyle'; 
+import globalStyles from '../../../../styles/globalStyle';
 export const ExtendQty = ({
   userState,
   commonState,
@@ -119,6 +120,7 @@ export const ExtendQty = ({
                   width="100%"
                   bordered
                   placeholder="Remarks"
+                  placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                   value={remarks}
                   onChangeText={val => setRemarks(val)}
                   style={globalStyles.mb10}

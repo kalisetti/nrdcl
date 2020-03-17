@@ -4,6 +4,7 @@ import DatePicker from 'react-native-datepicker';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps';
 import { View, Image, SafeAreaView, ScrollView } from 'react-native';
 import moment from 'moment';
+import Config from 'react-native-config';
 import {
   Container,
   Input,
@@ -250,6 +251,7 @@ export const AddSite = ({
                       value={approval_no}
                       onChangeText={val => setapproval_no(val)}
                       placeholder="Construction Approval No."
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 
@@ -259,6 +261,7 @@ export const AddSite = ({
                         value={number_of_floors}
                         onChangeText={val => setnumber_of_floors(val)}
                         placeholder="Number of Floors"
+                        placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                       />
                     </Item>
                   ) : (<Fragment></Fragment>)}
@@ -269,6 +272,7 @@ export const AddSite = ({
                         value={plot_no}
                         onChangeText={val => setplot_no(val)}
                         placeholder="Plot/Thram No."
+                        placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                       />
                     </Item>
                   ) : (<Fragment></Fragment>)}
@@ -321,11 +325,13 @@ export const AddSite = ({
                       rowSpan={3}
                       onChangeText={val => setlocation(val)}
                       placeholder="Location (Specific Location of Construction Site)"
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 
                   <Item regular style={globalStyles.mb10}>
                     <Input
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                       value={remarks}
                       onChangeText={val => setremarks(val)}
                       placeholder="Remarks"

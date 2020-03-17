@@ -18,7 +18,7 @@ import SpinnerScreen from '../../../base/SpinnerScreen';
 import { startUpdateDriverDetailSelf } from '../../../../redux/actions/siteActions';
 import { handleError, setLoading } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
-
+import Config from 'react-native-config';
 
 export const UpdateDriver = ({
   userState,
@@ -102,6 +102,7 @@ export const UpdateDriver = ({
                   value={remarks}
                   onChangeText={val => setremarks(val)}
                   style={globalStyles.mb10}
+                  placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                 />
 
                 <Button

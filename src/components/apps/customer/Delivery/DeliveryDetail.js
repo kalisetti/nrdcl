@@ -2,6 +2,7 @@ import React, { useEffect, useState, Fragment } from 'react';
 import { connect } from 'react-redux';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import { SafeAreaView, ScrollView } from 'react-native';
+import Config from 'react-native-config';
 import {
     Container,
     Text,
@@ -112,6 +113,7 @@ export const OrderDetail = ({
                                                     value={remarks}
                                                     onChangeText={val => setremarks(val)}
                                                     placeholder="Remarks"
+                                                    placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                                                 />
                                             </Item>
                                         ) : (

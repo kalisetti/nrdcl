@@ -124,7 +124,7 @@ const SiteItem = ({
       setErrorMsg('Need to agree self owned terms and conditions');
     } else if (expected_quantity === undefined) {
       setErrorMsg('Total requirement in M3 is required');
-    }  else if (expected_quantity <  1) {
+    } else if (expected_quantity < 1) {
       setexpected_quantity('');
       setErrorMsg('Total requirement in M3 cannot be zero');
     } else {
@@ -205,6 +205,7 @@ const SiteItem = ({
             value={uom}
             onChangeText={val => setuom(val)}
             placeholder="Unit of Measurement"
+            placeholderTextColor={Config.PLACE_HOLDER_COLOR}
           />
         </Item>
 
@@ -462,6 +463,7 @@ const SiteItem = ({
             }}
             placeholder="Total requirement in M3"
             keyboardType="numeric"
+            placeholderTextColor={Config.PLACE_HOLDER_COLOR}
           />
         </Item>
         <Item regular style={globalStyles.mb10}>
@@ -469,6 +471,7 @@ const SiteItem = ({
             value={remarks}
             onChangeText={val => setremarks(val)}
             placeholder="Remarks"
+            placeholderTextColor={Config.PLACE_HOLDER_COLOR}
           />
         </Item>
         <Container

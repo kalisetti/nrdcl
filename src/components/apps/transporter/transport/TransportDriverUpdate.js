@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import { SafeAreaView, ScrollView } from 'react-native';
-
 import {
   Container,
   Form,
@@ -18,6 +17,7 @@ import SpinnerScreen from '../../../base/SpinnerScreen';
 import { startUpdateDriverDetail } from '../../../../redux/actions/siteActions';
 import { setLoading } from '../../../../redux/actions/commonActions';
 import globalStyles from '../../../../styles/globalStyle';
+import Config from 'react-native-config';
 
 export const TransportDriverUpdate = ({
   userState,
@@ -74,12 +74,12 @@ export const TransportDriverUpdate = ({
             <Content style={globalStyles.content}>
               <Form>
                 <Item regular inlineLabel style={globalStyles.mb10}>
-                  <Label>Vehicle No</Label>
+                  <Label>Vehicle No:</Label>
                   <Input disabled value={vehicle} />
                 </Item>
 
                 <Item regular inlineLabel style={globalStyles.mb10}>
-                  <Label>Driver Name</Label>
+                  <Label>Driver Name:</Label>
                   <Input
                     value={driver_name}
                     onChangeText={val => setdriver_name(val)}
@@ -87,7 +87,7 @@ export const TransportDriverUpdate = ({
                 </Item>
 
                 <Item regular inlineLabel style={globalStyles.mb10}>
-                  <Label>Driver Mobile No</Label>
+                  <Label>Driver Mobile No:</Label>
                   <Input
                     keyboardType='numeric'
                     value={String(driver_mobile_no)}
@@ -99,10 +99,11 @@ export const TransportDriverUpdate = ({
                   rowSpan={3}
                   width="100%"
                   bordered
-                  placeholder="Remarks"
+                  placeholder="Remark"
                   value={remarks}
                   onChangeText={val => setremarks(val)}
                   style={globalStyles.mb10}
+                  placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                 />
 
                 <Button
@@ -113,7 +114,7 @@ export const TransportDriverUpdate = ({
                 </Button>
                 <Button
                   warning
-                  style={[globalStyles.mb50, globalStyles.button]}
+                  style={[globalStyles.mb10, globalStyles.button]}
                   onPress={() => navigation.goBack()}>
                   <Icon name="ios-arrow-back" />
                   <Text>Go Back</Text>

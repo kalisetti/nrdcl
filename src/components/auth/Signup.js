@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Dialog from "react-native-dialog";
+import Config from 'react-native-config';
 import {
   Container,
   Text,
@@ -41,14 +42,6 @@ export const Signup = ({
   const [email, setEmail] = useState('');
   const [pin, setPin] = useState('');
   const [showDialog, setshowDialog] = useState(false);
-
-  const [fullNameReqMsg, setFullNameReqMsg] = useState('');
-  const [fullNameLenMsg, setFullNameLenMsg] = useState('');
-  const [cidReqMsg, setCidReqMsg] = useState('');
-  const [mobilePriReqMsg, setMobilePriReqMsg] = useState('');
-  const [mobilePriLenMsg, setMobilePriLenMsg] = useState('');
-  const [mobileAltLenMsg, setMobileAltLenMsg] = useState('');
-
   const registerUser = () => {
     startRegister(fullname, loginid, mobileno, alternate_mobile_no, email, pin);
   };
@@ -78,10 +71,6 @@ export const Signup = ({
     else if ((mobileno.trim().length < 8) || (mobileno.trim().length > 8)) {
       showToast('Mobile number should have eight digits');
     }
-    // //Mobile number primary BMobile and Tcell validation
-    //  else if ((mobileno.substring(0, 2)!=='17')  {
-    //   setMobilePriReqMsg('B mobile number starts from 17 or 16 and TCell number starts from 77');
-    // }
     // Mobile number alternative length validation
     else if ((alternate_mobile_no.trim() !== '') && ((alternate_mobile_no.trim().length < 8)
       || (alternate_mobile_no.trim().length > 8))) {
@@ -93,7 +82,6 @@ export const Signup = ({
       if (res.status == 200) {
         setshowDialog(true);
       };
-
     }
   };
 
@@ -109,9 +97,10 @@ export const Signup = ({
                   <Icon name="person" />
                   <Input
                     value={fullname}
-                    onChangeText={usr => { setFullname(usr), setFullNameReqMsg(''), setFullNameLenMsg('') }
+                    onChangeText={usr => { setFullname(usr) }
                     }
                     placeholder="Full Name *"
+                    placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                   />
                 </Item>
 
@@ -119,8 +108,9 @@ export const Signup = ({
                   <Icon name="lock" />
                   <Input
                     value={loginid}
-                    onChangeText={usr => { setLoginid(usr), setCidReqMsg('') }}
+                    onChangeText={usr => { setLoginid(usr) }}
                     placeholder="CID Number *"
+                    placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     keyboardType={'numeric'}
                   />
                 </Item>
@@ -129,11 +119,9 @@ export const Signup = ({
                   <Icon name="call" />
                   <Input
                     value={mobileno}
-                    onChangeText={usr => {
-                      setMobileno(usr), setMobilePriReqMsg('')
-                        , setMobilePriLenMsg('')
-                    }}
+                    onChangeText={usr => { setMobileno(usr) }}
                     placeholder="Mobile No *"
+                    placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     keyboardType={'numeric'}
                   />
                 </Item>
@@ -142,8 +130,9 @@ export const Signup = ({
                   <Icon name="call" />
                   <Input
                     value={alternate_mobile_no}
-                    onChangeText={usr => { setAlternate_mobile_no(usr), setMobileAltLenMsg('') }}
+                    onChangeText={usr => { setAlternate_mobile_no(usr) }}
                     placeholder="Alternate Mobile No"
+                    placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     keyboardType={'numeric'}
                   />
                 </Item>
@@ -154,6 +143,7 @@ export const Signup = ({
                     value={email}
                     onChangeText={usr => setEmail(usr)}
                     placeholder="Email"
+                    placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                   />
                 </Item>
 
@@ -171,7 +161,9 @@ export const Signup = ({
                 <View>
                   <Dialog.Container visible={showDialog}>
                     <Dialog.Title>Please enter your PIN</Dialog.Title>
-                    <Dialog.Input placeholder='Please enter PIN'
+                    <Dialog.Input
+                      placeholder='Please enter PIN'
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                       wrapperStyle={globalStyles.dialogueInput}
                       onChangeText={usr => setPin(usr)}
                       secureTextEntry={true}
@@ -191,22 +183,7 @@ export const Signup = ({
                   <Text>Back to Login</Text>
                   <Icon name="arrow-round-back" />
                 </Button>
-
-                <Item>
-                  <Text style={globalStyles.italicFont}>All the fields in (*) are required</Text>
-                  <Input disabled />
-                </Item>
-
-                <View>
-                  <Text style={globalStyles.errorMsg}>
-                    {fullNameReqMsg}
-                    {fullNameLenMsg}
-                    {cidReqMsg}
-                    {mobilePriReqMsg}
-                    {mobilePriLenMsg}
-                    {mobileAltLenMsg}
-                  </Text>
-                </View>
+                <Text style={globalStyles.italicFont}>All the fields in (*) are required</Text>
               </Form>
             </Content>
           </ScrollView>

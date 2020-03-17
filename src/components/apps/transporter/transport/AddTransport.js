@@ -24,6 +24,7 @@ import {
 import { startTransportRegistration } from '../../../../redux/actions/transportActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
+import Config from 'react-native-config';
 
 export const AddTransport = ({
   userState,
@@ -111,7 +112,8 @@ export const AddTransport = ({
                     <Input
                       value={vehicle_no}
                       onChangeText={val => setVehicle_no(val)}
-                      placeholder="Vehicle No."
+                      placeholder="Vehicle No"
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 
@@ -139,6 +141,7 @@ export const AddTransport = ({
                       value={drivers_name}
                       onChangeText={val => setdrivers_name(val)}
                       placeholder="Driver Name"
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
                   <Item regular style={globalStyles.mb10}>
@@ -147,6 +150,7 @@ export const AddTransport = ({
                       onChangeText={val => setcontact_no(val)}
                       placeholder="Driver Mobile No"
                       keyboardType='numeric'
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 

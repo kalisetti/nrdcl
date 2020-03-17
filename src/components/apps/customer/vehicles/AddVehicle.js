@@ -27,6 +27,7 @@ import {
 import { startVehicleRegistration } from '../../../../redux/actions/siteActions';
 import globalStyles from '../../../../styles/globalStyle';
 import SpinnerScreen from '../../../base/SpinnerScreen';
+import Config from 'react-native-config';
 
 export const AddVehicle = ({
   userState,
@@ -150,7 +151,8 @@ export const AddVehicle = ({
                     <Input
                       value={vehicle_no}
                       onChangeText={val => setVehicle_no(val)}
-                      placeholder="Vehicle No."
+                      placeholder="Vehicle No"
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 
@@ -194,6 +196,7 @@ export const AddVehicle = ({
                       value={drivers_name}
                       onChangeText={val => setdrivers_name(val)}
                       placeholder="Driver Name"
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 
@@ -203,6 +206,7 @@ export const AddVehicle = ({
                       onChangeText={val => setcontact_no(val)}
                       placeholder="Driver Mobile No"
                       keyboardType="numeric"
+                      placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                     />
                   </Item>
 
@@ -256,6 +260,7 @@ export const AddVehicle = ({
                           onChangeText={val => setdriver_cid(val)}
                           placeholder="Spouse CID Number"
                           keyboardType="numeric"
+                          placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                         />
                       </Item>
 

@@ -914,6 +914,7 @@ export const AddOrder = ({
                           disabled
                           value={vehicle_capacity}
                           placeholder="Capacity"
+                          placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                         />
                       </Item>
                     )}
@@ -924,8 +925,8 @@ export const AddOrder = ({
                         onChangeText={val => {
                           settruckload(val), checkNumeric(val), setTruckLoadErrorMsg('');
                         }}
-
                         placeholder="No of Truck Load"
+                        placeholderTextColor={Config.PLACE_HOLDER_COLOR}
                         keyboardType={'numeric'}
                       />
                     </Item>
