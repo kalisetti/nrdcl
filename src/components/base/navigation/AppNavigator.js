@@ -270,12 +270,11 @@ const AppNavigator = createStackNavigator(
     AddToQueue: {
       screen: AddToQueue,
       navigationOptions: {
-        title: 'Apply to Queue',
+        title: 'Manage Queue',
       },
     }, 
   },
 
-  
   {
     initialRouteName: 'UserDetail',
     defaultNavigationOptions: {
