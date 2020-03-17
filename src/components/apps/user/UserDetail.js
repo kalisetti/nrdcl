@@ -149,13 +149,13 @@ const UserDetail = ({
             <ScrollView>
               <Content style={globalStyles.content}>
                 <Form>
-                  <Text>Full Name :<Text style={globalStyles.label}> {fullname}</Text></Text>
+                  <Text>Full Name:<Text style={globalStyles.label}> {fullname}</Text></Text>
                   <Text></Text>
-                  <Text >CID Number : <Text style={globalStyles.label}>{cid}</Text></Text>
+                  <Text >CID Number: <Text style={globalStyles.label}>{cid}</Text></Text>
                   <Text></Text>
 
                   <Button block info style={globalStyles.mb10} onPress={getCidFrontPage}>
-                    <Text>Upload CID COPY</Text>
+                    <Text>Upload CID Copy</Text>
                   </Button>
 
                   {imagesFront.length === 0 ? <Fragment></Fragment> : (
