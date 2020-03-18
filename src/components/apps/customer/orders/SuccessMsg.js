@@ -1,12 +1,10 @@
 import React from 'react';
 import { Container, Content, Text, Body, Card, CardItem, View, Button, Icon } from 'native-base';
 import globalStyle from '../../../../styles/globalStyle';
-import Moment from 'moment';
 
 export const SuccessMsg = ({
     navigation,
 }) => {
-
     return (
         <Container style={{ paddingTop: 70 }}>
             <Content padder>
@@ -28,21 +26,19 @@ export const SuccessMsg = ({
                             <Text style={{ alignSelf: 'center' }}>Thank you</Text>
                         </View>
                     </CardItem>
+                </Card>
+                <View style={{ marginTop: 15 }}>
                     <Button
                         block
-                        success
+                        warning
                         iconLeft
                         style={globalStyle.mb10}
                         onPress={() => navigation.navigate('OrderDashboard')}>
                         <Icon name="arrow-round-back" />
                         <Text>Go Back</Text>
-
                     </Button>
-                </Card>
-
-
+                </View>
             </Content>
-
         </Container>
     );
 };
