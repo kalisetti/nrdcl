@@ -252,7 +252,7 @@ export const Payment = ({
                 />
               </Item>
             )}
-            {remitter_acc_no && (
+            {remitter_acc_no !== undefined && (
               <Button
                 block
                 success
