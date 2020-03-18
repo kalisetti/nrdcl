@@ -427,11 +427,18 @@ export const AddOrder = ({
       settruckload('');
     } else {
       resetErrorMsg();
+      var load_capacity;
+      if (transport_mode === selfOwnedLabel) {
+        load_capacity = vehicle_capacity;
+      } else if (transport_mode === privatePool) {
+        load_capacity = vehicle_capacity;
+      }
+      else {
+        load_capacity = vehicle_capacities;
+      }
       const item = {
         vehicle,
-        vehicle_capacity:
-          transport_mode == (selfOwnedLabel || privatePool) ?
-            vehicle_capacity : vehicle_capacities,
+        vehicle_capacity: load_capacity,
         noof_truck_load,
       };
       addItem(item);
