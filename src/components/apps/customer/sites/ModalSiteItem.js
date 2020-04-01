@@ -42,7 +42,7 @@ const SiteItem = ({
   const [commonPoolTermsModal, setCommonPoolTermsModal] = useState(false);
   const [agreeSelfOnwedTerms, setAgreeSelfOnwedTerms] = useState(false);
   const [selfOwnedTermsModal, setSelfOwnedTermsModal] = useState(false);
-
+  const [allTransportMode, setAllTransportMode] = useState([]);
   var commonPool = 'Common Pool';
   var selfOwned = 'Self Owned Transport';
   var othersLabel = 'Others';
@@ -66,6 +66,12 @@ const SiteItem = ({
     } else {
       setcommon_pool(0);
     }
+  }, [branch]);
+
+  useEffect(() => {
+    settransport_mode(undefined);
+    setAllTransportMode([]);
+    getAllTransportMode();
   }, [branch]);
 
   const getAllBranch = async sub_group => {
@@ -166,6 +172,25 @@ const SiteItem = ({
     }
   };
 
+
+  const getAllTransportMode = async () => {
+    if (branch === undefined) {
+    } else {
+      try {
+        const res = await callAxios(
+          'method/erpnext.crm_utils.get_transport_mode',
+          'post',
+          {
+            branch,
+          },
+        );
+        setAllTransportMode(res.data.message);
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
   return (
     <Modal
       animationType="slide"
@@ -231,168 +256,28 @@ const SiteItem = ({
         )}
 
         {branch && (
-          // <Item regular style={globalStyles.mb10}>
-          //   {common_pool ? (
-          //     <Picker
-          //       mode="dropdown"
-          //       selectedValue={transport_mode}
-          //       onValueChange={val => settransport_mode(val)}>
-          //       <Picker.Item
-          //         label={'Select Transport Mode'}
-          //         value={undefined}
-          //         key={-1}
-          //       />
-          //       <Picker.Item
-          //         label={commonPool}
-          //         value={commonPool}
-          //         key={0}
-          //       />
-          //       <Picker.Item
-          //         label={selfOwned}
-          //         value={selfOwned}
-          //         key={1}
-          //       />
-          //     </Picker>
-          //   ) : (
-          //       <Picker
-          //         mode="dropdown"
-          //         selectedValue={transport_mode}
-          //         onValueChange={val => settransport_mode(val)}>
-          //         <Picker.Item
-          //           label={'Select Transport Mode'}
-          //           value={undefined}
-          //           key={-1}
-          //         />
-          //         <Picker.Item
-          //           label={selfOwned}
-          //           value={selfOwned}
-          //           key={0}
-          //         />
-          //       </Picker>
-          //     )}
-          // </Item>
           <View style={globalStyles.dropdown}>
-            {/* to select self owned */}
-            {self_owned === 1 && common_pool !== 1 && others !== 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={selfOwned} value={selfOwned} key={0} />
-              </Picker>
-            )}
-            {/* to select common pool */}
-            {self_owned !== 1 && common_pool === 1 && others !== 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={commonPool} value={commonPool} key={0} />
-              </Picker>
-            )}
-
-            {/* to select Others */}
-            {self_owned !== 1 && common_pool !== 1 && others == 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={othersLabel} value={othersLabel} key={0} />
-              </Picker>
-            )}
-
-            {/* to select common pool and self owned */}
-            {self_owned === 1 && common_pool === 1 && others !== 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={selfOwned} value={selfOwned} key={0} />
-                <Item label={commonPool} value={commonPool} key={1} />
-              </Picker>
-            )}
-            {/* to select common pool and Other */}
-            {self_owned !== 1 && common_pool === 1 && others === 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={commonPool} value={commonPool} key={0} />
-                <Item label={othersLabel} value={othersLabel} key={1} />
-              </Picker>
-            )}
-
-            {/* to select self owned and Others */}
-            {self_owned === 1 && common_pool !== 1 && others === 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={selfOwned} value={selfOwned} key={0} />
-                <Item label={othersLabel} value={othersLabel} key={1} />
-              </Picker>
-            )}
-
-            {/* to select all three */}
-            {self_owned === 1 && common_pool === 1 && others === 1 && (
-              <Picker
-                mode="dropdown"
-                selectedValue={transport_mode}
-                onValueChange={val => {
-                  settransport_mode(val);
-                }}>
-                <Item
-                  label={'Select Transport Mode'}
-                  value={undefined}
-                  key={-1}
-                />
-                <Item label={selfOwned} value={selfOwned} key={0} />
-                <Item label={commonPool} value={commonPool} key={1} />
-                <Item label={othersLabel} value={othersLabel} key={2} />
-              </Picker>
-            )}
+            <Picker
+              mode="dropdown"
+              selectedValue={transport_mode}
+              onValueChange={val => {
+                settransport_mode(val);
+              }}>
+              <Picker.Item
+                label={'Select Transport Mode'}
+                value={undefined}
+                key={-1}
+              />
+              {allTransportMode && allTransportMode.map((pur, idx) => {
+                return (
+                  <Picker.Item
+                    label={pur}
+                    value={pur}
+                    key={idx}
+                  />
+                );
+              })}
+            </Picker>
           </View>
         )}
 
