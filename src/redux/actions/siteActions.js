@@ -466,17 +466,14 @@ export const submitCancelFromQueue = (user, vehicle) => {
   };
 };
 
-export const cancelOrder = (user, order_no) => {
-  alert(user)
+export const cancelOrder = (customer_order) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
       await callAxios(
-        'method/erpnext.crm_api.cancel_order',
+        'method/erpnext.crm_api.cancel_customer_order',
         'post',
-        {
-          order_no,
-        },
+        { customer_order },
       );
       dispatch(setLoading(false));
       dispatch(showToast('Cancelled successfully. You may reorder', 'success'));

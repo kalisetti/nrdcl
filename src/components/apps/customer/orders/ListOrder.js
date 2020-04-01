@@ -119,15 +119,8 @@ export const ListOrder = ({
                   paddingLeft: 5,
                   width: 200
                 }}
-                onPress={() => {
-                  toggleAlert(),
-                    setOrderNo(item.name);
-                }}>
-                <Icon
-                  name="delete"
-                  type="AntDesign"
-                  style={{ color: 'white' }}
-                />
+                onPress={() => { toggleAlert(), setOrderNo(item.name) }}>
+                <Icon name="delete" type="AntDesign" style={{ color: 'white' }} />
                 <Text>Cancel Order</Text>
               </Button>
             ) : (
@@ -189,8 +182,7 @@ export const ListOrder = ({
                 toggleAlert();
               }}
               onConfirmPressed={() => {
-                toggleAlert();
-                cancelOrder(userState.login_id, orderNo);//api URL
+                toggleAlert(); cancelOrder(orderNo); getAllOrders();
               }}
             />
           </View>
