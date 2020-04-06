@@ -158,6 +158,18 @@ export const getImages = (
             );
           }
         }
+      }else if (Platform.OS === 'ios') {
+        const ios_camera = await check(PERMISSIONS.IOS.CAMERA);
+        if (ios_camera != RESULTS.GRANTED) {
+          const ios_granted = await request(PERMISSIONS.IOS.CAMERA);
+          if (ios_granted != RESULTS.GRANTED) {
+            dispatch(
+              handleError({
+                message: 'Cannot proceed without camera permission',
+              }),
+            );
+          }
+        }
       }
 
 
