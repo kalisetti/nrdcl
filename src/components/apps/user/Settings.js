@@ -51,12 +51,15 @@ export const Setting = ({
     } else if (!userState.profile_verified) {
       navigation.navigate('UserDetail');
     } else {
-      getFormData();
+      getDzongkhags();
       setLoading(true);
       getUserDetails(userState.login_id);
     }
-
   }, []);
+
+  useEffect(() => {
+    getGewogs();
+  }, [billing_dzongkhag]);
 
 
   const getUserDetails = async id => {
@@ -67,25 +70,39 @@ export const Setting = ({
       setbilling_address_line2(response.data.data.billing_address_line2);
       setbilling_dzongkhag(response.data.data.billing_dzongkhag);
       setbilling_gewog(response.data.data.billing_gewog);
-     
+
       setLoading(false);
     } catch (error) {
       handleError(error);
     }
 
   };
-  const getFormData = async () => {
+  const getDzongkhags = async () => {
     setLoading(true);
     try {
       const dz_all = await callAxios('resource/Dzongkhags', 'get');
       setall_dzongkhag(dz_all.data.data);
-      const gewog_all = await callAxios('resource/Gewogs', 'get');
-      setall_gewog(gewog_all.data.data);
       setLoading(false);
     } catch (error) {
       handleError(error);
     }
   };
+
+  const getGewogs = async () => {
+    if (billing_dzongkhag !== undefined) {
+      let params = {
+        fields: JSON.stringify(['name']),
+        filters: JSON.stringify([['dzongkhag', '=', billing_dzongkhag]]),
+      };
+      try {
+        const gw_all = await callAxios('resource/Gewogs', 'get', params);
+        setall_gewog(gw_all.data.data);
+      } catch (error) {
+        handleError(error);
+      }
+    }
+  };
+
   const submitBillingAddress = () => {
     const billingAddressChangeRequestData = {
       approval_status: 'Pending',
@@ -100,7 +117,6 @@ export const Setting = ({
     }
     startSubmitBillingAddress(billingAddressChangeRequestData);
   }
-
 
   return commonState.isLoading ? (
     <SpinnerScreen />

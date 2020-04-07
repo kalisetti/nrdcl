@@ -1,8 +1,8 @@
-import {Platform} from 'react-native';
+import { Platform } from 'react-native';
 import CookieManager from 'react-native-cookies';
 import setCookie from 'set-cookie-parser';
 import Config from 'react-native-config';
-import {LOGIN, LOGOUT, SET_MODE, SET_PROFILE_SUBMITTED} from './actionTypes';
+import { LOGIN, LOGOUT, SET_MODE, SET_PROFILE_SUBMITTED } from './actionTypes';
 import {
   showToast,
   setLoading,
@@ -31,7 +31,7 @@ export const login = userData => {
 export const startLogin = (login_id, pin) => {
   return async dispatch => {
     try {
-      await loginSchema.validate({login_id, pin});
+      await loginSchema.validate({ login_id, pin });
 
       const formData = new FormData();
       formData.append('usr', login_id);
@@ -44,7 +44,7 @@ export const startLogin = (login_id, pin) => {
       });
 
       if (!response.ok) {
-        throw {message: 'Invalid Login'};
+        throw { message: 'Invalid Login' };
       }
 
       var combinedCookieHeader = response.headers.get('Set-Cookie');
@@ -99,7 +99,7 @@ export const startLogin = (login_id, pin) => {
       if (user_details.data.profile_verified) {
         NavigationService.navigate('ModeSelector');
       } else {
-        NavigationService.navigate('UserDetail');
+        NavigationService.navigate('Ack');
       }
     } catch (error) {
       dispatch(handleError(error));
@@ -294,6 +294,29 @@ export const startProfileSubmission = (
       NavigationService.navigate('UserDetail');
     } catch (error) {
       dispatch(handleError(error));
+    }
+  };
+};
+
+export const submitFeedback = (feedbackInfo) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    if (feedbackInfo.feedback !== undefined) {
+      try {
+        let res = await callAxios(
+          'resource/Feedback/',
+          'POST',
+          {},
+          feedbackInfo,
+        );
+        dispatch(setLoading(false));
+        NavigationService.navigate('ModeSelector');
+        dispatch(showToast('Your feedback is submitted, Thank You', 'success'));
+      } catch (error) {
+        dispatch(handleError(error));
+      }
+    } else {
+      dispatch(showToast('Please write your feedback'));
     }
   };
 };

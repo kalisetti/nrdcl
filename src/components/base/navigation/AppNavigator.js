@@ -30,6 +30,7 @@ import Faq from '../../info/Faq';
 import ModeSelector from '../../apps/user/ModeSelector';
 import UserDetail from '../../apps/user/UserDetail';
 import Settings from '../../apps/user/Settings';
+import Feedback from '../../apps/user/Feedback'; 
 
 //Customer Screens
 import CustomerTerms from '../../apps/customer/CustomerTerms';
@@ -48,7 +49,7 @@ import ExtendQty from '../../apps/customer/sites/ExtendQty';
 import AddVehicle from '../../apps/customer/vehicles/AddVehicle';
 import ListVehicle from '../../apps/customer/vehicles/ListVehicle';
 import VehicleDetail from '../../apps/customer/vehicles/VehicleDetail';
-import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver'; 
+import UpdateDriver from '../../apps/customer/vehicles/UpdateDriver';
 import OrderDashboard from '../../apps/customer/OrderDashboard';
 import ListOrder from '../../apps/customer/orders/ListOrder';
 import AddOrder from '../../apps/customer/orders/AddOrder';
@@ -61,23 +62,16 @@ import SuccessMsg from '../../apps/customer/orders/SuccessMsg';
 
 
 //Transporter Screens
-import TransporterDashboard from '../../apps/transporter/TransporterDashboard'; 
+import TransporterDashboard from '../../apps/transporter/TransporterDashboard';
 import AddTransport from '../../apps/transporter/transport/AddTransport';
 import ListTransport from '../../apps/transporter/transport/ListTransport';
 import TransportDetail from '../../apps/transporter/transport/TransportDetail';
 import TransportDriverUpdate from '../../apps/transporter/transport/TransportDriverUpdate';
-import AddToQueue from '../../apps/transporter/Queue/AddToQueue'; 
+import AddToQueue from '../../apps/transporter/Queue/AddToQueue';
 
 const AppNavigator = createStackNavigator(
 
   {
-
-    UserDetail: {
-      screen: UserDetail,
-      navigationOptions: {
-        title: 'User Detail',
-      },
-    },
     ModeSelector: {
       screen: ModeSelector,
       navigationOptions: { title: 'Select Mode' },
@@ -90,12 +84,12 @@ const AppNavigator = createStackNavigator(
       screen: TransporterTerms,
       navigationOptions: { title: 'Terms & Conditions' },
     },
-    
+
     TransporterTermsRead: {
       screen: TransporterTermsRead,
       navigationOptions: { title: 'Terms & Conditions' },
     },
-    
+
     CustomerDashboard: {
       screen: CustomerDashboard,
       navigationOptions: {
@@ -229,7 +223,7 @@ const AppNavigator = createStackNavigator(
       navigationOptions: {
         title: 'Transporter',
       },
-    }, 
+    },
     AddTransport: {
       screen: AddTransport,
       navigationOptions: {
@@ -260,23 +254,23 @@ const AppNavigator = createStackNavigator(
         title: 'Settings',
       },
     },
-    SuccessMsg: {
-      screen: SuccessMsg,
+    Feedback: {
+      screen: Feedback,
       navigationOptions: {
-        title: 'Transaction Details',
+        title: 'Feedback',
       },
-    }, 
-
+    },
+ 
     AddToQueue: {
       screen: AddToQueue,
       navigationOptions: {
         title: 'Manage Queue',
       },
-    }, 
+    },
   },
 
   {
-    initialRouteName: 'UserDetail',
+    initialRouteName: 'ModeSelector',
     defaultNavigationOptions: {
       gestureEnabled: true,
       cardOverlayEnabled: true,
@@ -305,6 +299,9 @@ const AuthNavigator = createStackNavigator(
     Terms: { screen: Terms, navigationOptions: { title: 'Terms & Conditions' } },
     Signup: { screen: Signup, navigationOptions: { title: 'Register' } },
     PinRecover: { screen: PinRecover, navigationOptions: { title: 'Reset PIN' } },
+    About: { screen: About, navigationOptions: { title: 'About' } },
+    ContactUs: { screen: ContactUs, navigationOptions: { title: 'Contact Us' } },
+    Faq: { screen: Faq, navigationOptions: { title: 'FAQ' } },
   },
   {
     initialRouteName: 'Login',
@@ -319,6 +316,35 @@ const AuthNavigator = createStackNavigator(
       },
       headerTintColor: '#fff',
       headerRight: <Call />,
+    },
+  },
+);
+
+
+const AcknowledgeNavigator = createStackNavigator(
+  {
+    UserDetail: { screen: UserDetail, navigationOptions: { title: 'UserDetail' } },
+  },
+  {
+    initialRouteName: 'UserDetail',
+    defaultNavigationOptions: {
+      gestureEnabled: true,
+      cardOverlayEnabled: true,
+      headerStyle: {
+        backgroundColor: Config.APP_HEADER_COLOR,
+      },
+      headerTitleStyle: {
+        color: 'white'
+      },
+      headerTintColor: '#fff',
+
+      headerRight: (
+        <Fragment>
+          <Call />
+          <Logout />
+        </Fragment>
+      ),
+
     },
   },
 );
@@ -360,6 +386,7 @@ export default createAppContainer(
       App: AppNavigator,
       Auth: AuthNavigator,
       Info: InfoNavigator,
+      Ack: AcknowledgeNavigator,
     },
     {
       initialRouteName: 'AuthLoading',

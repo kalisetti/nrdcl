@@ -23,8 +23,7 @@ export default StyleSheet.create({
   ma15: {
     marginHorizontal: 15,
     marginVertical: 15,
-  },
-
+  }, 
   mb10: {
     borderRadius: 25,
     marginBottom: 10,
@@ -43,12 +42,14 @@ export default StyleSheet.create({
   },
 
   icon: {
+    // fontSize:15,
     color: Config.ICON_COLOR,
   },
 
   iconText: {
     fontWeight: 'bold',
     color: Config.ICON_COLOR,
+    fontSize:8
   },
   iconTextFooter: {
     fontWeight: 'bold',

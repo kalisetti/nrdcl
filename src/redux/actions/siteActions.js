@@ -432,7 +432,7 @@ export const submitApplyForQueue = (queueDetail) => {
   return async dispatch => {
     dispatch(setLoading(true));
     try {
-       await callAxios(
+      await callAxios(
         'resource/Load Request/',
         'post',
         {},
@@ -460,6 +460,23 @@ export const submitCancelFromQueue = (user, vehicle) => {
       );
       dispatch(setLoading(false));
       dispatch(showToast('Cancelled successfully ', 'success'));
+    } catch (error) {
+      dispatch(handleError(error));
+    }
+  };
+};
+
+export const cancelOrder = (customer_order) => {
+  return async dispatch => {
+    dispatch(setLoading(true));
+    try {
+      await callAxios(
+        'method/erpnext.crm_api.cancel_customer_order',
+        'post',
+        { customer_order },
+      );
+      dispatch(setLoading(false));
+      dispatch(showToast('Cancelled successfully. You may reorder', 'success'));
     } catch (error) {
       dispatch(handleError(error));
     }
