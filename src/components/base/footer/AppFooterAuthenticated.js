@@ -1,5 +1,15 @@
 import React from 'react';
-import { Container, Text, Footer, FooterTab, Button, Icon } from 'native-base';
+import {
+  Container, Text, Footer, FooterTab, Button, Icon,
+  Form,
+  Item,
+  Input,
+  Content,
+  Spinner,
+  View,
+  Row,
+  Col
+} from 'native-base';
 import Config from 'react-native-config';
 import globalStyle from '../../../styles/globalStyle';
 import NavigationService from '../navigation/NavigationService';
@@ -22,28 +32,58 @@ export default () => {
     <Container style={globalStyle.bottom}>
       <Footer>
         <FooterTab style={{ backgroundColor: Config.APP_HEADER_COLOR }}>
-          <Button
-            vertical
-            onPress={() => NavigationService.navigate('CustomerDashboard')}>
-            <Icon name="ios-people" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Customer</Text>
-          </Button>
-          <Button
-            vertical
-            onPress={checkLocalStorageTransporter}>
-            <Icon
-              name="dump-truck"
-              type="MaterialCommunityIcons"
-              style={globalStyle.icon}
-            />
-            <Text style={globalStyle.iconText}>Transporter</Text>
-          </Button>
-          <Button
-            vertical
-            onPress={() => NavigationService.navigate('Settings')}>
-            <Icon name="settings" type="Octicons" style={globalStyle.icon} />
-            <Text style={globalStyle.iconText}>Settings</Text>
-          </Button>
+          <Row>
+          <Col style={{ justifyContent: 'space-evenly' }}>
+              <Button
+                vertical
+                onPress={() => NavigationService.navigate('ModeSelector')}>
+                <Icon name="home" style={globalStyle.icon} />
+                <Text style={globalStyle.iconText}>Home</Text>
+              </Button>
+            </Col>
+            {/* <Col style={{ justifyContent: 'space-evenly' }}>
+              <Button
+                vertical
+                onPress={() => NavigationService.navigate('CustomerDashboard')}>
+                <Icon name="ios-people" style={globalStyle.icon} />
+                <Text style={globalStyle.iconText}>Home</Text>
+              </Button>
+            </Col>
+            <Col style={{ justifyContent: 'space-evenly' }}>
+              <Button
+                vertical
+                onPress={checkLocalStorageTransporter}>
+                <Icon
+                  name="dump-truck"
+                  type="MaterialCommunityIcons"
+                  style={globalStyle.icon}
+                />
+                <Text style={globalStyle.iconTextFooter}>Transporter</Text>
+              </Button>
+            </Col> */}
+            <Col style={{ justifyContent: 'space-evenly' }}>
+              <Button vertical onPress={() => NavigationService.navigate('Faq')}>
+                <Icon name="help-circle-outline" style={globalStyle.icon} />
+                <Text style={globalStyle.iconTextFooter}>FAQ</Text>
+              </Button>
+            </Col>
+            <Col style={{ justifyContent: 'space-evenly' }}>
+              <Button
+                vertical
+                onPress={() => NavigationService.navigate('Feedback')}>
+                <Icon name="feedback" type="MaterialIcons" style={globalStyle.icon} />
+                <Text style={globalStyle.iconTextFooter}>Feedback</Text>
+              </Button>
+            </Col>
+            <Col style={{ justifyContent: 'space-evenly' }}>
+              <Button
+                vertical
+                onPress={() => NavigationService.navigate('Settings')}>
+                <Icon name="settings" type="Octicons" style={globalStyle.icon} />
+                <Text style={globalStyle.iconTextFooter}>Settings</Text>
+              </Button>
+            </Col>
+          </Row>
         </FooterTab>
       </Footer>
     </Container>
